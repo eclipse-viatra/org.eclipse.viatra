@@ -11,13 +11,20 @@
 package org.eclipse.viatra.query.runtime.matchers.psystem;
 
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PQuery;
+import org.eclipse.viatra.query.runtime.matchers.tuple.Tuple;
 
 
 /**
  * @author Zoltan Ujhelyi
- *
+ * @noimplement This interface is not intended to be implemented by clients.
  */
 public interface IQueryReference {
 
     PQuery getReferredQuery();
+    
+    /**
+     * @return the tuple of variables given as actual parameters
+     * @since 2.1
+     */
+    Tuple getActualParametersTuple();
 }

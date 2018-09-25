@@ -42,5 +42,10 @@ public abstract class AbstractTransitiveClosure extends KeyedEnumerablePConstrai
     public Set<TypeJudgement> getImpliedJudgements(IQueryMetaContext context) {
         return PositivePatternCall.getTypesImpliedByCall(supplierKey, variablesTuple);
     }
+    
+    @Override
+    public Tuple getActualParametersTuple() {
+        return variablesTuple;
+    }
 
 }

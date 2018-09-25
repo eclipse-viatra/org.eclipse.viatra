@@ -53,6 +53,11 @@ public class PositivePatternCall extends KeyedEnumerablePConstraint<PQuery> impl
     }
 
     @Override
+    public Tuple getActualParametersTuple() {
+        return variablesTuple;
+    }
+    
+    @Override
     public Set<TypeJudgement> getImpliedJudgements(IQueryMetaContext context) {
         return getTypesImpliedByCall(supplierKey, variablesTuple);
     }

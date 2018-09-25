@@ -27,6 +27,7 @@ import org.eclipse.viatra.query.runtime.matchers.ViatraQueryRuntimeException;
 import org.eclipse.viatra.query.runtime.matchers.backend.IQueryResultProvider;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
 import org.eclipse.viatra.query.runtime.matchers.planning.helpers.FunctionalDependencyHelper;
+import org.eclipse.viatra.query.runtime.matchers.planning.helpers.StatisticsHelper;
 import org.eclipse.viatra.query.runtime.matchers.psystem.IQueryReference;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PConstraint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
@@ -38,6 +39,7 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.Inequalit
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.NegativePatternCall;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.PatternMatchCounter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.TypeFilterConstraint;
+import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.AbstractTransitiveClosure;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.BinaryReflexiveTransitiveClosure;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.BinaryTransitiveClosure;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.ConstantValue;
@@ -62,7 +64,7 @@ public abstract class StatisticsBasedConstraintCostFunction implements ICostFunc
     protected static final double MAX_COST = 250.0;
 
     protected static final double DEFAULT_COST = StatisticsBasedConstraintCostFunction.MAX_COST - 100.0;
-        
+            
     /**
      * @since 2.1
      */
@@ -74,6 +76,13 @@ public abstract class StatisticsBasedConstraintCostFunction implements ICostFunc
     
     
     private final double inverseNavigationPenalty;
+    
+    /**
+     * @since 2.1
+     */
+    protected Optional<Double> transitiveClosureDefaultDepth() {
+        return Optional.of(20.0);
+    }
     
     
     /**
@@ -107,7 +116,7 @@ public abstract class StatisticsBasedConstraintCostFunction implements ICostFunc
     }
 
     /**
-     * Override this to provide custom estimates for match set sizes of called patterns.
+     * Override this to provide custom estimates for match set bucket sizes of called patterns.
      * @since 2.1
      */
     public Optional<Double> bucketSize(final IQueryReference patternCall,
@@ -120,8 +129,27 @@ public abstract class StatisticsBasedConstraintCostFunction implements ICostFunc
         } else {            
             return resultProvider.estimateAverageBucketSize(projMask, Accuracy.APPROXIMATION);
         }
-    }
-   
+    }   
+    
+    /**
+     * Override this to provide custom estimates for match set projection sizes of called patterns.
+     * @since 2.1
+     */
+    public Optional<Long> projectionSize(final IQueryReference patternCall,
+            final IConstraintEvaluationContext input, TupleMask projMask) {
+        IQueryResultProvider resultProvider = input.resultProviderRequestor().requestResultProvider(patternCall, null);
+        // TODO hack: use LS cost instead of true projection size estimate
+        if (resultProvider instanceof AbstractLocalSearchResultProvider) {
+            AbstractLocalSearchResultProvider lsProvider = (AbstractLocalSearchResultProvider) resultProvider;
+            double estimatedCost = lsProvider.estimateCost(projMask);
+            double costPerMatch = lsProvider.estimateCost(TupleMask.identity(projMask.getSourceWidth()));
+            double denominator = Math.max(costPerMatch, 1.0);
+            double matchCountEstimate = estimatedCost / denominator;
+            return Optional.of((long)Math.min((double)Long.MAX_VALUE, matchCountEstimate));
+        } else {            
+            return resultProvider.estimateCardinality(projMask, Accuracy.APPROXIMATION);
+        }
+    }   
     
 
     @Override
@@ -296,15 +324,23 @@ public abstract class StatisticsBasedConstraintCostFunction implements ICostFunc
     }
 
     protected double _calculateCost(final PositivePatternCall patternCall, final IConstraintEvaluationContext input) {
+        // TODO distinguish branching factor and evaluation cost
+        TupleMask projMask = computeCallMask(patternCall, input);
+        return bucketSize(patternCall, input, projMask).orElse(DEFAULT_COST);        
+    }
+    
+    /**
+     * @since 2.1
+     */
+    protected TupleMask computeCallMask(final IQueryReference patternCall, final IConstraintEvaluationContext input) {
         final List<Integer> boundPositions = new ArrayList<>();
         final List<PParameter> parameters = patternCall.getReferredQuery().getParameters();
         for (int i = 0; (i < parameters.size()); i++) {
-            final PVariable variable = patternCall.getVariableInTuple(i);
+            final PVariable variable = (PVariable) patternCall.getActualParametersTuple().get(i);
             if (input.getBoundVariables().contains(variable)) boundPositions.add(i);
         }
         TupleMask projMask = TupleMask.fromSelectedIndices(parameters.size(), boundPositions);
-        
-        return bucketSize(patternCall, input, projMask).orElse(DEFAULT_COST);        
+        return projMask;
     }
 
 
@@ -326,14 +362,18 @@ public abstract class StatisticsBasedConstraintCostFunction implements ICostFunc
      * @since 1.7
      */
     protected double _calculateCost(final AggregatorConstraint aggregator, final IConstraintEvaluationContext input) {
-        return _calculateCost((PConstraint)aggregator, input);
+        // TODO distinguish branching factor and evaluation cost
+        TupleMask projMask = computeCallMask(aggregator, input);
+        return bucketSize(aggregator, input, projMask).orElse(DEFAULT_COST);        
     }
     
     /**
      * @since 1.7
      */
     protected double _calculateCost(final NegativePatternCall call, final IConstraintEvaluationContext input) {
-        return _calculateCost((PConstraint)call, input);
+        // TODO distinguish branching factor and evaluation cost
+        TupleMask projMask = computeCallMask(call, input);
+        return bucketSize(call, input, projMask).orElse(DEFAULT_COST);        
     }
     
     /**
@@ -347,16 +387,47 @@ public abstract class StatisticsBasedConstraintCostFunction implements ICostFunc
      * @since 1.7
      */
     protected double _calculateCost(final BinaryTransitiveClosure closure, final IConstraintEvaluationContext input) {
-        // if (input.getFreeVariables().size() == 1) return 3.0; 
-        return StatisticsBasedConstraintCostFunction.DEFAULT_COST;
+        return doCalculate(closure, input);
     }
-    
+
+
     /**
      * @since 2.0
      */
     protected double _calculateCost(final BinaryReflexiveTransitiveClosure closure, final IConstraintEvaluationContext input) {
-        // if (input.getFreeVariables().size() == 1) return 3.0; 
-        return StatisticsBasedConstraintCostFunction.DEFAULT_COST;
+        return doCalculate(closure, input);
+    }
+    
+    /**
+     * @since 2.1
+     */
+    protected double doCalculate(final AbstractTransitiveClosure closure, final IConstraintEvaluationContext input) {
+        // TODO distinguish branching factor and evaluation cost
+        TupleMask projMask = computeCallMask(closure, input);
+        Optional<Double> edgeCount = bucketSize(closure, input, TupleMask.empty(2));
+        Optional<Long> srcCount = projectionSize(closure, input, TupleMask.selectSingle(0, 2));
+        Optional<Long> trgCount = projectionSize(closure, input, TupleMask.selectSingle(1, 2));
+        Optional<Double> estimate = Optional.empty();
+        // TODO use src/target type or projection size
+        estimate = min(estimate, 
+                edgeCount.map((edges) -> edges*edges));
+        estimate = min(estimate, 
+                transitiveClosureDefaultDepth().flatMap((depth) -> 
+                    srcCount.flatMap((sources) -> 
+                        edgeCount.map((edges) -> 
+                                ((double)edges)*sources*depth))));
+        estimate = min(estimate, 
+                transitiveClosureDefaultDepth().flatMap((depth) -> 
+                    trgCount.flatMap((targets) -> 
+                        edgeCount.map((edges) -> 
+                                ((double)edges)*targets*depth))));
+        if (0 != projMask.getSize()) {
+            estimate = min(estimate, 
+                    transitiveClosureDefaultDepth().flatMap((depth) -> 
+                        edgeCount.map((edges) -> 
+                                ((double)edges)*depth)));
+        }
+        return estimate.orElse(StatisticsBasedConstraintCostFunction.DEFAULT_COST);
     }
     
     /**
