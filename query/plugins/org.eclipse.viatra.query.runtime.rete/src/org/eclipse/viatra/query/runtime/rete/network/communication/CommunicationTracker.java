@@ -98,6 +98,13 @@ public abstract class CommunicationTracker {
         this.groupQueue = new PriorityQueue<CommunicationGroup>();
         this.groupMap = new HashMap<Node, CommunicationGroup>();
     }
+    
+    /**
+     * @since 2.8
+     */
+    public boolean isEnqueued(final Node node) {
+        return this.groupQueue.contains(this.getGroup(node));
+    }
 
     public Graph<Node> getDependencyGraph() {
         return dependencyGraph;
