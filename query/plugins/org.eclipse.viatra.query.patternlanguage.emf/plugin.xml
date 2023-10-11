@@ -53,5 +53,11 @@
            provider="org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.LabelAnnotationValidator" />
      <annotation
            provider="org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.QueryExplorerAnnotationValidator" />
+     <annotation
+           provider="org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.NegativeRecursionAnnotationValidator">
+     </annotation>
+     <annotation
+           provider="org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.ModelObjectExpressionAnnotationValidator">
+     </annotation>
   </extension>
 </plugin>
