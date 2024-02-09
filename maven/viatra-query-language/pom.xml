@@ -40,26 +40,7 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>3.0</version>
-            <classifier>no_aop</classifier>
-            <exclusions>
-                <exclusion>
-                    <artifactId>cglib</artifactId>
-                    <groupId>*</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-multibindings</artifactId>
-            <version>3.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>cglib</artifactId>
-                    <groupId>*</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>        
     </dependencies>
     <parent>
         <artifactId>org.eclipse.viatra.parent.core</artifactId>

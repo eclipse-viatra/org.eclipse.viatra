@@ -536,90 +536,6 @@
       <requirement
           name="org.eclipse.sirius.diagram.elk.feature.feature.group"/>
       <repositoryList
-          name="2019-06">
-        <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.1.0/photon"/>
-      </repositoryList>
-      <repositoryList
-          name="2019-09">
-        <repository
-            url="http://download.eclipse.org/releases/2019-09"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.2.3/2019-06"/>
-      </repositoryList>
-      <repositoryList
-          name="2019-12">
-        <repository
-            url="http://download.eclipse.org/releases/2019-12"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.2.3/2019-06"/>
-      </repositoryList>
-      <repositoryList
-          name="2020-03">
-        <repository
-            url="http://download.eclipse.org/releases/2020-03"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.2.3/2019-06"/>
-      </repositoryList>
-      <repositoryList
-          name="2020-06">
-        <repository
-            url="http://download.eclipse.org/releases/2020-06"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.3.1/2019-12"/>
-      </repositoryList>
-      <repositoryList
-          name="2020-09">
-        <repository
-            url="http://download.eclipse.org/releases/2020-09"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.3.4/2020-09"/>
-      </repositoryList>
-      <repositoryList
-          name="2020-12">
-        <repository
-            url="http://download.eclipse.org/releases/2020-12"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.4.0/2020-09"/>
-      </repositoryList>
-      <repositoryList
-          name="2021-03">
-        <repository
-            url="http://download.eclipse.org/releases/2021-03"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.4.2/2020-09/"/>
-      </repositoryList>
-      <repositoryList
-          name="2021-06">
-        <repository
-            url="http://download.eclipse.org/releases/2021-06"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.5.1/2020-09/"/>
-      </repositoryList>
-      <repositoryList
-          name="2021-09">
-        <repository
-            url="http://download.eclipse.org/releases/2021-09"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.5.1/2020-09/"/>
-      </repositoryList>
-      <repositoryList
-          name="2021-12">
-        <repository
-            url="http://download.eclipse.org/releases/2021-12"/>
-        <repository
-            url="http://download.eclipse.org/sirius/updates/releases/6.6.0/2020-09/"/>
-      </repositoryList>
-      <repositoryList
-          name="2022-03">
-        <repository
-            url="http://download.eclipse.org/releases/2022-03"/>
-        <repository
-            url="https://download.eclipse.org/sirius/updates/releases/7.0.0/2021-06/"/>
-      </repositoryList>
-      <repositoryList
           name="2022-06">
         <repository
             url="http://download.eclipse.org/releases/2022-06"/>
@@ -897,112 +813,28 @@
             name="de.itemis.xtext.antlr.feature.feature.group"/>
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"
-            versionRange="[2.20.0,3.0.0)"/>
-        <repositoryList
-            name="2019-06">
-          <repository
-              url="http://download.eclipse.org/releases/2019-06"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-          <repository
-              url="http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.20.0"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emft/mwe/updates/releases/2.11.2"/>
-        </repositoryList>
-        <repositoryList
-            name="2019-09">
-          <repository
-              url="http://download.eclipse.org/releases/2019-09"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-          <repository
-              url="http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.20.0"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emft/mwe/updates/releases/2.11.2"/>
-        </repositoryList>
-        <repositoryList
-            name="2019-12">
-          <repository
-              url="http://download.eclipse.org/releases/2019-12"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-        <repositoryList
-            name="2020-03">
-          <repository
-              url="http://download.eclipse.org/releases/2020-03"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-        <repositoryList
-            name="2020-06">
-          <repository
-              url="http://download.eclipse.org/releases/2020-06"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-        <repositoryList
-            name="2020-09">
-          <repository
-              url="http://download.eclipse.org/releases/2020-09"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-        <repositoryList
-            name="2020-12">
-          <repository
-              url="http://download.eclipse.org/releases/2020-12"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-        <repositoryList
-            name="2021-03">
-          <repository
-              url="http://download.eclipse.org/releases/2021-03"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-        <repositoryList
-            name="2021-06">
-          <repository
-              url="http://download.eclipse.org/releases/2021-06"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-        <repositoryList
-            name="2021-09">
-          <repository
-              url="http://download.eclipse.org/releases/2021-09"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-        <repositoryList
-            name="2021-12">
-          <repository
-              url="http://download.eclipse.org/releases/2021-12"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-        <repositoryList
-            name="2022-03">
-          <repository
-              url="http://download.eclipse.org/releases/2022-03"/>
-          <repository
-              url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
+            versionRange="[2.33.0,3.0.0)"/>
         <repositoryList
             name="2022-06">
           <repository
               url="http://download.eclipse.org/releases/2022-06"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
         </repositoryList>
         <repositoryList
             name="2022-09">
           <repository
-              url="http://download.eclipse.org/releases/2022-06"/>
+              url="http://download.eclipse.org/releases/2022-09"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
         </repositoryList>
         <repositoryList
             name="2022-12">
@@ -1010,6 +842,10 @@
               url="http://download.eclipse.org/releases/2022-12"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
         </repositoryList>
         <repositoryList
             name="2023-03">
@@ -1017,6 +853,10 @@
               url="http://download.eclipse.org/releases/2022-03"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
         </repositoryList>
         <repositoryList
             name="2023-06">
@@ -1024,6 +864,10 @@
               url="http://download.eclipse.org/releases/2022-06"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
         </repositoryList>
         <repositoryList
             name="2023-09">
@@ -1031,6 +875,10 @@
               url="http://download.eclipse.org/releases/2023-09"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
         </repositoryList>
         <repositoryList
             name="2023-12">
@@ -1087,114 +935,6 @@
             name="org.eclipse.zest.sdk.feature.group"/>
         <requirement
             name="org.eclipse.zest.source.feature.group"/>
-        <repositoryList
-            name="2019-06">
-          <repository
-              url="http://download.eclipse.org/releases/2019-06"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2019-09">
-          <repository
-              url="http://download.eclipse.org/releases/2019-09"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2019-12">
-          <repository
-              url="http://download.eclipse.org/releases/2019-12"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2020-03">
-          <repository
-              url="http://download.eclipse.org/releases/2020-03"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2020-06">
-          <repository
-              url="http://download.eclipse.org/releases/2020-06"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2020-09">
-          <repository
-              url="http://download.eclipse.org/releases/2020-09"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2020-12">
-          <repository
-              url="http://download.eclipse.org/releases/2020-12"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2021-03">
-          <repository
-              url="http://download.eclipse.org/releases/2021-03"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2021-06">
-          <repository
-              url="http://download.eclipse.org/releases/2021-06"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2021-09">
-          <repository
-              url="http://download.eclipse.org/releases/2021-09"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2021-12">
-          <repository
-              url="http://download.eclipse.org/releases/2021-12"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
-        <repositoryList
-            name="2022-03">
-          <repository
-              url="http://download.eclipse.org/releases/2022-03"/>
-          <repository
-              url="http://download.eclipse.org/cbi/updates/license"/>
-          <repository
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
-        </repositoryList>
         <repositoryList
             name="2022-06">
           <repository

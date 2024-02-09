@@ -24,8 +24,9 @@
                 <configuration>
                     <aut>
                         <explicit>${autPath}</explicit>
+                        <!--<vm>JavaSE-${java.version}</vm>-->
                         <vmArgs>
-                            <vmArg>${argLine}</vmArg>
+                            <vmArg>${rcptt.vmargs}</vmArg>
                         </vmArgs>
                     </aut>
                     <runner>
@@ -48,5 +49,31 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>os-macosx</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <rcptt.vmargs>${argLine} -XstartOnFirstThread</rcptt.vmargs>
+            </properties>
+        </profile>
+        <profile>
+            <id>os-nonmac</id>
+            <activation>
+                <os>
+                    <family>!mac</family>
+                </os>
+            </activation>
+            <properties>
+                <rcptt.vmargs>${argLine} -XstartOnFirstThread</rcptt.vmargs>
+            </properties>
+        </profile>
+
+    </profiles>
 
 </project>
