@@ -63,6 +63,7 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.TypeCo
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PQuery;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PVisibility;
+import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.ExternalQueryPlanProvider;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.IRewriterTraceCollector;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PBodyNormalizer;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionRewriter;
@@ -132,7 +133,7 @@ public class ReteRecipeCompiler {
      * @since 2.4
      */
     protected final TimelyConfiguration timelyEvaluation;
-    
+
     /**
      * @since 1.5
      */
@@ -140,12 +141,12 @@ public class ReteRecipeCompiler {
             IQueryCacheContext queryCacheContext, IQueryBackendHintProvider hintProvider, QueryAnalyzer queryAnalyzer) {
         this(plannerStrategy, logger, metaContext, queryCacheContext, hintProvider, queryAnalyzer, false, null);
     }
-    
+
     /**
      * @since 2.4
      */
     public ReteRecipeCompiler(IQueryPlannerStrategy plannerStrategy, Logger logger, IQueryMetaContext metaContext,
-            IQueryCacheContext queryCacheContext, IQueryBackendHintProvider hintProvider, QueryAnalyzer queryAnalyzer, 
+            IQueryCacheContext queryCacheContext, IQueryBackendHintProvider hintProvider, QueryAnalyzer queryAnalyzer,
             boolean deleteAndRederiveEvaluation, TimelyConfiguration timelyEvaluation) {
         super();
         this.deleteAndRederiveEvaluation = deleteAndRederiveEvaluation;
@@ -177,7 +178,8 @@ public class ReteRecipeCompiler {
 
     private Map<PQuery, CompiledQuery> queryCompilerCache = new HashMap<PQuery, CompiledQuery>();
     private Set<PQuery> compilationInProgress = new HashSet<PQuery>();
-    private IMultiLookup<PQuery, RecursionCutoffPoint> recursionCutoffPoints = CollectionsFactory.createMultiLookup(Object.class, MemoryType.SETS, Object.class);
+    private IMultiLookup<PQuery, RecursionCutoffPoint> recursionCutoffPoints = CollectionsFactory
+            .createMultiLookup(Object.class, MemoryType.SETS, Object.class);
     private Map<SubPlan, CompiledSubPlan> subPlanCompilerCache = new HashMap<SubPlan, CompiledSubPlan>();
     private Map<ReteNodeRecipe, SubPlan> compilerBackTrace = new HashMap<ReteNodeRecipe, SubPlan>();
 
@@ -194,6 +196,7 @@ public class ReteRecipeCompiler {
 
     /**
      * Returns a {@link CompiledQuery} compiled from a query
+     * 
      * @throws ViatraQueryRuntimeException
      */
     public CompiledQuery getCompiledForm(PQuery query) {
@@ -232,6 +235,7 @@ public class ReteRecipeCompiler {
 
     /**
      * Returns a {@link CompiledSubPlan} compiled from a query plan
+     * 
      * @throws ViatraQueryRuntimeException
      */
     public CompiledSubPlan getCompiledForm(SubPlan plan) {
@@ -273,12 +277,17 @@ public class ReteRecipeCompiler {
         return plan;
     }
 
-    private CompiledQuery compileProduction(PQuery query) {
-        Collection<SubPlan> bodyPlans = new ArrayList<SubPlan>();
+    private CompiledQuery compileProduction(final PQuery query) {
+        final Collection<SubPlan> bodyPlans = new ArrayList<SubPlan>();
+        final ExternalQueryPlanProvider externalPlanner = CommonQueryHintOptions.externalQueryPlanProvider
+                .getValueOrNull(hintProvider.getQueryEvaluationHint(query));
         normalizer.setTraceCollector(CommonQueryHintOptions.normalizationTraceCollector
                 .getValueOrDefault(hintProvider.getQueryEvaluationHint(query)));
-        for (PBody pBody : normalizer.rewrite(query).getBodies()) {
-            SubPlan bodyPlan = getPlan(pBody);
+        for (final PBody pBody : normalizer.rewrite(query).getBodies()) {
+            SubPlan bodyPlan = externalPlanner != null ? externalPlanner.getPlan(pBody) : null;
+            if (bodyPlan == null) {
+                bodyPlan = getPlan(pBody);
+            }
             bodyPlans.add(bodyPlan);
         }
         return doCompileProduction(query, bodyPlans);
@@ -301,9 +310,9 @@ public class ReteRecipeCompiler {
 
             // project to parameter list
             RecipeTraceInfo finalTrace = projectBodyFinalToParameters(compiledBody, false);
-                       
+
             bodyFinalTraces.put(bodyFinalPlan.getBody(), finalTrace);
-            bodyFinalRecipes.add(finalTrace.getRecipe());            
+            bodyFinalRecipes.add(finalTrace.getRecipe());
         }
 
         CompiledQuery compiled = CompilerHelper.makeQueryTrace(query, bodyFinalTraces, bodyFinalRecipes,
@@ -502,7 +511,7 @@ public class ReteRecipeCompiler {
         final RecipeTraceInfo primaryIndexer = fakeJoinHelper.getPrimaryIndexer();
         final RecipeTraceInfo callProjectionIndexer = fakeJoinHelper.getSecondaryIndexer();
 
-        final List<PVariable> sideVariablesTuple =  new ArrayList<PVariable>(
+        final List<PVariable> sideVariablesTuple = new ArrayList<PVariable>(
                 fakeJoinHelper.getSecondaryMask().transform(callTrace.getVariablesTuple()));
         /* if (!booleanCheck) */ sideVariablesTuple.add(constraint.getResultVariable());
 
@@ -579,8 +588,9 @@ public class ReteRecipeCompiler {
         Mask groupMask = CompilerHelper.toRecipeMask(callGroupMask);
 
         // temporary solution to support the deprecated option for now
-        final boolean deleteAndRederiveEvaluationDep = this.deleteAndRederiveEvaluation || ReteHintOptions.deleteRederiveEvaluation.getValueOrDefault(getHints(plan));
-       
+        final boolean deleteAndRederiveEvaluationDep = this.deleteAndRederiveEvaluation
+                || ReteHintOptions.deleteRederiveEvaluation.getValueOrDefault(getHints(plan));
+
         columnAggregatorRecipe.setDeleteRederiveEvaluation(deleteAndRederiveEvaluationDep);
         if (deleteAndRederiveEvaluationDep || (this.timelyEvaluation != null)) {
             List<PParameter> parameters = constraint.getReferredQuery().getParameters();
@@ -724,48 +734,49 @@ public class ReteRecipeCompiler {
         List<PVariable> projectedVariables = new ArrayList<PVariable>(operation.getToVariables());
         // Determinizing projection: try to keep original order (hopefully facilitates node reuse)
         Map<PVariable, Integer> parentPosMapping = compiledParent.getPosMapping();
-        Collections.sort(projectedVariables, Comparator.comparing(parentPosMapping::get)); 
-        
-        return doProjectPlan(compiledParent, projectedVariables, true, 
-                parentTrace -> parentTrace.cloneFor(plan), 
-                (recipe, parentTrace) -> new PlanningTrace(plan, projectedVariables, recipe, parentTrace), 
-                (recipe, parentTrace) -> new CompiledSubPlan(plan, projectedVariables, recipe, parentTrace)
-        );
+        Collections.sort(projectedVariables, Comparator.comparing(parentPosMapping::get));
+
+        return doProjectPlan(compiledParent, projectedVariables, true, parentTrace -> parentTrace.cloneFor(plan),
+                (recipe, parentTrace) -> new PlanningTrace(plan, projectedVariables, recipe, parentTrace),
+                (recipe, parentTrace) -> new CompiledSubPlan(plan, projectedVariables, recipe, parentTrace));
     }
-    
+
     /**
      * Projects a subplan onto the specified variable tuple
-     * @param compiledParentPlan the compiled form of the subplan
-     * @param targetVariables list of variables to project to
-     * @param enforceUniqueness whether distinctness shall be enforced after the projection. 
-     * Specify false only if directly connecting to a production node.
-     * @param reinterpretTraceFactory constructs a reinterpreted trace that simply relabels the compiled parent plan, in case it is sufficient
-     * @param intermediateTraceFactory constructs a recipe trace for an intermediate node, given the recipe of the node and its parent trace
-     * @param finalTraceFactory constructs a recipe trace for the final resulting node, given the recipe of the node and its parent trace
+     * 
+     * @param compiledParentPlan
+     *                                     the compiled form of the subplan
+     * @param targetVariables
+     *                                     list of variables to project to
+     * @param enforceUniqueness
+     *                                     whether distinctness shall be enforced after the projection. Specify false
+     *                                     only if directly connecting to a production node.
+     * @param reinterpretTraceFactory
+     *                                     constructs a reinterpreted trace that simply relabels the compiled parent
+     *                                     plan, in case it is sufficient
+     * @param intermediateTraceFactory
+     *                                     constructs a recipe trace for an intermediate node, given the recipe of the
+     *                                     node and its parent trace
+     * @param finalTraceFactory
+     *                                     constructs a recipe trace for the final resulting node, given the recipe of
+     *                                     the node and its parent trace
      * @since 2.1
      */
-    <ResultTrace extends RecipeTraceInfo> ResultTrace doProjectPlan(
-            final CompiledSubPlan compiledParentPlan,
-            final List<PVariable> targetVariables,
-            boolean enforceUniqueness,
+    <ResultTrace extends RecipeTraceInfo> ResultTrace doProjectPlan(final CompiledSubPlan compiledParentPlan,
+            final List<PVariable> targetVariables, boolean enforceUniqueness,
             Function<CompiledSubPlan, ResultTrace> reinterpretTraceFactory,
             BiFunction<ReteNodeRecipe, RecipeTraceInfo, RecipeTraceInfo> intermediateTraceFactory,
-            BiFunction<ReteNodeRecipe, RecipeTraceInfo, ResultTrace> finalTraceFactory) 
-    {
+            BiFunction<ReteNodeRecipe, RecipeTraceInfo, ResultTrace> finalTraceFactory) {
         if (targetVariables.equals(compiledParentPlan.getVariablesTuple())) // no projection needed
-            return reinterpretTraceFactory.apply(compiledParentPlan); 
-          
+            return reinterpretTraceFactory.apply(compiledParentPlan);
+
         // otherwise, we need at least a trimmer
         TrimmerRecipe trimmerRecipe = CompilerHelper.makeTrimmerRecipe(compiledParentPlan, targetVariables);
-        
+
         // do we need to eliminate duplicates?
         SubPlan parentPlan = compiledParentPlan.getSubPlan();
-        if (!enforceUniqueness || BuildHelper.areAllVariablesDetermined(
-                parentPlan, 
-                targetVariables, 
-                queryAnalyzer,
-                true)) 
-        {
+        if (!enforceUniqueness
+                || BuildHelper.areAllVariablesDetermined(parentPlan, targetVariables, queryAnalyzer, true)) {
             // if uniqueness enforcess is unwanted or unneeeded, skip it
             return finalTraceFactory.apply(trimmerRecipe, compiledParentPlan);
         } else {
@@ -774,11 +785,13 @@ public class ReteRecipeCompiler {
             recipe.getParents().add(trimmerRecipe);
 
             // temporary solution to support the deprecated option for now
-            final boolean deleteAndRederiveEvaluationDep = this.deleteAndRederiveEvaluation || ReteHintOptions.deleteRederiveEvaluation.getValueOrDefault(getHints(parentPlan));
-            
+            final boolean deleteAndRederiveEvaluationDep = this.deleteAndRederiveEvaluation
+                    || ReteHintOptions.deleteRederiveEvaluation.getValueOrDefault(getHints(parentPlan));
+
             recipe.setDeleteRederiveEvaluation(deleteAndRederiveEvaluationDep);
             if (deleteAndRederiveEvaluationDep || (this.timelyEvaluation != null)) {
-                PosetTriplet triplet = CompilerHelper.computePosetInfo(targetVariables, parentPlan.getBody(), metaContext);
+                PosetTriplet triplet = CompilerHelper.computePosetInfo(targetVariables, parentPlan.getBody(),
+                        metaContext);
 
                 if (triplet.comparator != null) {
                     MonotonicityInfo info = FACTORY.createMonotonicityInfo();
@@ -788,31 +801,30 @@ public class ReteRecipeCompiler {
                     recipe.setOptionalMonotonicityInfo(info);
                 }
             }
-            
+
             RecipeTraceInfo trimmerTrace = intermediateTraceFactory.apply(trimmerRecipe, compiledParentPlan);
             return finalTraceFactory.apply(recipe, trimmerTrace);
         }
     }
-    
+
     /**
      * Projects the final compiled form of a PBody onto the parameter tuple
-     * @param compiledBody the compiled form of the body, with all constraints enforced, not yet projected to query parameters 
-     * @param enforceUniqueness whether distinctness shall be enforced after the projection. 
-     * Specify false only if directly connecting to a production node.
+     * 
+     * @param compiledBody
+     *                              the compiled form of the body, with all constraints enforced, not yet projected to
+     *                              query parameters
+     * @param enforceUniqueness
+     *                              whether distinctness shall be enforced after the projection. Specify false only if
+     *                              directly connecting to a production node.
      * @since 2.1
      */
-    RecipeTraceInfo projectBodyFinalToParameters(
-            final CompiledSubPlan compiledBody, 
-            boolean enforceUniqueness) 
-    {
+    RecipeTraceInfo projectBodyFinalToParameters(final CompiledSubPlan compiledBody, boolean enforceUniqueness) {
         final PBody body = compiledBody.getSubPlan().getBody();
         final List<PVariable> parameterList = body.getSymbolicParameterVariables();
-        
-        return doProjectPlan(compiledBody, parameterList, enforceUniqueness, 
-                parentTrace -> parentTrace, 
+
+        return doProjectPlan(compiledBody, parameterList, enforceUniqueness, parentTrace -> parentTrace,
                 (recipe, parentTrace) -> new ParameterProjectionTrace(body, recipe, parentTrace),
-                (recipe, parentTrace) -> new ParameterProjectionTrace(body, recipe, parentTrace)
-        );
+                (recipe, parentTrace) -> new ParameterProjectionTrace(body, recipe, parentTrace));
     }
 
     private CompiledSubPlan doCompileStart(PStart operation, SubPlan plan) {
@@ -858,7 +870,7 @@ public class ReteRecipeCompiler {
         // TODO the implementation would perform better if an inequality check would be used after tcRecipe and
         // uniqueness enforcer be replaced by a transparent node with multiple parents, but such a node is not available
         // in recipe metamodel in VIATRA 2.0
-        
+
         // Find called query
         final PQuery referredQuery = constraint.getSupplierKey();
         final PlanningTrace callTrace = referQuery(referredQuery, plan, constraint.getVariablesTuple());
@@ -866,28 +878,32 @@ public class ReteRecipeCompiler {
         // Calculate irreflexive transitive closure
         final TransitiveClosureRecipe tcRecipe = FACTORY.createTransitiveClosureRecipe();
         tcRecipe.setParent(callTrace.getRecipe());
-        final PlanningTrace tcTrace = new PlanningTrace(plan, CompilerHelper.convertVariablesTuple(constraint), tcRecipe, callTrace);
-                
+        final PlanningTrace tcTrace = new PlanningTrace(plan, CompilerHelper.convertVariablesTuple(constraint),
+                tcRecipe, callTrace);
+
         // Enumerate universe type
         final IInputKey inputKey = constraint.getUniverseType();
-        final InputRecipe universeTypeRecipe = RecipesHelper.inputRecipe(inputKey, inputKey.getStringID(), inputKey.getArity());
+        final InputRecipe universeTypeRecipe = RecipesHelper.inputRecipe(inputKey, inputKey.getStringID(),
+                inputKey.getArity());
         final PlanningTrace universeTypeTrace = new PlanningTrace(plan, CompilerHelper.convertVariablesTuple(
                 Tuples.staticArityFlatTupleOf(constraint.getVariablesTuple().get(0))), universeTypeRecipe);
-        
+
         // Calculate reflexive access by duplicating universe type column
         final TrimmerRecipe reflexiveRecipe = FACTORY.createTrimmerRecipe();
         reflexiveRecipe.setMask(RecipesHelper.mask(1, 0, 0));
         reflexiveRecipe.setParent(universeTypeRecipe);
-        final PlanningTrace reflexiveTrace = new PlanningTrace(plan, CompilerHelper.convertVariablesTuple(constraint), reflexiveRecipe, universeTypeTrace);
+        final PlanningTrace reflexiveTrace = new PlanningTrace(plan, CompilerHelper.convertVariablesTuple(constraint),
+                reflexiveRecipe, universeTypeTrace);
 
         // Finally, reduce duplicates after a join
         final UniquenessEnforcerRecipe brtcRecipe = FACTORY.createUniquenessEnforcerRecipe();
         brtcRecipe.getParents().add(tcRecipe);
         brtcRecipe.getParents().add(reflexiveRecipe);
-        
-        return new PlanningTrace(plan, CompilerHelper.convertVariablesTuple(constraint), brtcRecipe, reflexiveTrace, tcTrace);
+
+        return new PlanningTrace(plan, CompilerHelper.convertVariablesTuple(constraint), brtcRecipe, reflexiveTrace,
+                tcTrace);
     }
-    
+
     private PlanningTrace compileEnumerable(SubPlan plan, BinaryTransitiveClosure constraint) {
         final PQuery referredQuery = constraint.getSupplierKey();
         final PlanningTrace callTrace = referQuery(referredQuery, plan, constraint.getVariablesTuple());
@@ -897,7 +913,7 @@ public class ReteRecipeCompiler {
 
         return new PlanningTrace(plan, CompilerHelper.convertVariablesTuple(constraint), recipe, callTrace);
     }
-    
+
     private PlanningTrace compileEnumerable(SubPlan plan, RelationEvaluation constraint) {
         final List<ReteNodeRecipe> parentRecipes = new ArrayList<ReteNodeRecipe>();
         final List<RecipeTraceInfo> parentTraceInfos = new ArrayList<RecipeTraceInfo>();
@@ -931,7 +947,7 @@ public class ReteRecipeCompiler {
 
     // TODO handle recursion
     private PlanningTrace referQuery(PQuery query, SubPlan plan, Tuple actualParametersTuple) {
-        RecipeTraceInfo referredQueryTrace = originalTraceOfReferredQuery(query);            
+        RecipeTraceInfo referredQueryTrace = originalTraceOfReferredQuery(query);
         return new PlanningTrace(plan, CompilerHelper.convertVariablesTuple(actualParametersTuple),
                 referredQueryTrace.getRecipe(), referredQueryTrace.getParentRecipeTracesForCloning());
     }
@@ -942,7 +958,7 @@ public class ReteRecipeCompiler {
             Set<PBody> rewrittenBodies = normalizer.rewrite(query).getBodies();
             if (1 == rewrittenBodies.size()) { // non-disjunctive
                 // TODO in the future, check if non-recursive - (not currently permitted)
-                
+
                 PBody pBody = rewrittenBodies.iterator().next();
                 SubPlan bodyFinalPlan = getPlan(pBody);
 
@@ -956,10 +972,11 @@ public class ReteRecipeCompiler {
                 final CompiledSubPlan compiledBody = getCompiledForm(bodyFinalPlan);
 
                 // project to parameter list, add uniqueness enforcer if necessary
-                return projectBodyFinalToParameters(compiledBody, true /* ensure uniqueness, as no production node is used */);
+                return projectBodyFinalToParameters(compiledBody,
+                        true /* ensure uniqueness, as no production node is used */);
             }
-        } 
-        
+        }
+
         // otherwise, regular reference to recipe realizing the query
         return getCompiledForm(query);
     }

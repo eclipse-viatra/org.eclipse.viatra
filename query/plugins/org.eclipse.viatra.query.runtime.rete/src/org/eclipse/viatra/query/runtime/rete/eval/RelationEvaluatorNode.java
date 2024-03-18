@@ -9,11 +9,13 @@
 package org.eclipse.viatra.query.runtime.rete.eval;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import org.eclipse.viatra.query.runtime.matchers.psystem.IRelationEvaluator;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.RelationEvaluation;
@@ -28,6 +30,7 @@ import org.eclipse.viatra.query.runtime.rete.network.Receiver;
 import org.eclipse.viatra.query.runtime.rete.network.ReteContainer;
 import org.eclipse.viatra.query.runtime.rete.network.StandardNode;
 import org.eclipse.viatra.query.runtime.rete.network.Supplier;
+import org.eclipse.viatra.query.runtime.rete.network.communication.CommunicationTracker;
 import org.eclipse.viatra.query.runtime.rete.network.communication.Timestamp;
 import org.eclipse.viatra.query.runtime.rete.single.AbstractUniquenessEnforcerNode;
 
@@ -46,12 +49,22 @@ public class RelationEvaluatorNode extends StandardNode implements Supplier, Cle
     private Supplier[] inputSuppliers;
     private BatchingReceiver[] inputReceivers;
 
-    public RelationEvaluatorNode(final ReteContainer container, final IRelationEvaluator evaluator) {
+    public RelationEvaluatorNode(final ReteContainer container, final IRelationEvaluator evaluator,
+            final BatchingReceiver[] inputReceivers) {
         super(container);
         this.evaluator = evaluator;
+        this.inputReceivers = inputReceivers;
+        for (final BatchingReceiver inputReceiver : inputReceivers) {
+            inputReceiver.setContainerNode(this);
+        }
         this.reteContainer.registerClearable(this);
     }
-    
+
+    public RelationEvaluatorNode(final ReteContainer container, final IRelationEvaluator evaluator) {
+        this(container, evaluator, IntStream.range(0, evaluator.getInputArities().size())
+                .mapToObj(i -> new BatchingReceiver(container)).toArray(BatchingReceiver[]::new));
+    }
+
     @Override
     public void clear() {
         this.cachedOutputs.clear();
@@ -59,7 +72,6 @@ public class RelationEvaluatorNode extends StandardNode implements Supplier, Cle
 
     public void connectToParents(final List<Supplier> inputSuppliers) {
         this.inputSuppliers = new Supplier[inputSuppliers.size()];
-        this.inputReceivers = new BatchingReceiver[inputSuppliers.size()];
 
         final List<Integer> inputArities = evaluator.getInputArities();
 
@@ -85,10 +97,10 @@ public class RelationEvaluatorNode extends StandardNode implements Supplier, Cle
                         evaluator.toString() + " expects input arity " + currentExpectedInputArity + " at position " + i
                                 + " but got " + currentActualInputArity + "!");
             }
-            final BatchingReceiver inputReceiver = new BatchingReceiver((ProductionNode) inputSupplier,
-                    this.reteContainer);
+            final BatchingReceiver inputReceiver = this.inputReceivers[i];
+            inputReceiver.setSourceNode((ProductionNode) inputSupplier);
+
             this.inputSuppliers[i] = inputSupplier;
-            this.inputReceivers[i] = inputReceiver;
             this.reteContainer.connectAndSynchronize(inputSupplier, inputReceiver);
             reteContainer.getCommunicationTracker().registerDependency(inputReceiver, this);
         }
@@ -153,16 +165,32 @@ public class RelationEvaluatorNode extends StandardNode implements Supplier, Cle
         this.cachedOutputs = newOutputs;
     }
 
-    public class BatchingReceiver extends SimpleReceiver {
-        private final ProductionNode source;
+    public static class BatchingReceiver extends SimpleReceiver {
+        private ProductionNode sourceNode;
+        private RelationEvaluatorNode containerNode;
 
-        private BatchingReceiver(final ProductionNode source, final ReteContainer container) {
+        private BatchingReceiver(final ReteContainer container) {
             super(container);
-            this.source = source;
+        }
+
+        public void setSourceNode(final ProductionNode sourceNode) {
+            this.sourceNode = sourceNode;
+        }
+
+        public ProductionNode getSourceNode() {
+            return this.sourceNode;
+        }
+
+        public void setContainerNode(final RelationEvaluatorNode containerNode) {
+            this.containerNode = containerNode;
+        }
+
+        public RelationEvaluatorNode getContainerNode() {
+            return this.containerNode;
         }
 
         private Set<Tuple> getTuples() {
-            return ((AbstractUniquenessEnforcerNode) this.source).getTuples();
+            return ((AbstractUniquenessEnforcerNode) this.sourceNode).getTuples();
         }
 
         @Override
@@ -173,9 +201,25 @@ public class RelationEvaluatorNode extends StandardNode implements Supplier, Cle
         @Override
         public void batchUpdate(final Collection<Entry<Tuple, Integer>> updates, final Timestamp timestamp) {
             assert Timestamp.ZERO.equals(timestamp);
-            // there is nothing to do here because the source production node has already updated itself
-            // the only thing we need to do is to issue the callback
-            RelationEvaluatorNode.this.batchUpdateCompleted();
+            // The source production node has already updated itself, so there is no need to do anything with the input
+            // updates. We will just use the tuples maintained in the memory of the production node.
+            // However, we should guard against spurious calls to the evaluation logic as much as possible, and only
+            // really issue the call if this is the "last" batchUpdate call among all the batching receivers of this
+            // relation evaluator node. It can happen that certain batching receivers are "lacking behind" because
+            // their ancestor may not have processed their updates yet. In such cases, the batchUpdateCompleted will
+            // be called potentially unnecessarily again, which is an issue for performance but not an issue for
+            // correctness.
+            final CommunicationTracker tracker = this.containerNode.getCommunicationTracker();
+            if (Arrays.stream(this.containerNode.inputReceivers).noneMatch(receiver -> {
+                return tracker.isEnqueued(receiver);
+            })) {
+                this.containerNode.batchUpdateCompleted();
+            }
+        }
+
+        @Override
+        protected String getTraceInfoPatternsEnumerated() {
+            return this.getContainerNode().toString();
         }
 
     }
