@@ -43,6 +43,7 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternImport;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ReferenceType;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.VQLImportSection;
+import org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.ModelObjectExpressionAnnotationValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.jvmmodel.EMFPatternLanguageJvmModelInferrerUtil;
 import org.eclipse.viatra.query.patternlanguage.emf.services.EMFPatternLanguageGrammarAccess;
@@ -799,6 +800,9 @@ public class EMFPatternLanguageValidator extends AbstractEMFPatternLanguageValid
     }
 
     private void checkForWrongVariablesInXExpressionsInternal(final XExpression expression) {
+        boolean safeModelObject = 
+                PatternLanguageHelper.containerPattern(expression).getAnnotations().stream().anyMatch(annotation -> ModelObjectExpressionAnnotationValidator.ANNOTATION_ID.equals(annotation.getName()));
+        
         for (Variable variable : PatternLanguageHelper.getReferencedPatternVariablesOfXExpression(expression,
                 associations)) {
             IInputKey classifier = typeInferrer.getType(variable);
@@ -807,6 +811,7 @@ public class EMFPatternLanguageValidator extends AbstractEMFPatternLanguageValid
                         + variable.getName() + " has an unknown type.",
                         expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
             } else if (classifier != null && !(classifier instanceof EDataTypeInSlotsKey)
+                    && !safeModelObject
                     && !(classifier instanceof JavaTransitiveInstancesKey)) {// null-check needed, otherwise code throws
                                                                              // NPE for classifier.getName()
                 error("Only simple EDataTypes are allowed in check() and eval() expressions. The variable "

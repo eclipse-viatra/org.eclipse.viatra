@@ -495,13 +495,38 @@ public final class PatternLanguageHelper {
      * @return the pattern body that contains the value reference
      */
     public static PatternBody containerPatternBody(ValueReference val) {
+        return containerPatternBody((EObject) val);
+    }
+
+    /**
+     * @return the pattern body that contains the value reference or pattern call
+     * @since 2.8
+     */
+    public static PatternBody containerPatternBody(EObject val) {
         for (EObject cursor = val; cursor!=null; cursor = cursor.eContainer())
             if (cursor instanceof PatternBody)
                 return (PatternBody) cursor;
         // cursor == null --> not contained in PatternBody
         throw new IllegalArgumentException(
                 String.format(
-                        "Misplaced value reference %s not contained in any pattern body",
+                        "Misplaced pattern definition element %s not contained in any pattern body",
+                        val));
+    }
+    
+    /**
+     * @return the pattern that contains the value reference or pattern call
+     * @since 2.8
+     */
+    public static Pattern containerPattern(EObject val) {
+        PatternBody body = containerPatternBody(val);
+        EObject container = body.eContainer();
+        if (container instanceof Pattern) {
+            return (Pattern) container;
+        }
+        // not contained in Pattern
+        throw new IllegalArgumentException(
+                String.format(
+                        "Misplaced pattern definition element %s not contained in any pattern",
                         val));
     }
 

@@ -22,15 +22,18 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.viatra.query.patternlanguage.emf.EMFPatternLanguageConfigurationConstants;
 import org.eclipse.viatra.query.patternlanguage.emf.annotations.IPatternAnnotationValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.annotations.PatternAnnotationProvider;
+import org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.NegativeRecursionAnnotationValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.JavaTypesHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.internal.DuplicationChecker;
@@ -656,8 +659,14 @@ public class PatternLanguageValidator extends AbstractDeclarativeValidator imple
             }
 
             if (isNegativePatternCall(call)) {
-                error(String.format(RECURSIVE_PATTERN_CALL_NEGATIVE, buffer.toString()), call,
-                        PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
+                EList<Annotation> annotations = PatternLanguageHelper.containerPattern(call).getAnnotations();
+                if (annotations.stream().noneMatch(annotation -> NegativeRecursionAnnotationValidator.ANNOTATION_ID.equals(annotation.getName()))) {
+                    error(String.format(RECURSIVE_PATTERN_CALL_NEGATIVE, buffer.toString()), call, 
+                            PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
+                } else {
+                    warning(String.format(RECURSIVE_PATTERN_CALL, buffer.toString()), call,
+                            PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
+                }
             } else if (PatternLanguageHelper.isTransitive(call)) {
                 error(String.format(RECURSIVE_PATTERN_CALL_TRANSITIVE, buffer.toString()), call,
                         PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
