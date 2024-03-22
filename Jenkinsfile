@@ -27,7 +27,7 @@ pipeline {
 	
 	tools {
         maven 'apache-maven-3.9.6'
-        jdk 'openjdk-jdk11-latest'
+        jdk 'openjdk-jdk17-latest' // Java 11 is selected using Maven toolchains
     }
 
 	stages {
