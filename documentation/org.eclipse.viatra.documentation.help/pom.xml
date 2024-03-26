@@ -53,7 +53,7 @@
                                 <last-update-label>false</last-update-label>
                                 <sourceHighlighter>${asciidoc.highlighter}</sourceHighlighter>
                             </attributes>
-                            <headerFooter>${asciidoc.header}</headerFooter>
+                            <standalone>${asciidoc.header}</standalone>
                         </configuration>
                     </execution>
                 </executions>

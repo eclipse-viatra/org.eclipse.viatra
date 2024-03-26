@@ -16,7 +16,7 @@
 		<eclipse.bugzillaUrl>https://bugs.eclipse.org/bugs/enter_bug.cgi?product=viatra</eclipse.bugzillaUrl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
-		<jacoco.version>0.8.3</jacoco.version>
+		<jacoco.version>0.8.11</jacoco.version>
 		<jacoco.targetdir>${project.basedir}/../../jacoco</jacoco.targetdir>
 		<xtend.compiler.version>2.33.0</xtend.compiler.version>
 		<guava.version>32.1.3-jre</guava.version>
@@ -25,7 +25,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<viatra.main.version>2.9.0-SNAPSHOT</viatra.main.version>
-		<cbi.jarsigner.version>1.3.2</cbi.jarsigner.version>
+		<cbi.jarsigner.version>1.4.3</cbi.jarsigner.version>
 		<sign.build>false</sign.build>
 		<simrel.repository.url>https://download.eclipse.org/releases/2022-06</simrel.repository.url>
 		<!-- Maven deploy related properties -->
@@ -102,16 +102,12 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-p2-publisher-plugin</artifactId>
 				<version>${tycho.version}</version>
-				<configuration>
-					<publishArtifacts>true</publishArtifacts>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<configuration>
 					<destFile>${jacoco.targetdir}/jacoco.exec</destFile>
-
 				</configuration>
 				<executions>
 					<execution>
@@ -134,7 +130,6 @@
                 <artifactId>target-platform-configuration</artifactId>
                 <version>${tycho.version}</version>
                 <configuration>
-                    <resolver>p2</resolver>
                     <target>
                         <artifact>
                             <groupId>org.eclipse.viatra</groupId>
@@ -207,10 +202,6 @@
 					<configuration>
 						<!-- need to prefix by basedir to generate to currently built module -->
 						<outputDirectory>${basedir}/xtend-gen</outputDirectory>
-						<goals>
-							<goal>compile</goal>
-							<goal>testCompile</goal>
-						</goals>
 					</configuration>
 				</plugin>
 				<plugin>
