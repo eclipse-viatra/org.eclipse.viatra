@@ -108,6 +108,10 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<configuration>
 					<destFile>${jacoco.targetdir}/jacoco.exec</destFile>
+					<!-- Only include classes coming from VIATRA to avoid excessive instrumentation -->
+					<includes>
+                        <include>org/eclipse/viatra/**/*.class</include>
+                    </includes>
 				</configuration>
 				<executions>
 					<execution>

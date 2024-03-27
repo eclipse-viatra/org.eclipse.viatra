@@ -93,6 +93,7 @@
       <feature id="org.eclipse.viatra.query.rcptt.queries.feature" version="2.9.0.qualifier"/>
       <feature id="org.eclipse.viatra.examples.cps.metamodel.feature"/>
       <feature id="org.eclipse.xtext.redist"/>
+      <feature id="org.eclipse.gef"/>
    </features>
 
    <configurations>
