@@ -7,7 +7,7 @@ Element-Version: 3.0
 External-Reference: 
 Id: _DHI3kPBQEeWlEbYJ7IoFCQ
 Runtime-Version: 2.5.4.202210020716
-Save-Time: 3/26/24, 6:30 PM
+Save-Time: 3/27/24, 6:27 PM
 Testcase-Type: ecl
 
 ------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa
@@ -32,6 +32,17 @@ Entry-Name: .content
  * 
  * SPDX-License-Identifier: EPL-2.0
  *******************************************************************************/
+
+proc "select-from-content-assist" [val textviewer -input] [val assist] {
+	with [$textviewer] {
+		show-content-assist
+	}
+	wait-until-eclipse-is-ready
+	get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select $assist | click 
+    	-default
+    
+    $textviewer
+}
 
 // Create Query Project
 get-menu "File/New/Other..." | click
@@ -111,40 +122,26 @@ with [get-editor "test.vql" | get-text-viewer] {
     type-text "pattern ApplicationsWithAllocatedInstances("
     key-type Enter
     type-text "app : "
-    show-content-assist
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select ApplicationType | click 
-    -default
-with [get-editor "test.vql" | get-text-viewer] {
+	select-from-content-assist ApplicationType
+
     key-type Down
     type-text " {"
     key-type Enter
     type-text App
-    show-content-assist
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select ApplicationType | click 
-    -default
-with [get-editor "test.vql" | get-text-viewer] {
+	select-from-content-assist ApplicationType
+
     type-text "."
-    show-content-assist
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select instances | click -default
-with [get-editor "test.vql" | get-text-viewer] {
+	select-from-content-assist instances
+
     type-text "(app, inst"
     key-type Right
     type-text ";"
     key-type Enter
-    show-content-assist
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select find | click -default
-with [get-editor "test.vql" | get-text-viewer] {
+    select-from-content-assist find
+
     type-text " "
-    show-content-assist
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table 
-    | select "AllocatedApplicationInstances - org.eclipse.viatra.examples.cps.testqueries.AllocatedApplicationInstances" 
-    | click -default
-with [get-editor "test.vql" | get-text-viewer] {
+    select-from-content-assist "AllocatedApplicationInstances - org.eclipse.viatra.examples.cps.testqueries.AllocatedApplicationInstances"
+
     key-type Left
     type-text inst
 }
