@@ -80,7 +80,7 @@ public abstract class ProjectGenerationHelper {
      * Contains the default import package requirements for VIATRA in a format that can be loaded into {@link #ensurePackageImports(IProject, List)}.
      * @since 2.0
      */
-    public static final List<String> DEFAULT_VIATRA_IMPORT_PACKAGES = Arrays.asList("org.apache.log4j");
+    public static final List<String> DEFAULT_VIATRA_IMPORT_PACKAGES = Arrays.asList("org.apache.log4j", "javax.annotation");
     
     private ProjectGenerationHelper() {/*Utility class constructor*/}
     

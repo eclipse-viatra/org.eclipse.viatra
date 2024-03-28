@@ -24,10 +24,13 @@
                 <configuration>
                     <aut>
                         <explicit>${autPath}</explicit>
+                        <vm>${jdkHome}</vm>
                         <vmArgs>
-                            <vmArg>${argLine}</vmArg>
+                            <vmArg>-Xmx2G</vmArg>
+                            <vmArgs>${argLine}</vmArgs>
                         </vmArgs>
                     </aut>
+                    <memoryUsage>true</memoryUsage>
                     <runner>
                         <version>${rcptt.version}</version>
                     </runner>
@@ -38,9 +41,6 @@
                     <skipTags>
                         <skipTag>testToSkip</skipTag>
                     </skipTags>
-
-
-                    <!--Remove if you want to run all tests! -->
                     <suites>
                         <suite>VIATRA All GUI Tests</suite>
                     </suites>

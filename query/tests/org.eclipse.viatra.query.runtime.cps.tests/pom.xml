@@ -80,6 +80,7 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
+					<useUIHarness>false</useUIHarness>
 				</configuration>
 			</plugin>
 		</plugins>

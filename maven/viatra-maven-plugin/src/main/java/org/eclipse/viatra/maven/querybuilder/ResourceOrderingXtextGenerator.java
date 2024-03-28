@@ -30,7 +30,6 @@ import org.eclipse.xtext.builder.standalone.compiler.IJavaCompiler;
 import org.eclipse.xtext.maven.ClusteringConfig;
 import org.eclipse.xtext.maven.Language;
 import org.eclipse.xtext.maven.MavenLog4JConfigurator;
-import org.eclipse.xtext.maven.XtextGenerator;
 import org.eclipse.xtext.util.Strings;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 

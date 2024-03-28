@@ -29,21 +29,21 @@
                             <filesets>
                                 <fileset><!-- EMF generated code -->
                                     <directory>emf-gen</directory>
-                                                                <excludes>
-                                                                        <exclude>.gitignore</exclude>
-                                                                </excludes>
+                                    <excludes>
+                                        <exclude>.gitignore</exclude>
+                                    </excludes>
                                 </fileset>
                                 <fileset><!--  EMF generator workspace -->
                                     <directory>${emf.workspace.location}</directory>
-                                                                <excludes>
-                                                                        <exclude>.gitignore</exclude>
-                                                                </excludes>
+                                    <excludes>
+                                        <exclude>.gitignore</exclude>
+                                    </excludes>
                                 </fileset>
                                 <fileset><!--  VIATRA Query generated code -->
                                     <directory>src-gen</directory>
-                                                                <excludes>
-                                                                        <exclude>.gitignore</exclude>
-                                                                </excludes>
+                                    <excludes>
+                                        <exclude>.gitignore</exclude>
+                                    </excludes>
                                 </fileset>
                             </filesets>
                         </configuration>
@@ -55,9 +55,12 @@
                 <artifactId>tycho-eclipserun-plugin</artifactId>
                 <configuration>
                     <applicationsArgs>
-                        <applicationsArg>-data ${emf.workspace.location}</applicationsArg>
-                        <applicationsArg>-application org.eclipse.emf.codegen.ecore.Generator</applicationsArg>
-                        <applicationsArg>-projects ${project.basedir}</applicationsArg>
+                        <applicationsArg>-data</applicationsArg>
+                        <applicationsArg>${emf.workspace.location}</applicationsArg>
+                        <applicationsArg>-application</applicationsArg>
+                        <applicationsArg>org.eclipse.emf.codegen.ecore.Generator</applicationsArg>
+                        <applicationsArg>-projects</applicationsArg>
+                        <applicationsArg>${project.basedir}</applicationsArg>
                         <applicationsArg>-model</applicationsArg>
                         <applicationsArg>${project.basedir}/model/traceability.genmodel</applicationsArg>
                         <applicationsArg>${project.basedir}</applicationsArg>
@@ -65,6 +68,10 @@
                     <dependencies>
                         <dependency>
                             <artifactId>org.eclipse.emf.codegen.ecore</artifactId>
+                            <type>eclipse-plugin</type>
+                        </dependency>
+                        <dependency>
+                            <artifactId>org.apache.felix.scr</artifactId>
                             <type>eclipse-plugin</type>
                         </dependency>
                     </dependencies>

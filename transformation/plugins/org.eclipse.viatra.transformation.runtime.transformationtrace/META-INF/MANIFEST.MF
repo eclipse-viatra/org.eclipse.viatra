@@ -4,7 +4,7 @@ Bundle-Name: VIATRA Transformation Trace Model (Incubation)
 Bundle-SymbolicName: org.eclipse.viatra.transformation.runtime.transformationtrace;singleton:=true
 Bundle-Version: 0.29.0.qualifier
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.viatra.transformation.debug.transformationtrace.model,
  org.eclipse.viatra.transformation.debug.transformationtrace.serializer,
  org.eclipse.viatra.transformation.debug.transformationtrace.util

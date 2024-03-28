@@ -6,7 +6,8 @@ Element-Type: testcase
 Element-Version: 3.0
 External-Reference: 
 Id: _DHI3kPBQEeWlEbYJ7IoFCQ
-Save-Time: 1/18/21, 5:44 PM
+Runtime-Version: 2.5.4.202210020716
+Save-Time: 3/28/24, 9:34 AM
 Testcase-Type: ecl
 
 ------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa
@@ -32,9 +33,21 @@ Entry-Name: .content
  * SPDX-License-Identifier: EPL-2.0
  *******************************************************************************/
 
+proc "select-from-content-assist" [val textviewer -input] [val assist] {
+	with [$textviewer] {
+		show-content-assist
+	}
+	// Waiting for Eclipse to populate the content assist, it can take a while in a few cases
+	wait 5000
+	get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select $assist | click 
+    	-default
+    
+    $textviewer
+}
+
 // Create Query Project
 get-menu "File/New/Other..." | click
-with [get-window New] {
+with [get-window "Select a wizard"] {
     get-tree | select "VIATRA/Query Project"
     get-button "Next >" | click
 }
@@ -58,7 +71,7 @@ get-editor "org.eclipse.viatra.examples.cps.testqueries" | close
 
 // Create pattern
 get-view "Project Explorer" | get-tree | select "org.eclipse.viatra.examples.cps.testqueries" | get-menu "New/Other..." | click
-with [get-window New] {
+with [get-window "Select a wizard"] {
     get-tree | select "VIATRA/Query Definition"
     get-button "Next >" | click
 }
@@ -90,7 +103,7 @@ with [get-editor "test.vql" | get-text-viewer] {
     type-text "pattern NotAllocatedApplicationInstances("
     key-type Enter
     type-text "inst : "
-    key-type "CTRL+SPACE"
+    show-content-assist
     key-type Down
     key-type Up
     key-type Enter
@@ -98,10 +111,10 @@ with [get-editor "test.vql" | get-text-viewer] {
     type-text " {"
     key-type Enter
     type-text "neg fin"
-    key-type "CTRL+SPACE"
+    show-content-assist
     key-type Enter
     type-text " "
-    key-type "CTRL+SPACE"
+    show-content-assist
     key-type Enter
     key-type Left
     type-text inst
@@ -110,40 +123,26 @@ with [get-editor "test.vql" | get-text-viewer] {
     type-text "pattern ApplicationsWithAllocatedInstances("
     key-type Enter
     type-text "app : "
-    key-type "CTRL+SPACE"
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select ApplicationType | click 
-    -default
-with [get-editor "test.vql" | get-text-viewer] {
+	select-from-content-assist ApplicationType
+
     key-type Down
     type-text " {"
     key-type Enter
     type-text App
-    key-type "CTRL+SPACE"
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select ApplicationType | click 
-    -default
-with [get-editor "test.vql" | get-text-viewer] {
+	select-from-content-assist ApplicationType
+
     type-text "."
-    show-content-assist
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select instances | click -default
-with [get-editor "test.vql" | get-text-viewer] {
+	select-from-content-assist instances
+
     type-text "(app, inst"
     key-type Right
     type-text ";"
     key-type Enter
-    key-type "CTRL+SPACE"
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table | select find | click -default
-with [get-editor "test.vql" | get-text-viewer] {
+    select-from-content-assist find
+
     type-text " "
-    key-type "CTRL+SPACE"
-}
-get-window -from "CompletionProposalPopup.createProposalSelector()" | get-table 
-    | select "AllocatedApplicationInstances - org.eclipse.viatra.examples.cps.testqueries.AllocatedApplicationInstances" 
-    | click -default
-with [get-editor "test.vql" | get-text-viewer] {
+    select-from-content-assist "AllocatedApplicationInstances - org.eclipse.viatra.examples.cps.testqueries.AllocatedApplicationInstances"
+
     key-type Left
     type-text inst
 }

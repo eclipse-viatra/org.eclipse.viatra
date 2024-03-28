@@ -28,8 +28,8 @@
          version="0.0.0"/>
 
    <requires>
-      <import plugin="org.eclipse.xtext.ide" version="2.13.0"/>
-      <import plugin="org.eclipse.xtext.xbase.ide" version="2.13.0"/>
+      <import plugin="org.eclipse.xtext.ide" version="2.33.0"/>
+      <import plugin="org.eclipse.xtext.xbase.ide" version="2.33.0"/>
    </requires>
 
    <plugin

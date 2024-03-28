@@ -10,7 +10,7 @@ Export-Package: org.eclipse.viatra.addon.validation.core,
  org.eclipse.viatra.addon.validation.core.listeners,
  org.eclipse.viatra.addon.validation.core.violationkey
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: Eclipse VIATRA Project
 Import-Package: org.apache.log4j
 Automatic-Module-Name: org.eclipse.viatra.addon.validation.core

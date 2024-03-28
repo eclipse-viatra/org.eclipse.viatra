@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: VIATRA UML Integration Test
 Bundle-SymbolicName: org.eclipse.viatra.integration.uml.test
 Bundle-Version: 2.9.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.viatra.integration.uml;bundle-version="1.0.0",
  org.junit;bundle-version="4.11.0",
  org.eclipse.uml2.uml;bundle-version="5.0.0",
@@ -12,6 +12,6 @@ Require-Bundle: org.eclipse.viatra.integration.uml;bundle-version="1.0.0",
  org.eclipse.uml2.uml.resources;bundle-version="5.0.0",
  com.google.guava;bundle-version="27.1.0",
  org.mockito;bundle-version="1.9.5",
- org.hamcrest;bundle-version="1.1.0"
+ org.hamcrest.core;bundle-version="1.1.0"
 Bundle-Vendor: Eclipse VIATRA Project
 Automatic-Module-Name: org.eclipse.viatra.integration.uml.test

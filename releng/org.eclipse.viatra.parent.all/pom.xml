@@ -93,40 +93,6 @@
 		</repository>
 	</repositories>
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-versions-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-toolchains-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>
-					<includePackedArtifacts>true</includePackedArtifacts>
-					<resolver>p2</resolver>
-					<target>
-						<artifact>
-							<groupId>org.eclipse.viatra</groupId>
-							<artifactId>org.eclipse.viatra.target.all</artifactId>
-							<version>${viatra.main.version}</version>
-						</artifact>
-						<dependency-resolution>
-							<extraRequirements>
-								<requirement>
-									<type>eclipse-plugin</type>
-									<id>com.google.inject.multibindings</id>
-									<versionRange>[3.0.0,4.0.0)</versionRange>
-								</requirement>
-							</extraRequirements>
-						</dependency-resolution>
-					</target>
-				</configuration>
-			</plugin>
-		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>
