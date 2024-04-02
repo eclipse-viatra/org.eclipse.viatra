@@ -871,6 +871,11 @@
         value="=https://git.eclipse.org/c/viatra/org.eclipse.viatra.git/plain/releng/org.eclipse.viatra.setup/VIATRAEMF.setup->${git.clone.viatra.location|uri}/releng/org.eclipse.viatra.setup/VIATRAEMF.setup"
         vm="true"/>
     <setupTask
+        xsi:type="setup:EclipseIniTask"
+        option="-Doomph.redirection.viatra.setup"
+        value="=https://raw.githubusercontent.com/eclipse-viatra/org.eclipse.viatra/master/releng/org.eclipse.viatra.setup/VIATRAEMF.setup->${git.clone.viatra.location|uri}/releng/org.eclipse.viatra.setup/VIATRAEMF.setup"
+        vm="true"/>
+    <setupTask
         xsi:type="pde:APIBaselineTask"
         name="viatraBaseline"
         version="2.8"
