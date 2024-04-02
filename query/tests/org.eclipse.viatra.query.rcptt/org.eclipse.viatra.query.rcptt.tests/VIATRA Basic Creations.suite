@@ -4,8 +4,8 @@ Element-Name: VIATRA Basic Creations
 Element-Type: testsuite
 Element-Version: 2.0
 Id: _eAbv0PEBEeW0yqPNDxWanA
-Runtime-Version: 2.3.0.201806262310
-Save-Time: 3/22/19, 8:50 PM
+Runtime-Version: 2.5.4.202210020716
+Save-Time: 4/2/24, 4:24 PM
 
 ------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa
 Content-Type: text/plain
@@ -25,7 +25,6 @@ Entry-Name: testcase-items
 _-a1aIPBHEeWlEbYJ7IoFCQ	// kind: 'test' name: 'Create Pattern' path: 'Create Pattern.test'
 _img6cPBOEeWlEbYJ7IoFCQ	// kind: 'test' name: 'Create Query Generator Model' path: 'Create Query Generator Model.test'
 _IagsIPBEEeWlEbYJ7IoFCQ	// kind: 'test' name: 'Create Query Project' path: 'Create Query Project.test'
-_DHI3kPBQEeWlEbYJ7IoFCQ	// kind: 'test' name: 'Pattern Autocomplete' path: 'Pattern Autocomplete.test'
 _H8xyEJqMEeab4oboKsBTUA	// kind: 'test' name: 'Create Pattern with Template' path: 'Create Pattern with Template.test'
 _TRoCkFqUEeiOt8o8P2LMSA	// kind: 'test' name: 'Create Query Project - Custom Output Directory' path: 'Create Query Project - Custom Output Directory.test'
 
