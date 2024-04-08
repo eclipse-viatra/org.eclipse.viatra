@@ -834,7 +834,7 @@
       <requirement
           name="org.eclipse.viatra.query.sdk.feature.source.feature.group"/>
       <repository
-          url="${viatra.ci.build.job.name}/lastSuccessfulBuild/artifact/releng/org.eclipse.viatra.update/target/repository"/>
+          url=" https://ci.eclipse.org/viatra/job/VIATRA/job/${viatra.git.branch}/lastSuccessfulBuild/artifact/releng/org.eclipse.viatra.update/target/repository"/>
       <repository
           url="http://download.eclipse.org/collections/10.2.0/repository"/>
     </setupTask>
@@ -846,7 +846,7 @@
             name="org.eclipse.viatra.query.sdk.feature.source.feature.group"/>
         <repositoryList>
           <repository
-              url="${viatra.ci.build.job.name}/lastSuccessfulBuild/artifact/releng/org.eclipse.viatra.update/target/repository"/>
+              url=" https://ci.eclipse.org/viatra/job/VIATRA/job/${viatra.git.branch}/lastSuccessfulBuild/artifact/releng/org.eclipse.viatra.update/target/repository"/>
         </repositoryList>
       </targlet>
     </setupTask>
