@@ -275,6 +275,14 @@ public final class LocalSearchHints implements IMatcherCapability {
         return traceCollector == null ? normalizationTraceCollector.getDefaultValue() : traceCollector;
     }
     
+    /**
+     * @since 2.9
+     */
+    public LocalSearchHints setConsultSurrogates(boolean consultSurrogates) {
+        this.consultSurrogates = consultSurrogates;
+        return this;
+    }
+    
     public LocalSearchHints setUseBase(boolean useBase) {
         this.useBase = useBase;
         return this;
