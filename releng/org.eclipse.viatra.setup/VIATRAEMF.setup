@@ -151,8 +151,6 @@
         name="org.eclipse.sirius.specifier.ide.ui.feature.group"/>
     <requirement
         name="org.eclipse.sirius.specifier.ide.ui.aql.feature.group"/>
-    <requirement
-        name="org.eclipse.rcptt.platform.feature.group"/>
     <repository
         url="http://download.eclipse.org/sirius/updates/releases/6.6.0/2020-09/"/>
     <description>Install the tools needed in the IDE to work with the source code for ${scope.project.label}</description>
