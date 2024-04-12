@@ -20,4 +20,7 @@ public class DummyClass {
         return false;
     }
     
+    public static int hashOf(Object o) {
+        return o.hashCode();
+    }
 }

@@ -23,6 +23,8 @@ import org.junit.runner.RunWith
 import org.eclipse.viatra.query.patternlanguage.emf.tests.util.AbstractValidatorTest
 import org.eclipse.viatra.query.patternlanguage.emf.validation.EMFPatternLanguageValidator
 import org.eclipse.viatra.query.patternlanguage.emf.tests.CustomizedEMFPatternLanguageInjectorProvider
+import org.eclipse.emf.common.util.Diagnostic
+import static org.junit.Assert.assertNotEquals
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(CustomizedEMFPatternLanguageInjectorProvider))
@@ -258,6 +260,41 @@ class CheckConstraintTest extends AbstractValidatorTest {
         tester.validate(model).assertAll(
             getErrorCode(IssueCodes::EVAL_INCORRECT_RETURNVALUE)
         )
+    }
+    
+    @Test
+    def elementInExpressionCheck() {
+        val model = parseHelper.parse('''
+            package org.eclipse.viatra.query.patternlanguage.emf.tests
+            import "http://www.eclipse.org/emf/2002/Ecore"
+
+            pattern evalTest(cl : EClass, hash : java Integer) {
+                EClass(cl);
+                hash == eval(DummyClass::hashOf(cl));
+            }
+        ''')
+        tester.validate(model).assertDiagnostic(Diagnostic.ERROR,
+            IssueCodes::CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR,
+            "Only simple EDataTypes are allowed in check() and eval()"
+        )
+    }
+    
+    @Test
+    def elementInExpressionSuppressedCheck() {
+        val model = parseHelper.parse('''
+            package org.eclipse.viatra.query.patternlanguage.emf.tests
+            import "http://www.eclipse.org/emf/2002/Ecore"
+
+            @SafeElementInExpression
+            pattern evalTest(cl : EClass, hash : java Integer) {
+                EClass(cl);
+                hash == eval(DummyClass::hashOf(cl));
+            }
+        ''')
+        val results = tester.validate(model)
+        results.assertDiagnostic(Diagnostic.INFO, IssueCodes::CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR, "[SUPPRESSED]")
+        
+        assertNotEquals(Diagnostic.ERROR, results.diagnostic.severity)
     }
 
 }

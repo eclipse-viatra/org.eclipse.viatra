@@ -43,6 +43,8 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternImport;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ReferenceType;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.VQLImportSection;
+import org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.SafeElementInExpressionAnnotationValidator;
+import org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.SafeNegativeRecursionAnnotationValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.jvmmodel.EMFPatternLanguageJvmModelInferrerUtil;
 import org.eclipse.viatra.query.patternlanguage.emf.services.EMFPatternLanguageGrammarAccess;
@@ -799,19 +801,33 @@ public class EMFPatternLanguageValidator extends AbstractEMFPatternLanguageValid
     }
 
     private void checkForWrongVariablesInXExpressionsInternal(final XExpression expression) {
+        Pattern containingPattern = EcoreUtil2.getContainerOfType(expression, Pattern.class);
+        boolean hasSafeElementInExpressionAnnotation = PatternLanguageHelper.getFirstAnnotationByName(
+                containingPattern, SafeElementInExpressionAnnotationValidator.ANNOTATION_NAME).isPresent();
+        
         for (Variable variable : PatternLanguageHelper.getReferencedPatternVariablesOfXExpression(expression,
                 associations)) {
             IInputKey classifier = typeInferrer.getType(variable);
+            
+            String detectedError = null;
             if (classifier instanceof BottomTypeKey) {
-                error("Only simple EDataTypes are allowed in check() and eval() expressions. The variable "
-                        + variable.getName() + " has an unknown type.",
-                        expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
+                detectedError = "Only simple EDataTypes are allowed in check() and eval() expressions. The variable "
+                        + variable.getName() + " has an unknown type.";
             } else if (classifier != null && !(classifier instanceof EDataTypeInSlotsKey)
                     && !(classifier instanceof JavaTransitiveInstancesKey)) {// null-check needed, otherwise code throws
                                                                              // NPE for classifier.getName()
-                error("Only simple EDataTypes are allowed in check() and eval() expressions. The variable "
-                        + variable.getName() + " has a type of " + classifier.getPrettyPrintableName() + ".",
-                        expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
+                detectedError = "Only simple EDataTypes are allowed in check() and eval() expressions. The variable "
+                        + variable.getName() + " has a type of " + classifier.getPrettyPrintableName() + ".";
+            }
+            
+            if (null != detectedError) {
+                if (hasSafeElementInExpressionAnnotation) {
+                    info(IssueCodes.SUPPRESSED_MESSAGE_PREFIX + detectedError, 
+                            expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
+                } else {
+                    error(detectedError, 
+                            expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
+                }
             }
         }
     }
