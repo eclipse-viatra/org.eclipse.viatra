@@ -8,7 +8,12 @@
  *******************************************************************************/
 package org.eclipse.viatra.query.runtime.tests.api;
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.Callable;
+
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternLanguagePackage;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel;
 import org.eclipse.viatra.query.patternlanguage.emf.specification.SpecificationBuilder;
 import org.eclipse.viatra.query.patternlanguage.emf.tests.CustomizedEMFPatternLanguageInjectorProvider;
@@ -19,10 +24,12 @@ import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngineOptions;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryMatcher;
 import org.eclipse.viatra.query.runtime.emf.EMFScope;
+import org.eclipse.viatra.query.runtime.emf.types.EStructuralFeatureInstancesKey;
 import org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHints;
 import org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchResultProvider;
 import org.eclipse.viatra.query.runtime.matchers.backend.IQueryResultProvider;
 import org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint;
+import org.eclipse.viatra.query.runtime.matchers.context.surrogate.SurrogateQueryRegistry;
 import org.eclipse.viatra.query.runtime.rete.matcher.ReteBackendFactory;
 import org.eclipse.viatra.query.runtime.rete.matcher.RetePatternMatcher;
 import org.eclipse.xtext.testing.InjectWith;
@@ -54,15 +61,14 @@ public class QueryEvaluationsHintTest {
     
     @Before
     public void setUp() throws Exception{
-        ResourceSetImpl rs = new ResourceSetImpl();
-        engine = AdvancedViatraQueryEngine.createUnmanagedEngine(new EMFScope(rs));
         String patternCode = "package org.eclipse.viatra.query.patternlanguage.emf.tests\n"
                             + "import \"http://www.eclipse.org/viatra/query/patternlanguage/emf/PatternLanguage\"\n"
-                            + "pattern p(p : Pattern) = {\n"
-                            + " Pattern(p);\n"
+                            + "pattern patternsWithName(patternObject : Pattern, nameString : java String) = {\n"
+                            + " Pattern.name(patternObject, nameString);\n"
                             + "}";
         PatternModel model = parseHelper.parse(patternCode);
         specification = new SpecificationBuilder().getOrCreateSpecification(model.getPatterns().get(0));
+        engine = AdvancedViatraQueryEngine.createUnmanagedEngine(new EMFScope(model));
     }
     
     @After
@@ -118,4 +124,88 @@ public class QueryEvaluationsHintTest {
         IQueryResultProvider resultProvider = engine.getResultProviderOfMatcher(matcher);
         Assert.assertTrue(resultProvider + "is not rete", resultProvider instanceof RetePatternMatcher);
     }
+    
+    /**
+     * Test that local search ignores surrogates by default
+     */
+    @Test
+    public void testSurrogateUsageLSDefault() throws Exception {
+        tryWithSurrogate(() -> {
+            Assert.assertEquals(
+                    "With consultSurrogates set to false, LS should use EMF getters instead of surrogate queries",
+                    Collections.singleton("patternsWithName"), 
+                    getAllPatternNames(LocalSearchHints.getDefault().build())
+            );
+            return null;
+        });
+    }
+    /**
+     * Test that local search ignores surrogates if hinted to do so
+     */
+    @Test
+    public void testSurrogateUsageLSNoConsult() throws Exception {
+        tryWithSurrogate(() -> {
+            Assert.assertEquals(
+                    "With default parameters, LS should use EMF getters instead of surrogate queries",
+                    Collections.singleton("patternsWithName"), 
+                    getAllPatternNames(LocalSearchHints.getDefault().setConsultSurrogates(false).build())
+            );
+            return null;
+        });
+    }
+    /**
+     * Test that local search uses surrogates if hinted to do so
+     */
+    @Test
+    public void testSurrogateUsageLSConsult() throws Exception {
+        tryWithSurrogate(() -> {
+            Assert.assertEquals(
+                    "With consultSurrogates set to true, LS should use EMF getters instead of surrogate queries",
+                    Collections.singleton("patternObject"), 
+                    getAllPatternNames(LocalSearchHints.getDefault().setConsultSurrogates(true).build())
+            );
+            return null;
+        });
+    }
+    /**
+     * Test Rete uses surrogates always 
+     */
+    @Test
+    public void testSurrogateUsageRete() throws Exception {
+        tryWithSurrogate(() -> {
+            Assert.assertEquals(
+                    "Rete should always use surrogate queries",
+                    Collections.singleton("patternObject"), 
+                    getAllPatternNames(new QueryEvaluationHint(null, ReteBackendFactory.INSTANCE))
+            );
+            return null;
+        });
+    }
+
+    private Set<Object> getAllPatternNames(QueryEvaluationHint hints) {
+        return engine.getMatcher(specification, hints).getAllValues("nameString");
+    }
+    
+    private void tryWithSurrogate(Callable payload) throws Exception {
+        String surrogatePatternCode = "package org.eclipse.viatra.query.patternlanguage.emf.tests.surrogates\n"
+                + "import \"http://www.eclipse.org/viatra/query/patternlanguage/emf/PatternLanguage\"\n"
+                + "pattern surrogate(p : Pattern, name : java String) = {\n"
+                + " Pattern(p);\n"
+                + " name == \"patternObject\";\n"
+                + "}";
+        PatternModel surrogateQueriesModel = parseHelper.parse(surrogatePatternCode);
+        IQuerySpecification<? extends ViatraQueryMatcher<? extends IPatternMatch>> surrogate = 
+                new SpecificationBuilder().getOrCreateSpecification(surrogateQueriesModel.getPatterns().get(0));
+        EStructuralFeatureInstancesKey surrogateKey = new EStructuralFeatureInstancesKey(PatternLanguagePackage.eINSTANCE.getPattern_Name());
+        
+        SurrogateQueryRegistry.instance().addDynamicSurrogateQueryForFeature(surrogateKey, surrogate.getInternalQueryRepresentation());
+        try {
+            payload.call();
+        } finally {
+            SurrogateQueryRegistry.instance().removeDynamicSurrogateQueryForFeature(surrogateKey);
+        }
+    }
+    
+
+    
 }

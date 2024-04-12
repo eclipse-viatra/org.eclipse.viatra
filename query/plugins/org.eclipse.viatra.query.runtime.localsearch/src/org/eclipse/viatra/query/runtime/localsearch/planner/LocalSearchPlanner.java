@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHintOptions;
 import org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHints;
 import org.eclipse.viatra.query.runtime.localsearch.operations.ISearchOperation;
 import org.eclipse.viatra.query.runtime.localsearch.plan.SearchPlanForBody;
@@ -30,10 +31,12 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.ExportedParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PQuery;
+import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.IdentityPDisjunctionRewriter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PBodyNormalizer;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionRewriter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionRewriterCacher;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PQueryFlattener;
+import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.SurrogateQueryRewriter;
 
 /**
  * 
@@ -63,6 +66,9 @@ public class LocalSearchPlanner implements ILocalSearchPlanner {
         this.configuration = configuration;
         this.operationCompiler = compiler;
         this.resultRequestor = resultRequestor;
+        PDisjunctionRewriter surrogatesRewriter = (true == configuration.isConsultSurrogates())
+                ? new SurrogateQueryRewriter()
+                : new IdentityPDisjunctionRewriter();
         PQueryFlattener flattener = new PQueryFlattener(configuration.getFlattenCallPredicate());
         /*
          * TODO https://bugs.eclipse.org/bugs/show_bug.cgi?id=439358: The normalizer is initialized with the false
@@ -72,13 +78,18 @@ public class LocalSearchPlanner implements ILocalSearchPlanner {
          * negatively.
          */
         PBodyNormalizer normalizer = new PBodyNormalizer(runtimeContext.getMetaContext()) {
-            
+
             @Override
             protected boolean shouldCalculateImpliedTypes(PQuery query) {
                 return false;
             }
         };
-        preprocessor = new PDisjunctionRewriterCacher(flattener, normalizer);
+
+        preprocessor = new PDisjunctionRewriterCacher(
+                flattener, 
+                surrogatesRewriter, // TODO surrogates will not be flattened themselves
+                normalizer
+        );
 
         plannerStrategy = new LocalSearchRuntimeBasedStrategy();
 
