@@ -899,9 +899,16 @@
         value="master"/>
     <setupTask
         xsi:type="jdt:JRETask"
-        version="JavaSE-1.8"
+        version="JavaSE-11"
         location="${jre.location-11}"
         name="JRE for JavaSE-11">
+      <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
+    </setupTask>
+    <setupTask
+        xsi:type="jdt:JRETask"
+        version="JavaSE-17"
+        location="${jre.location-17}"
+        name="JRE for JavaSE-17">
       <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
     </setupTask>
   </stream>
