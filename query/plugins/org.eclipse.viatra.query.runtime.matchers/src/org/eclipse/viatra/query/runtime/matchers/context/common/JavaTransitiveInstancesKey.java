@@ -114,7 +114,7 @@ public class JavaTransitiveInstancesKey extends BaseInputKeyWrapper<String> {
     @Override
     public String getPrettyPrintableName() {
         getWrapperInstanceClass();
-        return cachedWrapperInstanceClass == null ? wrappedKey == null ? "<null>" : wrappedKey : cachedWrapperInstanceClass.getName();
+        return cachedWrapperInstanceClass == null ? wrappedKey == null ? "<null>" : wrappedKey : cachedWrapperInstanceClass.getCanonicalName();
     }
 
     @Override
