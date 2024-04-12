@@ -13,16 +13,16 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.builder.standalone.StandaloneBuilder;
 
 /**
  * {@link StandaloneBuilder} implementation customized to sort resources by filename.
  */
 public class ResourceOrderingStandaloneBuilder extends StandaloneBuilder {
+
   @Override
-  protected List<URI> collectResources(final Iterable<String> roots, final ResourceSet resourceSet) {
-      List<URI> resources = super.collectResources(roots, resourceSet);
+  protected List<URI> collectResources(final Iterable<String> roots) {
+      List<URI> resources = super.collectResources(roots);
       Collections.sort(resources, new Comparator<URI>() {
 
         @Override

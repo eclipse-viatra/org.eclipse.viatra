@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.xtext;bundle-version="[2.20.0,3.0.0)",
  org.eclipse.emf.common,
  org.antlr.runtime,
  org.eclipse.emf.codegen.ecore
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.viatra.query.tooling.generator.model;
   uses:="com.google.inject",
  org.eclipse.viatra.query.tooling.generator.model.formatting,
