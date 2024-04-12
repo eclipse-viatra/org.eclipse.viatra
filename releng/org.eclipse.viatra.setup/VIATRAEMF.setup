@@ -17,12 +17,6 @@
     name="viatra"
     label="VIATRA">
   <setupTask
-      xsi:type="jdt:JRETask"
-      version="JavaSE-1.8"
-      location="${jre.location-1.8}">
-    <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
-  </setupTask>
-  <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Xmx"
       value="2048m"
@@ -378,7 +372,7 @@
     <setupTask
         xsi:type="projects:ProjectsBuildTask"
         id="viatra.xtext.pregen"
-        predecessor="//@setupTasks.12/@setupTasks.1 //@setupTasks.12/@setupTasks.2 //@setupTasks.12/@setupTasks.3"
+        predecessor="//@setupTasks.11/@setupTasks.1 //@setupTasks.11/@setupTasks.2 //@setupTasks.11/@setupTasks.3"
         onlyNewProjects="true"
         refresh="true"/>
     <setupTask
@@ -389,25 +383,25 @@
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="//@setupTasks.13/@setupTasks.1"
+        predecessor="//@setupTasks.12/@setupTasks.1"
         launcher="org.eclipse.viatra.setup/GenerateEMFPatternLanguage.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="//@setupTasks.13/@setupTasks.2"
+        predecessor="//@setupTasks.12/@setupTasks.2"
         launcher="org.eclipse.viatra.setup/GeneratePatternLanguageTestMetamodel.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="//@setupTasks.13/@setupTasks.2"
+        predecessor="//@setupTasks.12/@setupTasks.2"
         launcher="org.eclipse.viatra.setup/GeneratePatternLanguageSiriusMetamodel.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="//@setupTasks.13/@setupTasks.2"
+        predecessor="//@setupTasks.12/@setupTasks.2"
         launcher="org.eclipse.viatra.setup/GenerateTestSnapshotMetamodel.mwe2.launch">
       <description></description>
     </setupTask>
@@ -418,7 +412,7 @@
     <setupTask
         xsi:type="projects:ProjectsBuildTask"
         id="viatra.xtext.postgen"
-        predecessor="//@setupTasks.13/@setupTasks.2"
+        predecessor="//@setupTasks.12/@setupTasks.2"
         onlyNewProjects="true"
         refresh="true"/>
     <setupTask
@@ -905,6 +899,13 @@
         xsi:type="setup:VariableTask"
         name="viatra.git.branch"
         value="master"/>
+    <setupTask
+        xsi:type="jdt:JRETask"
+        version="JavaSE-1.8"
+        location="${jre.location-11}"
+        name="JRE for JavaSE-11">
+      <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
+    </setupTask>
   </stream>
   <stream name="2.8-maintenance">
     <setupTask
@@ -1623,6 +1624,12 @@
         xsi:type="setup:VariableTask"
         name="viatra.git.branch"
         value="2.8-maintenance"/>
+    <setupTask
+        xsi:type="jdt:JRETask"
+        version="JavaSE-1.8"
+        location="${jre.location-1.8}">
+      <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
+    </setupTask>
   </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
