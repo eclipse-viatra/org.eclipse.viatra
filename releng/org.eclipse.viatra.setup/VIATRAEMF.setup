@@ -157,6 +157,8 @@
         name="org.eclipse.sirius.specifier.ide.ui.feature.group"/>
     <requirement
         name="org.eclipse.sirius.specifier.ide.ui.aql.feature.group"/>
+    <requirement
+        name="org.eclipse.rcptt.platform.feature.group"/>
     <repository
         url="http://download.eclipse.org/sirius/updates/releases/6.6.0/2020-09/"/>
     <description>Install the tools needed in the IDE to work with the source code for ${scope.project.label}</description>
@@ -164,7 +166,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="2020-12"
+      defaultValue="2024-03"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="git:GitCloneTask"
@@ -340,397 +342,127 @@
         locateNestedProjects="true"/>
   </setupTask>
   <setupTask
-      xsi:type="setup.targlets:TargletTask">
-    <targlet
-        name="${scope.project.label}"
-        activeRepositoryList="${eclipse.target.platform}">
-      <requirement
-          name="org.eclipse.gmf.runtime.notation.sdk.feature.group"/>
-      <requirement
-          name="org.eclipse.gmf.runtime.sdk.feature.group"/>
-      <requirement
-          name="org.eclipse.graphiti.feature.feature.group"/>
-      <requirement
-          name="org.eclipse.uml2.sdk.feature.group"
-          versionRange="[5.0.0,6.0.0)"/>
-      <repositoryList
-          name="2019-06">
-        <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2019-09">
-        <repository
-            url="http://download.eclipse.org/releases/2019-09"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2019-12">
-        <repository
-            url="http://download.eclipse.org/releases/2019-12"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2020-03">
-        <repository
-            url="http://download.eclipse.org/releases/2020-03"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2020-06">
-        <repository
-            url="http://download.eclipse.org/releases/2020-06"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2020-09">
-        <repository
-            url="http://download.eclipse.org/releases/2020-09"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2020-12">
-        <repository
-            url="http://download.eclipse.org/releases/2020-12"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2021-03">
-        <repository
-            url="http://download.eclipse.org/releases/2021-03"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2021-06">
-        <repository
-            url="http://download.eclipse.org/releases/2021-06"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2021-09">
-        <repository
-            url="http://download.eclipse.org/releases/2021-09"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2021-12">
-        <repository
-            url="http://download.eclipse.org/releases/2021-12"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2022-03">
-        <repository
-            url="http://download.eclipse.org/releases/2022-03"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2022-06">
-        <repository
-            url="http://download.eclipse.org/releases/2022-06"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
-      </repositoryList>
-      <repositoryList
-          name="2022-09">
-        <repository
-            url="http://download.eclipse.org/releases/2022-09"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="2022-12">
-        <repository
-            url="http://download.eclipse.org/releases/2022-12"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="2023-03">
-        <repository
-            url="http://download.eclipse.org/releases/2023-03"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="2023-06">
-        <repository
-            url="http://download.eclipse.org/releases/2023-06"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="2023-09">
-        <repository
-            url="http://download.eclipse.org/releases/2023-09"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="2023-12">
-        <repository
-            url="http://download.eclipse.org/releases/2023-12"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="2024-03">
-        <repository
-            url="http://download.eclipse.org/releases/2024-03"/>
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-    </targlet>
-    <targlet
-        name="Sirius"
-        activeRepositoryList="${eclipse.target.platform}">
-      <requirement
-          name="org.eclipse.sirius.runtime.ide.ui.source.feature.group"/>
-      <requirement
-          name="org.eclipse.sirius.runtime.aql.source.feature.group"/>
-      <requirement
-          name="org.eclipse.sirius.properties.feature.source.feature.group"/>
-      <requirement
-          name="org.eclipse.sirius.specifier.properties.feature.source.feature.group"/>
-      <requirement
-          name="org.eclipse.sirius.runtime.ide.xtext.source.feature.group"/>
-      <requirement
-          name="org.eclipse.sirius.diagram.elk.feature.feature.group"/>
-      <repositoryList
-          name="2022-06">
-        <repository
-            url="http://download.eclipse.org/releases/2022-06"/>
-        <repository
-            url="https://download.eclipse.org/sirius/updates/releases/7.0.0/2021-06/"/>
-      </repositoryList>
-      <repositoryList
-          name="2022-09">
-        <repository
-            url="http://download.eclipse.org/releases/2022-09"/>
-        <repository
-            url="https://download.eclipse.org/sirius/updates/releases/7.0.4/2021-06/"/>
-      </repositoryList>
-      <repositoryList
-          name="2022-12">
-        <repository
-            url="http://download.eclipse.org/releases/2022-12"/>
-        <repository
-            url="https://download.eclipse.org/sirius/updates/releases/7.0.6/2021-06/"/>
-      </repositoryList>
-      <repositoryList
-          name="2023-03">
-        <repository
-            url="http://download.eclipse.org/releases/2023-03"/>
-        <repository
-            url="https://download.eclipse.org/sirius/updates/releases/7.0.7/2021-06/"/>
-      </repositoryList>
-      <repositoryList
-          name="2023-06">
-        <repository
-            url="http://download.eclipse.org/releases/2023-06"/>
-        <repository
-            url="https://download.eclipse.org/sirius/updates/releases/7.2.0/2023-03/"/>
-      </repositoryList>
-      <repositoryList
-          name="2023-09">
-        <repository
-            url="http://download.eclipse.org/releases/2023-09"/>
-        <repository
-            url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
-      </repositoryList>
-      <repositoryList
-          name="2023-12">
-        <repository
-            url="http://download.eclipse.org/releases/2023-12"/>
-        <repository
-            url="https://download.eclipse.org/sirius/updates/releases/7.3.0/2023-03/"/>
-      </repositoryList>
-      <repositoryList
-          name="2024-03">
-        <repository
-            url="http://download.eclipse.org/releases/2024-03"/>
-        <repository
-            url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
-      </repositoryList>
-    </targlet>
-  </setupTask>
-  <setupTask
       xsi:type="setup:CompoundTask"
       excludedTriggers="STARTUP MANUAL"
-      name="Bootstrap">
+      name="EMF metamodel (independent)">
     <setupTask
         xsi:type="projects:ProjectsBuildTask"
         id="viatra.pregen"
-        onlyNewProjects="true"/>
+        onlyNewProjects="true">
+      <predecessor
+          xsi:type="setup.targlets:TargletTask"
+          href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@setupTasks.4"/>
+    </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
         predecessor="viatra.pregen"
-        successor="viatra.xtext.pregen"
         launcher="org.eclipse.viatra.setup/GenerateReteRecipeMetamodel.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
         predecessor="viatra.pregen"
-        successor="viatra.xtext.pregen"
         launcher="org.eclipse.viatra.setup/GenerateNotationMetamodel.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
         predecessor="viatra.pregen"
-        successor="viatra.xtext.pregen"
         launcher="org.eclipse.viatra.setup/GenerateTraceabilityMetamodel.mwe2.launch">
       <description></description>
     </setupTask>
-    <setupTask
-        xsi:type="launching:LaunchTask"
-        predecessor="viatra.pregen"
-        successor="viatra.xtext.pregen"
-        launcher="org.eclipse.viatra.setup/GeneratePatternLanguageSiriusMetamodel.mwe2.launch">
-      <description></description>
-    </setupTask>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      name="Xtext Workflows and Dependent Metamodels">
     <setupTask
         xsi:type="projects:ProjectsBuildTask"
         id="viatra.xtext.pregen"
+        predecessor="//@setupTasks.12/@setupTasks.1 //@setupTasks.12/@setupTasks.2 //@setupTasks.12/@setupTasks.3"
         onlyNewProjects="true"
         refresh="true"/>
     <setupTask
         xsi:type="launching:LaunchTask"
         predecessor="viatra.xtext.pregen"
-        successor="viatra.xtext.postgen"
         launcher="org.eclipse.viatra.setup/GenerateGeneratorModel.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="viatra.xtext.postgen"
-        successor="//@setupTasks.13/@setupTasks.8"
+        predecessor="//@setupTasks.13/@setupTasks.1"
         launcher="org.eclipse.viatra.setup/GenerateEMFPatternLanguage.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="//@setupTasks.13/@setupTasks.7"
+        predecessor="//@setupTasks.13/@setupTasks.2"
         launcher="org.eclipse.viatra.setup/GeneratePatternLanguageTestMetamodel.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="//@setupTasks.13/@setupTasks.7"
-        launcher="org.eclipse.viatra.setup/GeneratePatternLanguageSiriusQueries.mwe2.launch">
+        predecessor="//@setupTasks.13/@setupTasks.2"
+        launcher="org.eclipse.viatra.setup/GeneratePatternLanguageSiriusMetamodel.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
+        xsi:type="launching:LaunchTask"
+        predecessor="//@setupTasks.13/@setupTasks.2"
+        launcher="org.eclipse.viatra.setup/GenerateTestSnapshotMetamodel.mwe2.launch">
+      <description></description>
+    </setupTask>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      name="VQL Generation">
+    <setupTask
         xsi:type="projects:ProjectsBuildTask"
         id="viatra.xtext.postgen"
+        predecessor="//@setupTasks.13/@setupTasks.2"
         onlyNewProjects="true"
         refresh="true"/>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="viatra.pregen"
-        successor="viatra.xtext.pregen"
-        launcher="org.eclipse.viatra.setup/GenerateTestSnapshotMetamodel.mwe2.launch">
-      <description></description>
-    </setupTask>
-    <setupTask
-        xsi:type="launching:LaunchTask"
-        predecessor="viatra.query.prequerygen"
+        predecessor="viatra.xtext.postgen"
         launcher="org.eclipse.viatra.setup/GenerateRetevisQueryCode.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="viatra.query.prequerygen"
+        predecessor="viatra.xtext.pregen"
         filter=""
         launcher="org.eclipse.viatra.setup/GenerateUMLIntegrationQueryCode.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="viatra.query.prequerygen"
+        predecessor="viatra.xtext.pregen"
         launcher="org.eclipse.viatra.setup/GenerateViewersRuntimeQueryCode.mwe2.launch">
       <description></description>
     </setupTask>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="Generate query code">
-    <setupTask
-        xsi:type="projects:ProjectsBuildTask"
-        id="viatra.query.prequerygen"
-        onlyNewProjects="true"
-        refresh="true"/>
     <setupTask
         xsi:type="launching:LaunchTask"
-        launcher="org.eclipse.viatra.setup/GenerateRetevisQueryCode.mwe2.launch">
-      <description></description>
-    </setupTask>
-    <setupTask
-        xsi:type="launching:LaunchTask"
+        predecessor="viatra.xtext.pregen"
         launcher="org.eclipse.viatra.setup/GenerateTransformationViewsQueryCode.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        launcher="org.eclipse.viatra.setup/GenerateUMLIntegrationQueryCode.mwe2.launch">
+        predecessor="viatra.xtext.pregen"
+        launcher="org.eclipse.viatra.setup/GenerateRCPTTQueries.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        launcher="org.eclipse.viatra.setup/GenerateViewersRuntimeQueryCode.mwe2.launch">
-      <description></description>
-    </setupTask>
-    <setupTask
-        xsi:type="launching:LaunchTask"
-        predecessor="viatra.query.prequerygen"
+        predecessor="viatra.xtext.pregen"
         filter=""
         launcher="org.eclipse.viatra.setup/GenerateCPSFrameworkQueries.mwe2.launch">
       <description></description>
     </setupTask>
     <setupTask
         xsi:type="launching:LaunchTask"
-        predecessor="viatra.query.prequerygen"
-        launcher="org.eclipse.viatra.setup/GenerateRCPTTQueries.mwe2.launch">
+        predecessor="viatra.xtext.pregen"
+        launcher="org.eclipse.viatra.setup/GeneratePatternLanguageSiriusQueries.mwe2.launch">
       <description></description>
     </setupTask>
   </setupTask>
@@ -811,6 +543,149 @@
     <setupTask
         xsi:type="setup.targlets:TargletTask"
         targetName="">
+      <targlet
+          name="${scope.project.label}"
+          activeRepositoryList="${eclipse.target.platform}">
+        <requirement
+            name="org.eclipse.gmf.runtime.notation.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.gmf.runtime.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.graphiti.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.uml2.sdk.feature.group"
+            versionRange="[5.0.0,6.0.0)"/>
+        <repositoryList
+            name="2022-06">
+          <repository
+              url="http://download.eclipse.org/releases/2022-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-09">
+          <repository
+              url="http://download.eclipse.org/releases/2022-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-12">
+          <repository
+              url="http://download.eclipse.org/releases/2022-12"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-03">
+          <repository
+              url="http://download.eclipse.org/releases/2023-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-06">
+          <repository
+              url="http://download.eclipse.org/releases/2023-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-09">
+          <repository
+              url="http://download.eclipse.org/releases/2023-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-12">
+          <repository
+              url="http://download.eclipse.org/releases/2023-12"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-03">
+          <repository
+              url="http://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+      </targlet>
+      <targlet
+          name="Sirius"
+          activeRepositoryList="${eclipse.target.platform}">
+        <requirement
+            name="org.eclipse.sirius.runtime.ide.ui.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.runtime.aql.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.properties.feature.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.specifier.properties.feature.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.runtime.ide.xtext.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.diagram.elk.feature.feature.group"/>
+        <repositoryList
+            name="2022-06">
+          <repository
+              url="http://download.eclipse.org/releases/2022-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.0/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-09">
+          <repository
+              url="http://download.eclipse.org/releases/2022-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.4/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-12">
+          <repository
+              url="http://download.eclipse.org/releases/2022-12"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.6/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-03">
+          <repository
+              url="http://download.eclipse.org/releases/2023-03"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.7/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-06">
+          <repository
+              url="http://download.eclipse.org/releases/2023-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.2.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-09">
+          <repository
+              url="http://download.eclipse.org/releases/2023-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-12">
+          <repository
+              url="http://download.eclipse.org/releases/2023-12"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.3.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-03">
+          <repository
+              url="http://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
+        </repositoryList>
+      </targlet>
       <targlet
           name="Xtext"
           activeRepositoryList="${eclipse.target.platform}">
@@ -1056,6 +931,257 @@
     <setupTask
         xsi:type="setup.targlets:TargletTask"
         targetName="">
+      <targlet
+          name="${scope.project.label}"
+          activeRepositoryList="${eclipse.target.platform}">
+        <requirement
+            name="org.eclipse.gmf.runtime.notation.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.gmf.runtime.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.graphiti.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.uml2.sdk.feature.group"
+            versionRange="[5.0.0,6.0.0)"/>
+        <repositoryList
+            name="2019-06">
+          <repository
+              url="http://download.eclipse.org/releases/2019-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2019-09">
+          <repository
+              url="http://download.eclipse.org/releases/2019-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2019-12">
+          <repository
+              url="http://download.eclipse.org/releases/2019-12"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2020-03">
+          <repository
+              url="http://download.eclipse.org/releases/2020-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2020-06">
+          <repository
+              url="http://download.eclipse.org/releases/2020-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2020-09">
+          <repository
+              url="http://download.eclipse.org/releases/2020-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2020-12">
+          <repository
+              url="http://download.eclipse.org/releases/2020-12"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2021-03">
+          <repository
+              url="http://download.eclipse.org/releases/2021-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2021-06">
+          <repository
+              url="http://download.eclipse.org/releases/2021-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2021-09">
+          <repository
+              url="http://download.eclipse.org/releases/2021-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2021-12">
+          <repository
+              url="http://download.eclipse.org/releases/2021-12"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-03">
+          <repository
+              url="http://download.eclipse.org/releases/2022-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-06">
+          <repository
+              url="http://download.eclipse.org/releases/2022-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-09">
+          <repository
+              url="http://download.eclipse.org/releases/2022-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-12">
+          <repository
+              url="http://download.eclipse.org/releases/2022-12"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-03">
+          <repository
+              url="http://download.eclipse.org/releases/2023-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-06">
+          <repository
+              url="http://download.eclipse.org/releases/2023-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-09">
+          <repository
+              url="http://download.eclipse.org/releases/2023-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-12">
+          <repository
+              url="http://download.eclipse.org/releases/2023-12"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-03">
+          <repository
+              url="http://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+      </targlet>
+      <targlet
+          name="Sirius"
+          activeRepositoryList="${eclipse.target.platform}">
+        <requirement
+            name="org.eclipse.sirius.runtime.ide.ui.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.runtime.aql.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.properties.feature.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.specifier.properties.feature.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.runtime.ide.xtext.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.diagram.elk.feature.feature.group"/>
+        <repositoryList
+            name="2022-06">
+          <repository
+              url="http://download.eclipse.org/releases/2022-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.0/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-09">
+          <repository
+              url="http://download.eclipse.org/releases/2022-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.4/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-12">
+          <repository
+              url="http://download.eclipse.org/releases/2022-12"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.6/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-03">
+          <repository
+              url="http://download.eclipse.org/releases/2023-03"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.7/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-06">
+          <repository
+              url="http://download.eclipse.org/releases/2023-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.2.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-09">
+          <repository
+              url="http://download.eclipse.org/releases/2023-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-12">
+          <repository
+              url="http://download.eclipse.org/releases/2023-12"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.3.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-03">
+          <repository
+              url="http://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
+        </repositoryList>
+      </targlet>
       <targlet
           name="Xtext"
           activeRepositoryList="${eclipse.target.platform}">
