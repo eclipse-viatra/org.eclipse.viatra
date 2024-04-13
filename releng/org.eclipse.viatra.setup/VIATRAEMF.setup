@@ -360,8 +360,7 @@
         xsi:type="projects:ProjectsBuildTask"
         id="viatra.xtext.pregen"
         predecessor="//@setupTasks.11/@setupTasks.1 //@setupTasks.11/@setupTasks.2 //@setupTasks.11/@setupTasks.3"
-        onlyNewProjects="true"
-        refresh="true"/>
+        onlyNewProjects="true"/>
     <setupTask
         xsi:type="launching:LaunchTask"
         predecessor="viatra.xtext.pregen"
@@ -400,8 +399,7 @@
         xsi:type="projects:ProjectsBuildTask"
         id="viatra.xtext.postgen"
         predecessor="//@setupTasks.12/@setupTasks.2"
-        onlyNewProjects="true"
-        refresh="true"/>
+        onlyNewProjects="true"/>
     <setupTask
         xsi:type="launching:LaunchTask"
         predecessor="viatra.xtext.postgen"
@@ -503,11 +501,6 @@
     <setupTask
         xsi:type="setup:EclipseIniTask"
         option="-Doomph.redirection.viatra.setup"
-        value="=https://git.eclipse.org/c/viatra/org.eclipse.viatra.git/plain/releng/org.eclipse.viatra.setup/VIATRAEMF.setup->${git.clone.viatra.location|uri}/releng/org.eclipse.viatra.setup/VIATRAEMF.setup"
-        vm="true"/>
-    <setupTask
-        xsi:type="setup:EclipseIniTask"
-        option="-Doomph.redirection.viatra.setup"
         value="=https://raw.githubusercontent.com/eclipse-viatra/org.eclipse.viatra/master/releng/org.eclipse.viatra.setup/VIATRAEMF.setup->${git.clone.viatra.location|uri}/releng/org.eclipse.viatra.setup/VIATRAEMF.setup"
         vm="true"/>
     <setupTask
@@ -529,6 +522,7 @@
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask"
+        predecessor="//@streams[name='master']/@setupTasks.5 //@streams[name='master']/@setupTasks.6"
         targetName="">
       <targlet
           name="${scope.project.label}"
