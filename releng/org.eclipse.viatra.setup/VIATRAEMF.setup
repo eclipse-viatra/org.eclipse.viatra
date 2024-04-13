@@ -312,26 +312,15 @@
       xsi:type="projects:ProjectsImportTask"
       predecessor="git.clone.viatra">
     <sourceLocator
-        rootFolder="${git.clone.viatra.location}/addon"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/integration"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/query"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/transformation"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/documentation"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/releng"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/dse"
-        locateNestedProjects="true"/>
+        rootFolder="${git.clone.viatra.location}"
+        locateNestedProjects="true">
+      <predicate
+          xsi:type="predicates:NotPredicate">
+        <operand
+            xsi:type="predicates:NamePredicate"
+            pattern="org.eclipse.viatra.query.patternlanguage.metamodel.queries.test"/>
+      </predicate>
+    </sourceLocator>
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
@@ -455,6 +444,12 @@
         xsi:type="launching:LaunchTask"
         predecessor="viatra.xtext.pregen"
         launcher="org.eclipse.viatra.setup/GeneratePatternLanguageSiriusQueries.mwe2.launch">
+      <description></description>
+    </setupTask>
+    <setupTask
+        xsi:type="launching:LaunchTask"
+        predecessor="viatra.xtext.pregen"
+        launcher="org.eclipse.viatra.setup/GenerateDocumentationQueries.mwe2.launch">
       <description></description>
     </setupTask>
   </setupTask>
@@ -790,11 +785,7 @@
         <requirement
             name="org.eclipse.sdk.feature.group"/>
         <requirement
-            name="com.google.inject"
-            versionRange="[3.0.0,4.0.0)"/>
-        <requirement
-            name="com.google.inject.multibindings"
-            versionRange="[3.0.0,4.0.0)"/>
+            name="com.google.inject"/>
         <requirement
             name="org.mockito"/>
         <requirement
@@ -802,11 +793,7 @@
         <requirement
             name="com.google.guava"/>
         <requirement
-            name="org.eclipse.zest.feature.group"/>
-        <requirement
             name="org.eclipse.zest.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.zest.source.feature.group"/>
         <repositoryList
             name="2022-06">
           <repository
