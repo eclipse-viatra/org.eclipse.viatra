@@ -10,6 +10,7 @@ package org.eclipse.viatra.query.runtime.localsearch.matcher.integration;
 
 import static org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHintOptions.ADORNMENT_PROVIDER;
 import static org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHintOptions.CALL_DELEGATION_STRATEGY;
+import static org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHintOptions.CONSULT_SURROGATES;
 import static org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHintOptions.FLATTEN_CALL_PREDICATE;
 import static org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHintOptions.PLANNER_COST_FUNCTION;
 import static org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHintOptions.PLANNER_TABLE_ROW_COUNT;
@@ -44,6 +45,8 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.NopTraceColle
  */
 public final class LocalSearchHints implements IMatcherCapability {
     
+    private Boolean consultSurrogates = null;
+    
     private Boolean useBase = null;
     
     private Integer rowCount = null;
@@ -74,6 +77,7 @@ public final class LocalSearchHints implements IMatcherCapability {
      */
     public static LocalSearchHints getDefault(){
         LocalSearchHints result = new LocalSearchHints();
+        result.consultSurrogates = CONSULT_SURROGATES.getDefaultValue();
         result.useBase = USE_BASE_INDEX.getDefaultValue();
         result.rowCount = PLANNER_TABLE_ROW_COUNT.getDefaultValue();
         result.costFunction = PLANNER_COST_FUNCTION.getDefaultValue();
@@ -90,6 +94,7 @@ public final class LocalSearchHints implements IMatcherCapability {
      */
     public static LocalSearchHints getDefaultFlatten(){
         LocalSearchHints result = new LocalSearchHints();
+        result.consultSurrogates = false;
         result.useBase = true;
         result.rowCount = 4;
         result.costFunction = new IndexerBasedConstraintCostFunction();
@@ -105,6 +110,7 @@ public final class LocalSearchHints implements IMatcherCapability {
      */
     public static LocalSearchHints getDefaultNoBase(){
         LocalSearchHints result = new LocalSearchHints();
+        result.consultSurrogates = false;
         result.useBase = false;
         result.rowCount = 4;
         result.costFunction = new VariableBindingBasedCostFunction();
@@ -121,6 +127,7 @@ public final class LocalSearchHints implements IMatcherCapability {
      */
     public static LocalSearchHints getDefaultGeneric(){
         LocalSearchHints result = new LocalSearchHints();
+        result.consultSurrogates = false;
         result.useBase = true; // Should be unused; but a false value might cause surprises as an engine-default hint
         result.rowCount = 4;
         result.costFunction = new IndexerBasedConstraintCostFunction(StatisticsBasedConstraintCostFunction.INVERSE_NAVIGATION_PENALTY_GENERIC);
@@ -158,6 +165,7 @@ public final class LocalSearchHints implements IMatcherCapability {
     public static LocalSearchHints parse(QueryEvaluationHint hint){
         LocalSearchHints result = new LocalSearchHints();
         
+        result.consultSurrogates = CONSULT_SURROGATES.getValueOrNull(hint);
         result.useBase = USE_BASE_INDEX.getValueOrNull(hint);
         result.rowCount = PLANNER_TABLE_ROW_COUNT.getValueOrNull(hint);
         result.flattenCallPredicate = FLATTEN_CALL_PREDICATE.getValueOrNull(hint);
@@ -172,6 +180,9 @@ public final class LocalSearchHints implements IMatcherCapability {
 
     private Map<QueryHintOption<?>, Object> calculateHintMap() {
         Map<QueryHintOption<?>, Object> map = new HashMap<>();
+        if (consultSurrogates != null){
+            CONSULT_SURROGATES.insertOverridingValue(map, consultSurrogates); 
+        }
         if (useBase != null){
             USE_BASE_INDEX.insertOverridingValue(map, useBase); 
         }
@@ -220,6 +231,13 @@ public final class LocalSearchHints implements IMatcherCapability {
         return new QueryEvaluationHint(hints, factory);
     }
     
+    /**
+     * @since 2.9
+     */
+    public Boolean isConsultSurrogates() {
+        return consultSurrogates;
+    }
+    
     public boolean isUseBase() {
         return useBase;
     }
@@ -255,6 +273,14 @@ public final class LocalSearchHints implements IMatcherCapability {
      */
     public IRewriterTraceCollector getTraceCollector() {
         return traceCollector == null ? normalizationTraceCollector.getDefaultValue() : traceCollector;
+    }
+    
+    /**
+     * @since 2.9
+     */
+    public LocalSearchHints setConsultSurrogates(boolean consultSurrogates) {
+        this.consultSurrogates = consultSurrogates;
+        return this;
     }
     
     public LocalSearchHints setUseBase(boolean useBase) {
@@ -346,7 +372,7 @@ public final class LocalSearchHints implements IMatcherCapability {
             /*
              * We allow substitution of matchers if their functionally relevant settings are equal.
              */
-            return Objects.equals(other.useBase, useBase);
+            return Objects.equals(other.useBase, useBase) && Objects.equals(other.consultSurrogates, consultSurrogates);
         }
         /*
          * For any other cases (e.g. for Rete), we cannot assume
