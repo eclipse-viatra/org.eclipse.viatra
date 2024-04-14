@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Expression;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Variable;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
+import org.eclipse.viatra.query.runtime.matchers.context.common.JavaTransitiveInstancesKey;
+import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 
 /**
@@ -67,4 +69,12 @@ public interface ITypeInferrer {
      * @since 1.3
      */
     JvmTypeReference getJvmType(Expression ex, EObject context);
+    
+    /**
+     * Helper method that embeds a JVM type or type reference into an input key
+     * @since 2.9
+     */
+    public static IInputKey jvmTypeToInputKey(JvmIdentifiableElement jvmType) {
+        return new JavaTransitiveInstancesKey(jvmType.getIdentifier(), jvmType.getQualifiedName('.'));
+    }
 }

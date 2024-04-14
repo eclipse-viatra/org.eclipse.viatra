@@ -115,7 +115,7 @@ class EMFTypeSystem extends AbstractTypeSystem {
         } else if (type instanceof ReferenceType) {
             return type.refname?.EType.classifierToInputKey
         } else if (type instanceof JavaType) {
-            return new JavaTransitiveInstancesKey(type.classRef.identifier)
+            return ITypeInferrer.jvmTypeToInputKey(type.classRef)
         }
         // Never executed
         throw new UnsupportedOperationException()

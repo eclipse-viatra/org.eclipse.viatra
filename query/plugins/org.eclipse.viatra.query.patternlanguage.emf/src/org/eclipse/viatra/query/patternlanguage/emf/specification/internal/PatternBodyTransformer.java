@@ -28,6 +28,7 @@ import org.eclipse.viatra.query.patternlanguage.emf.internal.XtextInjectorProvid
 import org.eclipse.viatra.query.patternlanguage.emf.types.BottomTypeKey;
 import org.eclipse.viatra.query.patternlanguage.emf.types.EMFTypeInferrer;
 import org.eclipse.viatra.query.patternlanguage.emf.types.EMFTypeSystem;
+import org.eclipse.viatra.query.patternlanguage.emf.types.ITypeInferrer;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.AggregatedValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.BoolValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.CallableRelation;
@@ -63,7 +64,6 @@ import org.eclipse.viatra.query.runtime.emf.types.EStructuralFeatureInstancesKey
 import org.eclipse.viatra.query.runtime.matchers.ViatraQueryRuntimeException;
 import org.eclipse.viatra.query.runtime.matchers.aggregators.count;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
-import org.eclipse.viatra.query.runtime.matchers.context.common.JavaTransitiveInstancesKey;
 import org.eclipse.viatra.query.runtime.matchers.util.Preconditions;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
@@ -169,7 +169,7 @@ public class PatternBodyTransformer {
                 acceptor.acceptTypeConstraint(ImmutableList.of(variable.getName()), inputKey);
             } else if (variable.getType() instanceof JavaType) {
                 JvmDeclaredType classRef = ((JavaType) variable.getType()).getClassRef();
-                IInputKey inputKey = new JavaTransitiveInstancesKey(classRef.getIdentifier());
+                IInputKey inputKey = ITypeInferrer.jvmTypeToInputKey(classRef);
                 acceptor.acceptTypeCheckConstraint(ImmutableList.of(variable.getName()), inputKey);
             }
         }
@@ -365,8 +365,8 @@ public class PatternBodyTransformer {
     
     private void gatherTypeConstraint(TypeCheckConstraint constraint, PatternModelAcceptor<?> acceptor) {
         String variableName = getVariableName(constraint.getVar(), acceptor);
-        String className = ((JavaType)constraint.getType()).getClassRef().getIdentifier();
-        IInputKey inputKey = new JavaTransitiveInstancesKey(className);
+        JvmDeclaredType classRef = ((JavaType)constraint.getType()).getClassRef();
+        IInputKey inputKey = ITypeInferrer.jvmTypeToInputKey(classRef);
         acceptor.acceptTypeCheckConstraint(ImmutableList.of(variableName), inputKey);
     }
 

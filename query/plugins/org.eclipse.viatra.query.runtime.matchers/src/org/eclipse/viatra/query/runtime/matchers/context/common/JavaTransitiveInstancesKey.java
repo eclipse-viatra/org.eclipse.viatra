@@ -32,22 +32,43 @@ public class JavaTransitiveInstancesKey extends BaseInputKeyWrapper<String> {
      * Same as {@link #cachedOriginalInstanceClass}, but primitive classes are replaced with their wrapper classes (e.g. int --> java.lang.Integer).
      */
     private Class<?> cachedWrapperInstanceClass;
+    
+    /**
+     * Use this name to refer to the String in Java code
+     */
+    private final String nameInJavaCode;
 
     /**
-     * Preferred constructor.
+     * Call this constructor only in contexts where the class itself is not available for loading, e.g. it has not yet been compiled.
+     * @since 2.9
+     * @param jvmClassName {@link Class#getName()}
+     * @param javaClassName {@link Class#getCanonicalName()}
+     */
+    public JavaTransitiveInstancesKey(String jvmClassName, String javaClassName) {
+        super(jvmClassName);
+        this.nameInJavaCode = javaClassName;
+    }
+    
+    /**
+     * Convenience constructor for the case where the JVM Class is available 
+     *  (already precompiled and loaded) 
+     *  in the context where this input key is built.
      */
     public JavaTransitiveInstancesKey(Class<?> instanceClass) {
-        this(primitiveTypeToWrapperClass(instanceClass).getName());
+        this(
+                primitiveTypeToWrapperClass(instanceClass).getName(), 
+                primitiveTypeToWrapperClass(instanceClass).getCanonicalName()
+        );
         this.cachedOriginalInstanceClass = instanceClass;
     }
     
     /**
-     * Call this constructor only in contexts where the class itself is not available for loading, e.g. it has not yet been compiled.
+     * Call this constructor only as a last resort, if the Java canonical name of the class is unavailable.
+     * @deprecated as of 2.9
      */
-    public JavaTransitiveInstancesKey(String className) {
-        super(className);
+    public JavaTransitiveInstancesKey(String jvmClassName) {
+        this(jvmClassName, jvmClassName.replace('$', '.'));
     }
-    
 
     /**
      * Returns null if class cannot be loaded.
@@ -113,8 +134,7 @@ public class JavaTransitiveInstancesKey extends BaseInputKeyWrapper<String> {
     
     @Override
     public String getPrettyPrintableName() {
-        getWrapperInstanceClass();
-        return cachedWrapperInstanceClass == null ? wrappedKey == null ? "<null>" : wrappedKey : cachedWrapperInstanceClass.getCanonicalName();
+        return this.nameInJavaCode;
     }
 
     @Override
