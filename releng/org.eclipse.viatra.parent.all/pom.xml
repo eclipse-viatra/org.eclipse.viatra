@@ -78,7 +78,7 @@
 	<properties>
 		<!-- Sonar -->
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-		<sonar.jacoco.reportPaths>${jacoco.targetdir}/jacoco.exec</sonar.jacoco.reportPaths>
+		<sonar.coverage.jacoco.xmlReportPaths>${jacoco.targetdir}/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 	<repositories>
 		<repository>

@@ -1,6 +1,7 @@
 autoEnabled=true
+bindingSuggestionsDisabled=false
 eclipse.preferences.version=1
-extraProperties=
-moduleKey=org.eclipse.viatra\:org.eclipse.viatra.query.patternlanguage.emf
-projectKey=org.eclipse.viatra\:org.eclipse.viatra.parent.all
-serverId=build
+idePrefixKey=
+projectKey=org.eclipse.viatra
+serverId=SonarCloud/eclipse-viatra
+sqPrefixKey=
