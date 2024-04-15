@@ -23,7 +23,7 @@
 	environment {
 	   VERSION_MAVEN_PARAMETER = " ${params.RELEASE_VERSION ? '-Drepository.version=' + params.RELEASE_VERSION : ''} "
 	   SIGN_BUILD_PARAMETER = " ${params.BUILD_TYPE == 'ci' ? '' : '-Dsign.build=true'} "
-	   SONAR_BRANCH_PARAMETERS = ${env.CHANGE_ID} ? "-Dsonar.pullrequest.branch=${env.BRANCH_NAME} -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.base=${env.CHANGE_TARGET}" : "-Dsonar.branch.name=${env.BRANCH_NAME}"
+	   SONAR_BRANCH_PARAMETERS = "${env.CHANGE_ID ? '-Dsonar.pullrequest.branch=' + env.BRANCH_NAME + ' -Dsonar.pullrequest.key=' + env.CHANGE_ID + ' -Dsonar.pullrequest.base=' + env.CHANGE_TARGET : '-Dsonar.branch.name=' + env.BRANCH_NAME}"
 	}
 	
 	tools {
