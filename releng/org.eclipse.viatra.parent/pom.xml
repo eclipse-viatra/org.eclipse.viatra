@@ -7,13 +7,12 @@
 	<groupId>org.eclipse.viatra</groupId>
 	<artifactId>org.eclipse.viatra.parent</artifactId>
 	<name>VIATRA Parent job</name>
-	<url>http://eclipse.org/viatra</url>
+	<url>http://eclipse.dev/viatra</url>
 	<version>2.9.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
 		<tycho.version>4.0.6</tycho.version>
-		<tycho.scmUrl>scm:git:git://git.eclipse.org/gitroot/viatra/org.eclipse.viatra.git</tycho.scmUrl>
-		<eclipse.bugzillaUrl>https://bugs.eclipse.org/bugs/enter_bug.cgi?product=viatra</eclipse.bugzillaUrl>
+		<tycho.scmUrl>scm:git:https://github.com/eclipse-viatra/org.eclipse.viatra.git</tycho.scmUrl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
 		<jacoco.version>0.8.11</jacoco.version>
@@ -119,6 +118,12 @@
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
 				</executions>
 			</plugin>
             <plugin>
@@ -281,11 +286,11 @@
 	</scm>
 	<ciManagement>
 		<url>https://ci.eclipse.org/viatra/</url>
-		<system>Hudson</system>
+		<system>Jenkins</system>
 	</ciManagement>
 	<issueManagement>
-		<url>${eclipse.bugzillaUrl}</url>
-		<system>Bugzilla</system>
+		<url>https://github.com/eclipse-viatra/org.eclipse.viatra/issues/</url>
+		<system>Github</system>
 	</issueManagement>
 	<pluginRepositories>
 		<pluginRepository>
