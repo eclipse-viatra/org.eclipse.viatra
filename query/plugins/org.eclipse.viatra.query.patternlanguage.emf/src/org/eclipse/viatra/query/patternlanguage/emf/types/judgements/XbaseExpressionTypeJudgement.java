@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
+import org.eclipse.viatra.query.patternlanguage.emf.types.ITypeSystem;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Expression;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternBody;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Variable;
@@ -33,13 +34,15 @@ public class XbaseExpressionTypeJudgement extends AbstractTypeJudgement {
 
     private XExpression xExpression;
     private IBatchTypeResolver xbaseResolver;
+    private ITypeSystem typeSystem;
     private boolean unwind;
     
     public XbaseExpressionTypeJudgement(Expression expression, XExpression xExpression,
-            IBatchTypeResolver xbaseResolver, boolean unwind) {
+            IBatchTypeResolver xbaseResolver, ITypeSystem typeSystem, boolean unwind) {
         super(expression);
         this.xExpression = xExpression;
         this.xbaseResolver = xbaseResolver;
+        this.typeSystem = typeSystem;
         this.unwind = unwind;
     }
 
@@ -78,8 +81,7 @@ public class XbaseExpressionTypeJudgement extends AbstractTypeJudgement {
     }
 
     private JavaTransitiveInstancesKey asInputKey(LightweightTypeReference typeRef) {
-        LightweightTypeReference jvmType = typeRef.getWrapperTypeIfPrimitive().getRawTypeReference();
-        return new JavaTransitiveInstancesKey(jvmType.getJavaIdentifier(), jvmType.getHumanReadableName());
+        return typeSystem.fromJvmType(typeRef.getType(), xExpression);
     }
     
     @Override

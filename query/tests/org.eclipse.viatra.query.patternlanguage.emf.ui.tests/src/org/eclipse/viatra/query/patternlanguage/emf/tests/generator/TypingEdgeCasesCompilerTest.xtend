@@ -11,6 +11,7 @@ package org.eclipse.viatra.query.patternlanguage.emf.tests.generator
 import org.junit.rules.TestName
 import org.junit.Rule
 import org.junit.Test
+import org.eclipse.emf.ecore.EcorePackage
 
 class TypingEdgeCasesCompilerTest extends AbstractQueryCompilerTest {
     static val TEST_PROJECT_NAME_PREFIX = "org.eclipse.viatra.query.test"
@@ -61,7 +62,27 @@ class TypingEdgeCasesCompilerTest extends AbstractQueryCompilerTest {
             u == 4;
         }
     '''
-    static val TEST_CONTENTS_JAVACONST_INNERCLASS = '''
+    static val TEST_CONTENTS_JAVACONST = '''
+        package test
+        
+        import "http://www.eclipse.org/emf/2002/Ecore"
+        
+        pattern fee(e: java org.eclipse.emf.ecore.EcorePackage, u: java Integer) {
+            e == java org.eclipse.emf.ecore.EcorePackage::eINSTANCE;
+            u == 4;
+        }
+    '''
+    static val TEST_CONTENTS_JAVACONST_INFERRED = '''
+        package test
+        
+        import "http://www.eclipse.org/emf/2002/Ecore"
+        
+        pattern fie(e, u: java Integer) {
+            e == java org.eclipse.emf.ecore.EcorePackage::eINSTANCE;
+            u == 4;
+        }
+    '''
+    static val TEST_CONTENTS_JAVACONST_ENUM = '''
         package test
         
         import "http://www.eclipse.org/emf/2002/Ecore"
@@ -71,7 +92,7 @@ class TypingEdgeCasesCompilerTest extends AbstractQueryCompilerTest {
             u == 4;
         }
     '''
-    static val TEST_CONTENTS_JAVACONST_INNERCLASS_INFERRED = '''
+    static val TEST_CONTENTS_JAVACONST_ENUM_INFERRED = '''
         package test
         
         import "http://www.eclipse.org/emf/2002/Ecore"
@@ -107,11 +128,19 @@ class TypingEdgeCasesCompilerTest extends AbstractQueryCompilerTest {
         testFileCreationAndBuild(TEST_CONTENTS_GENERIC_INNERCLASS_INFERRED, 0)
     }
     @Test
-    def void compileJavaconstInnerClass() {
-        testFileCreationAndBuild(TEST_CONTENTS_JAVACONST_INNERCLASS, 0)
+    def void compileJavaconst() {
+        testFileCreationAndBuild(TEST_CONTENTS_JAVACONST, 0)
     }
     @Test
-    def void compileJavaconstInnerClassInferred() {
-        testFileCreationAndBuild(TEST_CONTENTS_JAVACONST_INNERCLASS_INFERRED, 0)
+    def void compileJavaconstInferred() {
+        testFileCreationAndBuild(TEST_CONTENTS_JAVACONST_INFERRED, 0)
+    }
+    @Test
+    def void compileJavaconstEnum() {
+        testFileCreationAndBuild(TEST_CONTENTS_JAVACONST_ENUM, 0)
+    }
+    @Test
+    def void compileJavaconstEnumInferred() {
+        testFileCreationAndBuild(TEST_CONTENTS_JAVACONST_ENUM_INFERRED, 0)
     }
 }

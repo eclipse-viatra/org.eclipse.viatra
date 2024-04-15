@@ -171,7 +171,7 @@ class PatternLanguageTypeRules {
                 return
             } 
             val returnType = (returnTypes).get(0)
-            information.provideType(new TypeJudgement(reference, ITypeInferrer.jvmTypeToInputKey(returnType)))
+            information.provideType(new TypeJudgement(reference, typeSystem.fromJvmType(returnType, reference)))
            } else {
             if (values.size !== 1 || !AggregatorUtil.mustHaveAggregatorVariables(reference)) {
                 //Incorrect aggregation; reported separately
@@ -195,17 +195,17 @@ class PatternLanguageTypeRules {
             for (var i=0; i < returnTypes.size; i++) {
                 information.provideType(new ConditionalJudgement(
                     reference, 
-                    ITypeInferrer.jvmTypeToInputKey(returnTypes.get(i)),
+                    typeSystem.fromJvmType(returnTypes.get(i), reference),
                     callParameters.get(index), 
-                    ITypeInferrer.jvmTypeToInputKey(parameterTypes.get(i))
+                    typeSystem.fromJvmType(parameterTypes.get(i), reference)
                 ))
                 // If return types are not unique for each source type, do not provide backward conditions
                 if (returnTypeUnique) {
                     information.provideType(new ConditionalJudgement(
                         callParameters.get(index), 
-                        ITypeInferrer.jvmTypeToInputKey(parameterTypes.get(i)),
+                        typeSystem.fromJvmType(parameterTypes.get(i), reference),
                         reference, 
-                        ITypeInferrer.jvmTypeToInputKey(returnTypes.get(i))
+                        typeSystem.fromJvmType(returnTypes.get(i), reference)
                     ))
                 }
             }
@@ -246,14 +246,14 @@ class PatternLanguageTypeRules {
     */
    def dispatch void inferTypes(JavaConstantValue reference, TypeInformation information) {
        val fieldRef = reference.fieldRef
-       if (null != fieldRef) {
-           val type = ITypeInferrer.jvmTypeToInputKey(fieldRef.type.type)
+       if (null !== fieldRef && null !== fieldRef.type && null !== fieldRef.type.type) {
+           val type = typeSystem.fromJvmType(fieldRef.type.type, reference)
            information.provideType(new TypeJudgement(reference, type))
        }
    }
    
    def dispatch void inferTypes(FunctionEvaluationValue reference, TypeInformation information) {
-       information.provideType(new XbaseExpressionTypeJudgement(reference, reference.expression, typeResolver, reference.isUnwind()))
+       information.provideType(new XbaseExpressionTypeJudgement(reference, reference.expression, typeResolver, typeSystem, reference.isUnwind()))
    }
    
    def dispatch void inferTypes(BoolValue reference, TypeInformation information) {

@@ -66,7 +66,8 @@ public abstract class AbstractTypeInferrer implements ITypeInferrer {
             List<JvmType> returnTypes = AggregatorUtil.getReturnTypes(((AggregatedValue) ex).getAggregator());
             if (returnTypes.size() == 1) {
                 JvmType jvmType = returnTypes.get(0);
-                return ITypeInferrer.jvmTypeToInputKey(jvmType);
+                return typeSystem.fromJvmType(jvmType, ex);
+
             }
         }
         return null;

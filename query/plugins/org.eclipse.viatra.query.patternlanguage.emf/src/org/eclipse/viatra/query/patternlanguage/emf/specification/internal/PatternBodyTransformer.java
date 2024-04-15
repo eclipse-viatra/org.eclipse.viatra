@@ -169,7 +169,7 @@ public class PatternBodyTransformer {
                 acceptor.acceptTypeConstraint(ImmutableList.of(variable.getName()), inputKey);
             } else if (variable.getType() instanceof JavaType) {
                 JvmDeclaredType classRef = ((JavaType) variable.getType()).getClassRef();
-                IInputKey inputKey = ITypeInferrer.jvmTypeToInputKey(classRef);
+                IInputKey inputKey = typeSystem.fromJvmType(classRef, pattern);
                 acceptor.acceptTypeCheckConstraint(ImmutableList.of(variable.getName()), inputKey);
             }
         }
@@ -366,7 +366,7 @@ public class PatternBodyTransformer {
     private void gatherTypeConstraint(TypeCheckConstraint constraint, PatternModelAcceptor<?> acceptor) {
         String variableName = getVariableName(constraint.getVar(), acceptor);
         JvmDeclaredType classRef = ((JavaType)constraint.getType()).getClassRef();
-        IInputKey inputKey = ITypeInferrer.jvmTypeToInputKey(classRef);
+        IInputKey inputKey = typeSystem.fromJvmType(classRef, pattern);
         acceptor.acceptTypeCheckConstraint(ImmutableList.of(variableName), inputKey);
     }
 

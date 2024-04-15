@@ -56,6 +56,10 @@ import org.eclipse.xtext.common.types.util.TypeReferences
 import org.eclipse.xtext.diagnostics.Severity
 
 import static com.google.common.base.Preconditions.checkArgument
+import org.eclipse.xtext.common.types.JvmIdentifiableElement
+import org.eclipse.xtext.common.types.util.JavaReflectAccess
+import com.google.inject.Injector
+import org.eclipse.xtext.common.types.JvmType
 
 /** 
  * @author Zoltan Ujhelyi
@@ -101,6 +105,7 @@ class EMFTypeSystem extends AbstractTypeSystem {
     @Inject TypeReferences typeReferences
     @Inject IClassLoaderProvider classLoaderProvider 
     @Inject IJvmTypeProvider.Factory typeProviderFactory;
+    @Inject Injector injector;
 
     @Inject new(Logger logger) {
         super(EMFQueryMetaContext.DEFAULT)
@@ -115,7 +120,7 @@ class EMFTypeSystem extends AbstractTypeSystem {
         } else if (type instanceof ReferenceType) {
             return type.refname?.EType.classifierToInputKey
         } else if (type instanceof JavaType) {
-            return ITypeInferrer.jvmTypeToInputKey(type.classRef)
+            return this.fromJvmType(type.classRef, type);
         }
         // Never executed
         throw new UnsupportedOperationException()
@@ -328,6 +333,24 @@ class EMFTypeSystem extends AbstractTypeSystem {
             }
         }
         return typeReferences.getTypeForName(Object, context)
+    }
+    
+    override fromJvmType(JvmType jvmType, EObject context) {
+        try {
+            // if the class is loadable, even from source files, try to use it directly for instance filtering
+            val javaReflect = injector.getInstance(JavaReflectAccess);            
+            val classLoader = classLoaderProvider.getClassLoader(context);
+            if (classLoader !== null) {
+                javaReflect.setClassLoader(classLoader);
+            }
+            val Class<?> loadedClass = javaReflect.getRawType(jvmType);
+            return new JavaTransitiveInstancesKey(loadedClass);
+        } catch (Exception ex) {
+            // if loading the class failed, we can still construct the input key from its qualified name;
+            // however, this constraint will only be useful for generating code from it
+            
+            return new JavaTransitiveInstancesKey(jvmType.identifier, jvmType.getQualifiedName('$'));
+        }
     }
 
     private def JvmTypeReference getJvmType(EClassifier classifier, EObject context) {
