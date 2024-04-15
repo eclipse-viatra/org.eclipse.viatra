@@ -42,9 +42,9 @@
                 xvnc {
                     withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONARCLOUD_TOKEN')]) {
                         withSonarQubeEnv('SonarCloud.io') {
-                            sh 'mvn -B -f releng/org.eclipse.viatra.parent.all/pom.xml $SIGN_BUILD_PARAMETER $VERSION_MAVEN_PARAMETER -Dmaven.repo.local=$WORKSPACE/.repository -Dmaven.test.failure.ignore=true -DrunUITests=true clean install '
-                            + 'org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar -Dsonar.projectKey=eclipse-viatra_org.eclipse.viatra -Dsonar.organization=eclipse-viatra -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONARCLOUD_TOKEN '
-                            + SONAR_BRANCH_PARAMETERS
+                            sh 'mvn -B -f releng/org.eclipse.viatra.parent.all/pom.xml $SIGN_BUILD_PARAMETER $VERSION_MAVEN_PARAMETER -Dmaven.repo.local=$WORKSPACE/.repository -Dmaven.test.failure.ignore=true -DrunUITests=true clean install ' +
+                              'org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar -Dsonar.projectKey=eclipse-viatra_org.eclipse.viatra -Dsonar.organization=eclipse-viatra -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONARCLOUD_TOKEN ' +
+                              SONAR_BRANCH_PARAMETERS
                         }
                     }
                 }
