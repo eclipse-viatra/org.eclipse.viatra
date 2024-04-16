@@ -157,7 +157,7 @@ class BodyCodeGenerator extends StringConcatenationClient {
                         val literals = new NumberLiterals
                         '''«literals.toJavaLiteral(constant, true)»'''
                     }
-                    String: '''"«constant»"'''
+                    String: '''"«constant.escapeToQuotedString»"'''
                     default: '''«constant»'''
                 }
             }
