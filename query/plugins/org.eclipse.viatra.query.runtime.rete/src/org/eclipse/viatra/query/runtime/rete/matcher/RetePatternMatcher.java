@@ -450,6 +450,7 @@ public class RetePatternMatcher extends TransformerNode implements IQueryResultP
 
     @Override
     public void removeUpdateListener(Object listenerTag) {
+        if (engine.isDisposedOrUninitialized()) return; // NO-OP
         engine.constructionWrapper(() -> {
             disconnectByTag(listenerTag);
             return null;
