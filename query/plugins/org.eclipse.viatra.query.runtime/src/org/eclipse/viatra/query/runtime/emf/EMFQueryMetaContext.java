@@ -342,10 +342,10 @@ public final class EMFQueryMetaContext extends AbstractQueryMetaContext {
     }
 
     public boolean isFeatureMultiplicityToOne(EStructuralFeature feature) {
-        return isFeatureToOneMultiplicity(feature);
+        return isFeatureToOneMultiplicity(feature); // delegate legacy instance method to new static method
     }
     public boolean isFeatureMultiplicityOneTo(EStructuralFeature typeObject) {
-        return isFeatureMultiplicityOneTo(typeObject);
+        return isFeatureOneToMultiplicity(typeObject); // delegate legacy instance method to new static method
     }
     /**
      * @since 2.9
