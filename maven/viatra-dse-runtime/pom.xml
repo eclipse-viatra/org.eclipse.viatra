@@ -11,11 +11,6 @@
         <relativePath>../../releng/org.eclipse.viatra.parent.incubation.maven/pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <emf.version>2.10.1</emf.version>
-        <emf.ecore.change.version>2.10.0.v20150123-0348</emf.ecore.change.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.eclipse.viatra</groupId>
@@ -52,16 +47,16 @@
         <dependency>
             <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.edit</artifactId>
-            <version>${emf.version}</version>
+            <!-- Synchronized with org.eclipse.emf.ecore used version 2.26.0 -->
+            <version>2.17.0</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.birt.runtime</groupId>
+            <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.ecore.change</artifactId>
-            <version>${emf.ecore.change.version}</version>
         </dependency>
     </dependencies>
 

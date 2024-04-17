@@ -1,4 +1,4 @@
-pipeline {
+ pipeline {
 	agent {
         kubernetes {
             label 'centos7-6gb'
@@ -23,11 +23,12 @@ pipeline {
 	environment {
 	   VERSION_MAVEN_PARAMETER = " ${params.RELEASE_VERSION ? '-Drepository.version=' + params.RELEASE_VERSION : ''} "
 	   SIGN_BUILD_PARAMETER = " ${params.BUILD_TYPE == 'ci' ? '' : '-Dsign.build=true'} "
+	   SONAR_BRANCH_PARAMETERS = "${env.CHANGE_ID ? '-Dsonar.pullrequest.branch=' + env.BRANCH_NAME + ' -Dsonar.pullrequest.key=' + env.CHANGE_ID + ' -Dsonar.pullrequest.base=' + env.CHANGE_TARGET : '-Dsonar.branch.name=' + env.BRANCH_NAME}"
 	}
 	
 	tools {
-        maven 'apache-maven-3.8.6'
-        jdk 'oracle-jdk8-latest' //AdoptOpenJDK does not work because of JavaFX dependencies
+        maven 'apache-maven-3.9.6'
+        jdk 'openjdk-jdk17-latest' // Java 11 is selected using Maven toolchains
     }
 
 	stages {
@@ -39,9 +40,15 @@ pipeline {
 		stage('Full build') { 
 			steps {
                 xvnc {
-                    sh "mvn -B -f releng/org.eclipse.viatra.parent.all/pom.xml ${SIGN_BUILD_PARAMETER} ${VERSION_MAVEN_PARAMETER} -Dmaven.repo.local=$WORKSPACE/.repository -Dmaven.test.failure.ignore=true -DrunUITests=true clean install"
+                    withCredentials([string(credentialsId: 'sonarcloud-token', variable: 'SONARCLOUD_TOKEN')]) {
+                        withSonarQubeEnv('SonarCloud.io') {
+                            sh 'mvn -B -f releng/org.eclipse.viatra.parent.all/pom.xml $SIGN_BUILD_PARAMETER $VERSION_MAVEN_PARAMETER -Dmaven.repo.local=$WORKSPACE/.repository -Dmaven.test.failure.ignore=true -DrunUITests=true clean install ' +
+                              'org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar -Dsonar.projectKey=eclipse-viatra_org.eclipse.viatra -Dsonar.organization=eclipse-viatra -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONARCLOUD_TOKEN ' +
+                              SONAR_BRANCH_PARAMETERS
+                        }
+                    }
                 }
-			}
+            }
 		}
 		stage('download.eclipse.org') {
 		  when {expression { return params.BUILD_TYPE != "ci" }}

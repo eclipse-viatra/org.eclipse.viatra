@@ -8,7 +8,7 @@ Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.viatra.query.patternlanguage.metamodel.vgql.provider.GraphicalQueryLanguageEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.viatra.query.patternlanguage.metamodel.vgql.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.viatra.query.patternlanguage.metamodel;visibility:=reexport,

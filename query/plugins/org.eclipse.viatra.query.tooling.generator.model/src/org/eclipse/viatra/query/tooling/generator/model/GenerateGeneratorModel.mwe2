@@ -82,7 +82,7 @@ Workflow {
             
             fragment = grammarAccess.GrammarAccessFragment2 {}
             fragment = ecore.EMFGeneratorFragment2 {
-                jdkLevel = "JDK80"
+                jdkLevel = "JDK110"
             }
             fragment = serializer.SerializerFragment2 {
                 generateStub = false

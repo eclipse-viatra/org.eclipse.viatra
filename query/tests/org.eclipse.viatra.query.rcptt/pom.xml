@@ -20,7 +20,7 @@
 	</modules>
 	
 	<properties>
-   	    <rcptt.version>2.4.3</rcptt.version>
+   	    <rcptt.version>2.5.4</rcptt.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
@@ -45,17 +45,17 @@
 	   <repository>
 	       <id>rcptt.core</id>
 	       <layout>p2</layout>
-	       <url>http://download.eclipse.org/rcptt/release/${rcptt.version}/repository</url>
+	       <url>https://download.eclipse.org/rcptt/release/${rcptt.version}/repository</url>
 	   </repository>
 	   <repository>
 	       <id>rcptt.runtime</id>
 	       <layout>p2</layout>
-	       <url>http://download.eclipse.org/rcptt/release/${rcptt.version}/runtime4x</url>
+	       <url>https://download.eclipse.org/rcptt/release/${rcptt.version}/runtime4x</url>
 	   </repository>
 	   <repository>
 	       <id>aspectj</id>
 	       <layout>p2</layout>
-	       <url>http://download.eclipse.org/tools/ajdt/37/update/</url>
+	       <url>https://download.eclipse.org/tools/ajdt/37/update/</url>
 	   </repository>
 	</repositories>
 	<pluginRepositories>

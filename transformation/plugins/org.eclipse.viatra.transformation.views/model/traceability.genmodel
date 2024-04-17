@@ -7,8 +7,8 @@
     editorPluginClass="org.eclipse.viatra.transformation.views.traceability.presentation.TraceabilityEditorPlugin"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory="/org.eclipse.viatra.transformation.views.tests/emf-gen"
     testSuiteClass="org.eclipse.viatra.transformation.views.traceability.tests.TraceabilityAllTests"
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" copyrightFields="false"
-    runtimeVersion="2.10" operationReflection="true">
+    importerID="org.eclipse.emf.importer.ecore" bundleManifest="false" complianceLevel="11.0"
+    copyrightFields="false" runtimeVersion="2.10" operationReflection="true" pluginKey="">
   <foreignModel>traceability.ecore</foreignModel>
   <genPackages prefix="Traceability" basePackage="org.eclipse.viatra.transformation.views"
       disposableProviderFactory="true" ecorePackage="traceability.ecore#/">

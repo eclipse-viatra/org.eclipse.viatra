@@ -6,8 +6,9 @@
     modelName="GraphicalQueryLanguage" editPluginClass="org.eclipse.viatra.query.patternlanguage.metamodel.vgql.provider.GraphicalQueryLanguageEditPlugin"
     editorPluginClass="org.eclipse.viatra.query.patternlanguage.metamodel.vgql.presentation.GraphicalQueryLanguageEditorPlugin"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testsDirectory=""
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
-    optimizedHasChildren="true" runtimeVersion="2.10" operationReflection="true" importOrganizing="true">
+    importerID="org.eclipse.emf.importer.ecore" bundleManifest="false" complianceLevel="8.0"
+    copyrightFields="false" optimizedHasChildren="true" runtimeVersion="2.10" operationReflection="true"
+    importOrganizing="true" pluginKey="">
   <foreignModel>GraphicalPatternLanguage.ecore</foreignModel>
   <genPackages prefix="Vgql" basePackage="org.eclipse.viatra.query.patternlanguage.metamodel"
       disposableProviderFactory="true" ecorePackage="GraphicalPatternLanguage.ecore#/">

@@ -5,8 +5,8 @@ Element-Name: Create Query Project Helper
 Element-Type: context
 Element-Version: 2.0
 Id: _uYL1oFqTEeiOt8o8P2LMSA
-Runtime-Version: 2.3.0.201806262310
-Save-Time: 3/22/19, 8:43 PM
+Runtime-Version: 2.5.4.202210020716
+Save-Time: 3/21/24, 6:56 PM
 
 ------=_.ecl.context-718f04b4-ed39-33e3-af62-0995e4561998
 Content-Type: text/ecl
@@ -23,7 +23,7 @@ Entry-Name: .ecl.context
 
 proc createQueryProject[val outputDirectory] {
 	get-menu "File/New/Other..." | click
-	with [get-window New] {
+	with [get-window "Select a wizard"] {
 	    get-tree | select "VIATRA/Query Project"
 	    get-button "Next >" | click
 	}

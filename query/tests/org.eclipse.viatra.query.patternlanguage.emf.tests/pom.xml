@@ -45,10 +45,14 @@
 				<artifactId>tycho-eclipserun-plugin</artifactId>
 				<configuration>
 					<applicationsArgs>
-					  <args>-data ${emf.workspace.location}</args>
-					  <args>-application org.eclipse.emf.codegen.ecore.Generator</args>
-					  <args>-projects ${project.basedir}</args>
-					  <args>-model ${project.basedir}/model/typetest.genmodel</args>
+					  <args>-data</args>
+					  <args>${emf.workspace.location}</args>
+					  <args>-application</args>
+					  <args>org.eclipse.emf.codegen.ecore.Generator</args>
+					  <args>-projects</args>
+					  <args>${project.basedir}</args>
+					  <args>-model</args>
+					  <args>${project.basedir}/model/typetest.genmodel</args>
 					  <args>${project.basedir}</args>
 					</applicationsArgs>
 					<dependencies>
@@ -56,6 +60,10 @@
 							<artifactId>org.eclipse.emf.codegen.ecore</artifactId>
 							<type>eclipse-plugin</type>
 						</dependency>
+                        <dependency>
+                            <artifactId>org.apache.felix.scr</artifactId>
+                            <type>eclipse-plugin</type>
+                        </dependency>
 					</dependencies>
 					<repositories>
 						<repository>

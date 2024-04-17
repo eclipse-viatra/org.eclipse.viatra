@@ -67,9 +67,12 @@
 				<artifactId>tycho-eclipserun-plugin</artifactId>
 				<configuration>
                      <applicationsArgs>
-                        <applicationsArg>-data ${project.basedir}/..</applicationsArg>
-                        <applicationsArg>-application org.eclipse.emf.codegen.ecore.Generator</applicationsArg>
-                        <applicationsArg>-projects ${project.basedir}</applicationsArg>
+                        <applicationsArg>-data</applicationsArg>
+                        <applicationsArg>${project.basedir}/..</applicationsArg>
+                        <applicationsArg>-application</applicationsArg>
+                        <applicationsArg>org.eclipse.emf.codegen.ecore.Generator</applicationsArg>
+                        <applicationsArg>-projects</applicationsArg>
+                        <applicationsArg>${project.basedir}</applicationsArg>
                         <applicationsArg>-model</applicationsArg>
                         <applicationsArg>-edit</applicationsArg>
                         <applicationsArg>${project.basedir}/model/GraphicalPatternLanguage.genmodel</applicationsArg>
@@ -80,6 +83,10 @@
 							<artifactId>org.eclipse.emf.codegen.ecore</artifactId>
 							<type>eclipse-plugin</type>
 						</dependency>
+                        <dependency>
+                            <artifactId>org.apache.felix.scr</artifactId>
+                            <type>eclipse-plugin</type>
+                        </dependency>
 					</dependencies>
 					<repositories>
 						<repository>

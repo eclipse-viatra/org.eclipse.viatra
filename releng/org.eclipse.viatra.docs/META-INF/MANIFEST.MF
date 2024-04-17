@@ -4,5 +4,5 @@ Bundle-Name: VIATRA Developer Documentation
 Bundle-SymbolicName: org.eclipse.viatra.docs
 Bundle-Version: 2.9.0.qualifier
 Bundle-Vendor: Eclipse VIATRA Project
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.viatra.docs
