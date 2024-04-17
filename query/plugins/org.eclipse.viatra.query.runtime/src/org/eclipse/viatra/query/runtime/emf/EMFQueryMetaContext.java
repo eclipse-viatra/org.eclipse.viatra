@@ -340,12 +340,23 @@ public final class EMFQueryMetaContext extends AbstractQueryMetaContext {
     public void illegalInputKey(IInputKey key) {
         throw new IllegalArgumentException("The input key " + key + " is not a valid EMF input key.");
     }
-    
+
     public boolean isFeatureMultiplicityToOne(EStructuralFeature feature) {
+        return isFeatureToOneMultiplicity(feature);
+    }
+    public boolean isFeatureMultiplicityOneTo(EStructuralFeature typeObject) {
+        return isFeatureMultiplicityOneTo(typeObject);
+    }
+    /**
+     * @since 2.9
+     */
+    public static boolean isFeatureToOneMultiplicity(EStructuralFeature feature) {
         return !feature.isMany();
     }
-
-    public boolean isFeatureMultiplicityOneTo(EStructuralFeature typeObject) {
+    /**
+     * @since 2.9
+     */
+    public static boolean isFeatureOneToMultiplicity(EStructuralFeature typeObject) {
         if (typeObject instanceof EReference) {
             final EReference feature = (EReference)typeObject;
             final EReference eOpposite = feature.getEOpposite();
