@@ -121,7 +121,8 @@ public class EMFPatternLanguageBuilderParticipant extends BuilderParticipant {
         // Hopefully helps with performance, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=461302
         URI uri = delta.getUri();
         IProject builtProject = context.getBuiltProject();
-        if (uri.isPlatformResource() && builtProject.getName().equals(uri.segment(1))) {
+        String projectNameURIencoded = URI.encodeSegment(builtProject.getName(), false /*ignoreEscaped*/);
+        if (uri.isPlatformResource() && projectNameURIencoded.equals(uri.segment(1))) {
             // TODO: we will run out of memory here if the number of deltas is large enough
             Resource deltaResource = context.getResourceSet().getResource(delta.getUri(), true);
             if (shouldGenerate(deltaResource, context)) {
