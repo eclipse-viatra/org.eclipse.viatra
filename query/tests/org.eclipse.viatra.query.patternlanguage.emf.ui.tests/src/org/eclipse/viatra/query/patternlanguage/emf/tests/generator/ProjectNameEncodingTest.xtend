@@ -12,6 +12,9 @@ import org.eclipse.core.resources.IFile
 import org.eclipse.core.runtime.Path
 import org.junit.Test
 
+/**
+ * Test case for https://github.com/eclipse-viatra/org.eclipse.viatra/issues/154
+ */
 class ProjectNameEncodingTest extends AbstractQueryCompilerTest {
     
     override calculateTestProjectName() {
