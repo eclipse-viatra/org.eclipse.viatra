@@ -54,7 +54,7 @@
      <annotation
            provider="org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.QueryExplorerAnnotationValidator" />
      <annotation
-           provider="org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.SafeNegativeRecursionAnnotationValidator">
+           provider="org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.SafeRecursionAnnotationValidator">
      </annotation>
      <annotation
            provider="org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.SafeElementInExpressionAnnotationValidator">

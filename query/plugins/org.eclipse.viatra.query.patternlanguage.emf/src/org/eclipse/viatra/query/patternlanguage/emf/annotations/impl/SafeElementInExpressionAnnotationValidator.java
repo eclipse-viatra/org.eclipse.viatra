@@ -18,11 +18,15 @@ import org.eclipse.viatra.query.patternlanguage.emf.annotations.PatternAnnotatio
 public class SafeElementInExpressionAnnotationValidator extends PatternAnnotationValidator {
 
     public static final String ANNOTATION_NAME = "SafeElementInExpression";
-    private static final String ANNOTATION_DESCRIPTION = "<b>[EXPERIMENTAL]</b> " 
+    private static final String ANNOTATION_DESCRIPTION = "<b>[EXPERIMENTAL] [EXPERT USERS ONLY]</b> " 
             + "This annotation is experimental. It might be removed or changed in future versions.<p>"
-            + "This annotation is used to record that"
+            + "This annotation is for expert users only; misuse may break correctness guarantees.<p>"
+            + "Patterns decorated with this annotation are permitted to use model object variables in" 
+            + " check() or eval() expressions, in addition to scalar attribute variables. <p>"
+            + "This annotation is a record of the promise that"
             + " any expressions in this pattern that directly use a model object (as opposed to a scalar attribute value)" 
-            + " have been reviewed and proven to be deterministic functions of the object reference,"
+            + " have been reviewed and proven by the query author to be deterministic functions of the object reference"
+            + " (always yield the same result for the same variable substitution, even if the model is changed),"
             + " and hence result in correct semantics and dynamics.";
     
     

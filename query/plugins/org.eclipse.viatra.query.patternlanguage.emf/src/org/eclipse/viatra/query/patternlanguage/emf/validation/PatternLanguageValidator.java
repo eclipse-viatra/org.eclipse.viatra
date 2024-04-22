@@ -31,14 +31,17 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.viatra.query.patternlanguage.emf.EMFPatternLanguageConfigurationConstants;
 import org.eclipse.viatra.query.patternlanguage.emf.annotations.IPatternAnnotationValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.annotations.PatternAnnotationProvider;
-import org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.SafeNegativeRecursionAnnotationValidator;
+import org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.SafeRecursionAnnotationValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.JavaTypesHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.internal.DuplicationChecker;
 import org.eclipse.viatra.query.patternlanguage.emf.types.BottomTypeKey;
 import org.eclipse.viatra.query.patternlanguage.emf.types.ITypeInferrer;
 import org.eclipse.viatra.query.patternlanguage.emf.types.ITypeSystem;
+import org.eclipse.viatra.query.patternlanguage.emf.util.ASTStringProvider;
+import org.eclipse.viatra.query.patternlanguage.emf.util.AggregatorUtil;
 import org.eclipse.viatra.query.patternlanguage.emf.util.IExpectedPackageNameProvider;
+import org.eclipse.viatra.query.patternlanguage.emf.validation.whitelist.PureWhitelist;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.AggregatedValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Annotation;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.AnnotationParameter;
@@ -64,9 +67,6 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.UnaryTypeConstraint;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ValueReference;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Variable;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.VariableReference;
-import org.eclipse.viatra.query.patternlanguage.emf.util.ASTStringProvider;
-import org.eclipse.viatra.query.patternlanguage.emf.util.AggregatorUtil;
-import org.eclipse.viatra.query.patternlanguage.emf.validation.whitelist.PureWhitelist;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
 import org.eclipse.viatra.query.runtime.matchers.psystem.aggregations.IAggregatorFactory;
 import org.eclipse.xtext.EcoreUtil2;
@@ -95,6 +95,7 @@ import org.eclipse.xtext.xbase.typesystem.IBatchTypeResolver;
 import org.eclipse.xtext.xbase.typesystem.IResolvedTypes;
 import org.eclipse.xtext.xbase.typesystem.computation.NumberLiterals;
 import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
@@ -676,7 +677,7 @@ public class PatternLanguageValidator extends AbstractDeclarativeValidator imple
             } else {
                 Pattern containingPattern = EcoreUtil2.getContainerOfType(call, Pattern.class);
                 boolean hasSafeRecursionAnnotation = PatternLanguageHelper.getFirstAnnotationByName(
-                        containingPattern, SafeNegativeRecursionAnnotationValidator.ANNOTATION_NAME).isPresent();
+                        containingPattern, SafeRecursionAnnotationValidator.ANNOTATION_NAME).isPresent();
                 
                 if (hasSafeRecursionAnnotation) {
                     info(String.format(IssueCodes.SUPPRESSED_MESSAGE_PREFIX + detectedErrorTemplate, buffer.toString()), call,

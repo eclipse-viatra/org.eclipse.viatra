@@ -278,7 +278,7 @@ class RecursivePatternCallTest extends AbstractValidatorTest {
             'package org.eclipse.viatra.query.patternlanguage.emf.tests
             import "http://www.eclipse.org/viatra/query/patternlanguage/emf/PatternLanguage"
             
-            @SafeNegativeRecursion
+            @SafeRecursion
             pattern p1(p : Pattern) = {
                 Pattern(p);
             } or {
