@@ -262,6 +262,7 @@ public class ReteEngine implements IQueryBackend {
      * @since 2.4
      */
     public <T> T constructionWrapper(final Callable<T> payload) {
+        ensureInitialized();
         T result = null;
 //		context.modelReadLock();
 //		    try {
@@ -533,6 +534,13 @@ public class ReteEngine implements IQueryBackend {
 
     }
     
+    /**
+     * @since 2.9
+     */
+    public boolean isDisposedOrUninitialized() {
+        return disposedOrUninitialized;
+    }
+
     @Override
     public IQueryResultProvider getResultProvider(PQuery query)  {
         return accessMatcher(query);

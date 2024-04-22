@@ -63,7 +63,16 @@ class PatternMatchProcessorClassInferrer {
      */
     def inferProcessorClassMethods(JvmDeclaredType processorClass, Pattern pattern, JvmType matchClassRef) {
         try {
-            processorClass.members += pattern.toMethod("accept", null) [
+            val explodedMethodName = 
+                // Fixes shadowing problem in bug #137, 
+                //      where for a unary pattern whose only parameter is a java.lang.Object,
+                //      generated specific method accept(Object) would shadow the method of the raw type interface Consumer
+                if (1 == pattern.parameters.size && typeof(Object).name == pattern.parameters.head.calculateType.identifier)
+                    "acceptValue"
+                else 
+                    "accept"
+            
+            processorClass.members += pattern.toMethod(explodedMethodName, null) [
                 returnType = typeRef(Void::TYPE)
                 documentation = pattern.javadocProcessMethod.toString
                 abstract = true
@@ -76,7 +85,7 @@ class PatternMatchProcessorClassInferrer {
                 annotations += annotationRef(Override)
                 parameters += pattern.toParameter("match", typeRef(matchClassRef))
                 body = '''
-                    accept(«FOR p : pattern.parameters SEPARATOR ', '»match.«p.getterMethodName»()«ENDFOR»);
+                    «explodedMethodName»(«FOR p : pattern.parameters SEPARATOR ', '»match.«p.getterMethodName»()«ENDFOR»);
                 '''
             ]
         } catch (IllegalStateException ex) {

@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IMarker
 import org.eclipse.core.resources.IResource
 import java.util.function.Consumer
 import org.eclipse.core.resources.IProject
+import org.eclipse.core.resources.IFile
 
 abstract class AbstractQueryCompilerTest extends AbstractWorkbenchTest {
     
@@ -47,11 +48,11 @@ abstract class AbstractQueryCompilerTest extends AbstractWorkbenchTest {
         ProjectGenerationHelper.createProject(desc, proj, newArrayList, new NullProgressMonitor)
     }
     
-    protected def void testFileCreationAndBuild(String contents, int expectedIssueCount) {
+    protected def IFile testFileCreationAndBuild(String contents, int expectedIssueCount) {
         testFileCreationAndBuild(contents, expectedIssueCount, [])
     }
     
-    protected def void testFileCreationAndBuild(String contents, int expectedIssueCount, Consumer<IProject> projectConfigurer) {
+    protected def IFile testFileCreationAndBuild(String contents, int expectedIssueCount, Consumer<IProject> projectConfigurer) {
         val testFile = IResourcesSetupUtil.createFile(filePath, contents)
         val project = testFile.project
         projectConfigurer.accept(project)
@@ -65,6 +66,7 @@ abstract class AbstractQueryCompilerTest extends AbstractWorkbenchTest {
                 «marker.resource.projectRelativePath»(«marker.getAttribute(IMarker.LOCATION)»): «marker.getAttribute(IMarker.MESSAGE)» 
             «ENDFOR»
             ''', expectedIssueCount, markers.size)
+        return testFile
         
     }
 }

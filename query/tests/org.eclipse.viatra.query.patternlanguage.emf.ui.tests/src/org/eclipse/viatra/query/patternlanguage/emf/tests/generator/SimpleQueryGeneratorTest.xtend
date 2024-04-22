@@ -43,6 +43,19 @@ class SimpleQueryGeneratorTest extends AbstractQueryCompilerTest {
     }
     
     @Test
+    def void compileUnaryObjectPattern() {
+        testFileCreationAndBuild('''
+        package test
+        
+        import "http://www.eclipse.org/emf/2002/Ecore"
+        
+        pattern testPattern(o: java Object) {
+            o == eval(4 as Object);
+        }
+        ''', 0)
+    }
+    
+    @Test
     def void testStringLiteralEscaping() {
         testFileCreationAndBuild('''
         package test
