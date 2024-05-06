@@ -65,7 +65,7 @@ pipeline {
 		  }
 		}
         stage('Maven Deploy') {
-            when {branch "master"} 
+            when {branch "2.8-maintenance"} 
 			steps {
                 script {
                     if (params.RELEASE_VERSION) {
