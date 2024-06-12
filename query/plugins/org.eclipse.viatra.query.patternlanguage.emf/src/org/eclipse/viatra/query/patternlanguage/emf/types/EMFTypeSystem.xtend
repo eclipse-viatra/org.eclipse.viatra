@@ -161,7 +161,7 @@ class EMFTypeSystem extends AbstractTypeSystem {
 
     def IInputKey classifierToInputKey(EClassifier classifier) {
         switch (classifier) {
-            case classifier.eIsProxy : BottomTypeKey.INSTANCE
+            case classifier?.eIsProxy : BottomTypeKey.INSTANCE
             EClass: new EClassTransitiveInstancesKey(classifier)
             EDataType: new EDataTypeInSlotsKey(classifier)
             default: BottomTypeKey.INSTANCE
