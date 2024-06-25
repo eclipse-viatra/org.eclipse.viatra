@@ -36,12 +36,9 @@
 <unit id="org.eclipse.graphiti.sdk.feature.feature.group" version="0.18.0.202106091000"/>
 <unit id="org.eclipse.uml2.sdk.feature.group" version="5.5.2.v20210228-1829"/>
 <unit id="org.eclipse.zest.sdk.feature.group" version="1.7.0.201606061308"/>
+<unit id="org.eclipse.collections" version="11.0.0.v20211123-1459"/>
 <unit id="org.junit" version="4.13.2.v20211018-1956"/>
 <repository location="https://download.eclipse.org/releases/2022-06/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-  <unit id="org.eclipse.collections.feature.feature.group" version="10.1.0.v20200211-1558"/>
-  <repository location="https://download.eclipse.org/collections/10.2.0/repository"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.viatra.examples.cps.metamodel.feature.feature.group" version="2.0.0.201801280931"/>
