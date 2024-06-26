@@ -8,7 +8,11 @@
  *******************************************************************************/
 package org.eclipse.viatra.query.runtime.tests.api;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Collections;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel;
@@ -19,6 +23,7 @@ import org.eclipse.viatra.query.runtime.api.IQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryMatcher;
 import org.eclipse.viatra.query.runtime.emf.EMFScope;
+import org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint.BackendRequirement;
 import org.eclipse.xtext.testing.InjectWith;
 import org.eclipse.xtext.testing.XtextRunner;
 import org.eclipse.xtext.testing.util.ParseHelper;
@@ -59,4 +64,39 @@ public class QueryEngineTest {
         assertTrue(matcher != matcher2);
     }
     
+    @Test
+    public void testUnusualParameterTypes() throws Exception {
+        ResourceSetImpl rs = new ResourceSetImpl();
+        ViatraQueryEngine engine = ViatraQueryEngine.on(new EMFScope(rs));
+        String patternCode = "package org.eclipse.viatra.query.patternlanguage.emf.tests\n"
+                            + "import \"http://www.eclipse.org/viatra/query/patternlanguage/emf/PatternLanguage\"\n"
+                            + "pattern p(\n" 
+                            + "  generic:        java ^java.util.Map,\n" 
+                            + "  innerGeneric:   java ^java.util.Map.Entry,\n" 
+                            + "  constField:     java org.eclipse.emf.ecore.EcorePackage,\n" 
+                            + "  constInnerEnum: java org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint.BackendRequirement,\n" 
+                            + "  scalarJava:     java Integer\n" 
+                            + ")={\n"
+                            + "  generic == eval(^java.util.Collections.singletonMap(1,2));\n"
+                            + "  innerGeneric == eval(generic.entrySet.head);\n"
+                            + "  constField == java org.eclipse.emf.ecore.EcorePackage::eINSTANCE;\n"
+                            + "  constInnerEnum == java org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint.BackendRequirement::SPECIFIC;\n"
+                            + "  scalarJava == 4;\n"
+                            + "}\n";
+        PatternModel model = parseHelper.parse(patternCode);
+        
+        IQuerySpecification<? extends ViatraQueryMatcher<? extends IPatternMatch>> specification = new SpecificationBuilder().getOrCreateSpecification(model.getPatterns().get(0));
+        
+        ViatraQueryMatcher<? extends IPatternMatch> matcher = engine.getMatcher(specification);
+        assertEquals(1, matcher.countMatches());
+        IPatternMatch match = matcher.getOneArbitraryMatch().get();
+        assertEquals(Collections.singleton(Collections.singletonMap(1,2)), matcher.getAllValues("generic"));
+        assertTrue(match.get("innerGeneric") instanceof Map.Entry);
+        assertEquals(1, ((Map.Entry)match.get("innerGeneric")).getKey());
+        assertEquals(org.eclipse.emf.ecore.EcorePackage.eINSTANCE, match.get("constField"));
+        assertEquals(BackendRequirement.SPECIFIC, match.get("constInnerEnum"));
+        assertEquals(4, match.get("scalarJava"));
+        
+    }
+   
 }

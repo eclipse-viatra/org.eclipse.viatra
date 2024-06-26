@@ -152,8 +152,8 @@ class PatternMatchClassInferrer {
                 if (!isMutable()) throw new java.lang.UnsupportedOperationException();
                 «FOR variable : pattern.parameters»
                     «val type = variable.calculateType»
-                    if ("«variable.name»".equals(parameterName) «IF typeReference.is(type, Object)»&& newValue instanceof «type»«ENDIF») {
-                        this.«variable.fieldName» = («type») newValue;
+                    if ("«variable.name»".equals(parameterName) «IF typeReference.is(type, Object)»&& newValue instanceof «type.type»«ENDIF») {
+                        this.«variable.fieldName» = («type.type») newValue;
                         return true;
                     }
                 «ENDFOR»
