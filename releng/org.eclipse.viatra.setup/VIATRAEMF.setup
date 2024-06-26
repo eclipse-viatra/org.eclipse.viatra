@@ -540,6 +540,8 @@
         <requirement
             name="org.eclipse.uml2.sdk.feature.group"
             versionRange="[5.0.0,6.0.0)"/>
+        <requirement
+            name="org.eclipse.collections.feature.source.feature.group"/>
         <repositoryList
             name="2022-06">
           <repository
@@ -758,18 +760,6 @@
               url="http://download.eclipse.org/releases/2024-03"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-      </targlet>
-      <targlet
-          name="Eclipse Collections"
-          activeRepositoryList="10.2.0">
-        <requirement
-            name="org.eclipse.collections.feature.source.feature.group"
-            versionRange="[10.1.0,11.0.0)"/>
-        <repositoryList
-            name="10.2.0">
-          <repository
-              url="http://download.eclipse.org/collections/10.2.0/repository"/>
         </repositoryList>
       </targlet>
       <targlet
