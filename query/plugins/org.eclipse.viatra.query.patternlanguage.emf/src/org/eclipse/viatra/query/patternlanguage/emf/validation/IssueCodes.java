@@ -158,4 +158,9 @@ public final class IssueCodes {
      * @since 1.4
      */
     public static final String JAVA_TYPE_PREFIX = "java:";
+    /**
+     * This prefixed to the message of info messages that inform of suppressed errors or warnings 
+     * @since 2.9
+     */
+    public static final String SUPPRESSED_MESSAGE_PREFIX = "[SUPPRESSED] ";
 }

@@ -851,6 +851,15 @@ public final class PatternLanguageHelper {
     }
     
     /**
+     * Decides whether a call is aggregated
+     * @since 2.9
+     */
+    public static boolean isAggregated(CallableRelation call) {
+        return call.eContainer() instanceof AggregatedValue;
+    }
+
+    
+    /**
      * Decides whether a call is negative
      * @since 2.0
      */
