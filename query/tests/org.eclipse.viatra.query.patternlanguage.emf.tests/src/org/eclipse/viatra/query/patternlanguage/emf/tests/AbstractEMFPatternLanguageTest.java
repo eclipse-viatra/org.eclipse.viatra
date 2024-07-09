@@ -10,22 +10,22 @@
 package org.eclipse.viatra.query.patternlanguage.emf.tests;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternLanguagePackage;
-import org.eclipse.xtext.junit4.AbstractXtextTests;
+import org.eclipse.xtext.testing.AbstractXtextTests;
 import org.eclipse.xtext.testing.InjectWith;
 import org.eclipse.xtext.testing.XtextRunner;
 import org.junit.runner.RunWith;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 
 @RunWith(XtextRunner.class)
 @InjectWith(CustomizedEMFPatternLanguageInjectorProvider.class)
 public abstract class AbstractEMFPatternLanguageTest extends AbstractXtextTests {
 
-    static final ImmutableSet<String> defaultPackages = ImmutableSet
+    static final Set<String> defaultPackages = Set
             .of("http://www.eclipse.org/viatra/query/patternlanguage/emf/PatternLanguage");
     
     @Inject

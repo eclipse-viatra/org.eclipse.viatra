@@ -19,7 +19,7 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternLanguagePackage
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel
 import org.eclipse.viatra.query.runtime.matchers.context.common.JavaTransitiveInstancesKey
 import org.eclipse.xtext.diagnostics.Diagnostic
-import org.eclipse.xtext.junit4.validation.ValidatorTester
+import org.eclipse.xtext.testing.validation.ValidatorTester
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.XtextRunner
 import org.eclipse.xtext.testing.util.ParseHelper
