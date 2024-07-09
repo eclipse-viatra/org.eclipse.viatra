@@ -600,6 +600,20 @@
           <repository
               url="http://download.eclipse.org/cbi/updates/license"/>
         </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
       </targlet>
       <targlet
           name="Sirius"
@@ -671,6 +685,20 @@
               url="http://download.eclipse.org/releases/2024-03"/>
           <repository
               url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
         </repositoryList>
       </targlet>
       <targlet
@@ -758,6 +786,20 @@
             name="2024-03">
           <repository
               url="http://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="http://download.itemis.com/updates/releases/2.1.1/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="http://download.itemis.com/updates/releases/2.1.1/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
         </repositoryList>
@@ -849,6 +891,24 @@
             name="2024-03">
           <repository
               url="http://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
           <repository
               url="http://download.eclipse.org/cbi/updates/license"/>
           <repository
