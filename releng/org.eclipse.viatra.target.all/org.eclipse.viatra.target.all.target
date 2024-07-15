@@ -7,14 +7,14 @@
 <repository location="https://download.itemis.com/updates/releases/2.1.1/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.xtext.sdk.feature.group" version="2.33.0.v20231121-0955"/>
-<repository location="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+<unit id="org.eclipse.xtext.sdk.feature.group" version="2.35.0.v20240528-1523"/>
+<repository location="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.16.0.v20231117-0522"/>
-<unit id="org.eclipse.emf.mwe2.launcher.feature.group" version="2.16.0.v20231117-0522"/>
-<unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.16.0.v20231117-0522"/>
-<repository location="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+<unit id="org.eclipse.emf.mwe2.language.sdk.feature.group" version="2.18.0.v20240525-1058"/>
+<unit id="org.eclipse.emf.mwe2.launcher.feature.group" version="2.18.0.v20240525-1058"/>
+<unit id="org.eclipse.emf.mwe2.runtime.sdk.feature.group" version="2.18.0.v20240525-1058"/>
+<repository location="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.license.feature.group" version="2.0.2.v20181016-2210"/>

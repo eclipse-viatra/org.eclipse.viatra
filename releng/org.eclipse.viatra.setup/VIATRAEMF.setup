@@ -19,7 +19,7 @@
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Xmx"
-      value="2048m"
+      value="4G"
       vm="true">
     <description>Set the heap space needed to work with the projects of ${scope.project.label}</description>
   </setupTask>
@@ -600,6 +600,20 @@
           <repository
               url="http://download.eclipse.org/cbi/updates/license"/>
         </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
       </targlet>
       <targlet
           name="Sirius"
@@ -672,6 +686,20 @@
           <repository
               url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
         </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
+        </repositoryList>
       </targlet>
       <targlet
           name="Xtext"
@@ -680,7 +708,7 @@
             name="de.itemis.xtext.antlr.feature.feature.group"/>
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"
-            versionRange="[2.33.0,3.0.0)"/>
+            versionRange="[2.35.0,3.0.0)"/>
         <repositoryList
             name="2022-06">
           <repository
@@ -688,9 +716,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2022-09">
@@ -699,9 +727,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2022-12">
@@ -710,9 +738,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2023-03">
@@ -721,9 +749,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2023-06">
@@ -732,9 +760,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2023-09">
@@ -743,9 +771,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2023-12">
@@ -753,11 +781,33 @@
               url="http://download.eclipse.org/releases/2023-12"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2024-03">
           <repository
               url="http://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="http://download.itemis.com/updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="http://download.itemis.com/updates/releases/2.1.1/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
         </repositoryList>
@@ -849,6 +899,24 @@
             name="2024-03">
           <repository
               url="http://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
           <repository
               url="http://download.eclipse.org/cbi/updates/license"/>
           <repository

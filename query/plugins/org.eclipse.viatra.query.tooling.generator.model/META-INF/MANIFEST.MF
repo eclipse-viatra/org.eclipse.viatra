@@ -4,8 +4,8 @@ Bundle-Name: VIATRA Query Generator Model
 Bundle-Version: 2.9.0.qualifier
 Bundle-SymbolicName: org.eclipse.viatra.query.tooling.generator.model;singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.xtext;bundle-version="[2.20.0,3.0.0)",
- org.eclipse.xtext.util;bundle-version="[2.20.0,3.0.0)",
+Require-Bundle: org.eclipse.xtext;bundle-version="[2.35.0,3.0.0)",
+ org.eclipse.xtext.util;bundle-version="[2.35.0,3.0.0)",
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
  org.antlr.runtime,

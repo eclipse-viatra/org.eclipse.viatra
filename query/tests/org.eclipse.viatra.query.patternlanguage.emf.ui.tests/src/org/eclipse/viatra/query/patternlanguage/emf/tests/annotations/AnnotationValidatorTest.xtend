@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 import org.eclipse.xtext.testing.InjectWith
 import com.google.inject.Inject
 import org.eclipse.viatra.query.patternlanguage.emf.validation.EMFPatternLanguageValidator
-import org.eclipse.xtext.junit4.validation.ValidatorTester
+import org.eclipse.xtext.testing.validation.ValidatorTester
 import com.google.inject.Injector
 import org.eclipse.viatra.query.patternlanguage.emf.tests.util.AbstractValidatorTest
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel
