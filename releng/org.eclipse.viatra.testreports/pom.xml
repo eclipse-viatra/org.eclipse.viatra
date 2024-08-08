@@ -330,6 +330,9 @@
                     <execution>
                         <id>report-aggregate</id>
                         <phase>verify</phase>
+                        <configuration>
+                            <formats>XML</formats>
+                        </configuration>
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
