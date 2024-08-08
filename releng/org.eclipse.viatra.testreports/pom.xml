@@ -10,6 +10,9 @@
         <relativePath>../../releng/org.eclipse.viatra.parent.all/pom.xml</relativePath>
     </parent>
     <artifactId>org.eclipse.viatra.testreports</artifactId>
+    
+    <packaging>pom</packaging>
+    
     <dependencies>
         <dependency>
             <groupId>org.eclipse.viatra</groupId>
@@ -350,6 +353,7 @@
                     <groupId>org.eclipse.viatra</groupId>
                     <artifactId>org.eclipse.viatra.query.rcptt.tests</artifactId>
                     <version>${viatra.main.version}</version>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
         </profile>
