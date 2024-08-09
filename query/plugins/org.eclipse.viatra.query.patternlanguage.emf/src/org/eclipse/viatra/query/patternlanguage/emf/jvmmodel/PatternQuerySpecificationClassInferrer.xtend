@@ -165,7 +165,7 @@ class PatternQuerySpecificationClassInferrer {
                 annotations += annotationRef(Override)
                 parameters += pattern.toParameter("parameters", typeRef(Object).addArrayTypeDimension)
                 varArgs = true
-                body = '''return «matchClass».newMatch(«FOR p : pattern.parameters SEPARATOR ', '»(«p.calculateType.qualifiedName») parameters[«pattern.parameters.indexOf(p)»]«ENDFOR»);'''
+                body = '''return «matchClass».newMatch(«FOR p : pattern.parameters SEPARATOR ', '»(«p.calculateType.type») parameters[«pattern.parameters.indexOf(p)»]«ENDFOR»);'''
             ]
         }
     }

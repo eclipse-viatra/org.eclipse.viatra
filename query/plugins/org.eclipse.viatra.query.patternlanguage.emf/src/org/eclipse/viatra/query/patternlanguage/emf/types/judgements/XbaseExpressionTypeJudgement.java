@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
+import org.eclipse.viatra.query.patternlanguage.emf.types.ITypeSystem;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Expression;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternBody;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Variable;
@@ -33,13 +34,15 @@ public class XbaseExpressionTypeJudgement extends AbstractTypeJudgement {
 
     private XExpression xExpression;
     private IBatchTypeResolver xbaseResolver;
+    private ITypeSystem typeSystem;
     private boolean unwind;
     
     public XbaseExpressionTypeJudgement(Expression expression, XExpression xExpression,
-            IBatchTypeResolver xbaseResolver, boolean unwind) {
+            IBatchTypeResolver xbaseResolver, ITypeSystem typeSystem, boolean unwind) {
         super(expression);
         this.xExpression = xExpression;
         this.xbaseResolver = xbaseResolver;
+        this.typeSystem = typeSystem;
         this.unwind = unwind;
     }
 
@@ -59,10 +62,9 @@ public class XbaseExpressionTypeJudgement extends AbstractTypeJudgement {
         } else if (this.unwind) {
             return getComponentTypeKey(expressionType);
         } else {
-             return new JavaTransitiveInstancesKey(expressionType.getWrapperTypeIfPrimitive().getJavaIdentifier());
+            return asInputKey(expressionType);
         }
     }
-    
     private JavaTransitiveInstancesKey getComponentTypeKey(LightweightTypeReference typeRef) {
         for (LightweightTypeReference parent : typeRef.getAllSuperTypes()) {
             if (parent.getRawTypeReference().isType(Set.class) && parent instanceof ParameterizedTypeReference) {
@@ -71,14 +73,17 @@ public class XbaseExpressionTypeJudgement extends AbstractTypeJudgement {
                 if (typeArguments.size() != 1)
                     continue;
                 final LightweightTypeReference componentTypeRef = typeArguments.get(0);
-                final String componentJavaId = componentTypeRef.getWrapperTypeIfPrimitive().getJavaIdentifier();
-                return new JavaTransitiveInstancesKey(componentJavaId);
+                return asInputKey(componentTypeRef);
             }
         }
 
         return new JavaTransitiveInstancesKey(Object.class);
     }
 
+    private JavaTransitiveInstancesKey asInputKey(LightweightTypeReference typeRef) {
+        return typeSystem.fromJvmType(typeRef.getType(), xExpression);
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;

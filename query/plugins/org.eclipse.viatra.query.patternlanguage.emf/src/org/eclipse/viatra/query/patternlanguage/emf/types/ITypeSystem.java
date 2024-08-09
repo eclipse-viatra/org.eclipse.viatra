@@ -14,6 +14,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.RelationType;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Type;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
+import org.eclipse.viatra.query.runtime.matchers.context.common.JavaTransitiveInstancesKey;
+import org.eclipse.xtext.common.types.JvmIdentifiableElement;
+import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 
 /**
@@ -113,6 +116,12 @@ public interface ITypeSystem {
      * Creates a type reference for model inference from a selected type.
      */
     JvmTypeReference toJvmTypeReference(IInputKey type, EObject context);
+    
+    /**
+     * Creates a Java type filter IInputKey from a JVM type referenced in the pattern language.
+     * @since 2.9
+     */
+    JavaTransitiveInstancesKey fromJvmType(JvmType jvmType, EObject context);
 
     /**
      * Converts a type object to a user-visible description string.

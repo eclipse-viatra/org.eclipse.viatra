@@ -29,6 +29,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.viatra.query.patternlanguage.emf.util.SimpleClassLoaderProvider;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Pattern;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
+import org.eclipse.xtext.util.IResourceScopeCache;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -42,25 +43,40 @@ public class JavaProjectClassLoaderProvider extends SimpleClassLoaderProvider im
 
     @Inject
     private IWorkspaceRoot root;
+    
+    @Inject
+    private IResourceScopeCache cache;
 
     @Override
     public ClassLoader getClassLoader(EObject ctx) {
-        try {
-            IFile file = getIFile(ctx);
-            ClassLoader l;
-            if (file != null && file.exists()) {
-                l = getClassLoader(file);
-                if (l == null) {
-                    throw new ViatraQueryException(String.format("No classloader found for context object %s.", ctx), "No classloader found.");
-                }
-            } else {
-                l = super.getClassLoader(ctx);
-            }
-            return l;
-        } catch (Exception e) {
-            throw new ViatraQueryException(String.format("Cannot initialize classloader for context object %s because %s",
-                    ctx, e.getMessage()), "Cannot initialize classloader", e);
+        if (null == ctx || null == ctx.eResource()) {
+            return super.getClassLoader(ctx);
         }
+        // Caching is necessary not just for performance, 
+        // but also in order to force the same source class URI to be loaded by the same ClassLoader 
+        // (hence resulting in the same Class<T> object) 
+        // for all parts of a Pattern.
+        // 
+        // Caveat: the classpath may change without anybody touching this resource. 
+        // However, a simple editing of this VQL resource, or a clean&build, will fix the stale classpath problem, while there is no simple fix for the alternative. 
+        return cache.get(JavaProjectClassLoaderProvider.class, ctx.eResource(), () -> {
+            try {
+                IFile file = getIFile(ctx);
+                ClassLoader l;
+                if (file != null && file.exists()) {
+                    l = getClassLoader(file);
+                    if (l == null) {
+                        throw new ViatraQueryException(String.format("No classloader found for context object %s.", ctx), "No classloader found.");
+                    }
+                } else {
+                    l = super.getClassLoader(ctx);
+                }
+                return l;
+            } catch (Exception e) {
+                throw new ViatraQueryException(String.format("Cannot initialize classloader for context object %s because %s",
+                        ctx, e.getMessage()), "Cannot initialize classloader", e);
+            }
+        });
     }
     @Override
     public IFile getIFile(Pattern pattern) {
@@ -92,8 +108,6 @@ public class JavaProjectClassLoaderProvider extends SimpleClassLoaderProvider im
      *
      * @param file
      * @return {@link ClassLoader}
-     * @throws CoreException
-     * @throws MalformedURLException
      */
     public ClassLoader getClassLoader(IFile file) throws CoreException, MalformedURLException {
         if (file != null && file.exists()) {

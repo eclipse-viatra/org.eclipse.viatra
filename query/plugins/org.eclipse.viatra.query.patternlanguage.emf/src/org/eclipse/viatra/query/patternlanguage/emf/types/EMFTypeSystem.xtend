@@ -56,6 +56,9 @@ import org.eclipse.xtext.common.types.util.TypeReferences
 import org.eclipse.xtext.diagnostics.Severity
 
 import static com.google.common.base.Preconditions.checkArgument
+import org.eclipse.xtext.common.types.JvmIdentifiableElement
+import org.eclipse.xtext.common.types.util.JavaReflectAccess
+import org.eclipse.xtext.common.types.JvmType
 
 /** 
  * @author Zoltan Ujhelyi
@@ -101,6 +104,7 @@ class EMFTypeSystem extends AbstractTypeSystem {
     @Inject TypeReferences typeReferences
     @Inject IClassLoaderProvider classLoaderProvider 
     @Inject IJvmTypeProvider.Factory typeProviderFactory;
+    @Inject(optional = true) ClassLoader injectedClassloader;
 
     @Inject new(Logger logger) {
         super(EMFQueryMetaContext.DEFAULT)
@@ -115,7 +119,7 @@ class EMFTypeSystem extends AbstractTypeSystem {
         } else if (type instanceof ReferenceType) {
             return type.refname?.EType.classifierToInputKey
         } else if (type instanceof JavaType) {
-            return new JavaTransitiveInstancesKey(type.classRef.identifier)
+            return this.fromJvmType(type.classRef, type);
         }
         // Never executed
         throw new UnsupportedOperationException()
@@ -328,6 +332,29 @@ class EMFTypeSystem extends AbstractTypeSystem {
             }
         }
         return typeReferences.getTypeForName(Object, context)
+    }
+    
+    override fromJvmType(JvmType jvmType, EObject context) {
+        try {
+            // if the class is loadable, even from source files, try to use it directly for instance filtering
+            // Instead of asking for the reflection helper from the injector, we are initializing it manually
+            // to make sure it always loads with the appropriate classloader
+            val javaReflect = new JavaReflectAccess;            
+            val classLoader = classLoaderProvider.getClassLoader(context);
+            if (classLoader !== null) {
+                javaReflect.setClassLoader(classLoader);
+            } else if (injectedClassloader !== null) {
+                // If no classloader can be selected from the context, we should rely on the classloader of the language injector
+                javaReflect.setClassLoader(injectedClassloader);
+            }
+            val Class<?> loadedClass = javaReflect.getRawType(jvmType);
+            return new JavaTransitiveInstancesKey(loadedClass);
+        } catch (Exception ex) {
+            // if loading the class failed, we can still construct the input key from its qualified name;
+            // however, this constraint will only be useful for generating code from it
+            
+            return new JavaTransitiveInstancesKey(jvmType.identifier, jvmType.getQualifiedName('$'));
+        }
     }
 
     private def JvmTypeReference getJvmType(EClassifier classifier, EObject context) {
