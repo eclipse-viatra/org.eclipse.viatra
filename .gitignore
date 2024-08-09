@@ -5,3 +5,4 @@ MANIFEST.MF_gen
 .DS_Store*
 rebel.xml
 .metadata
+.tycho-consumer-pom.xml
