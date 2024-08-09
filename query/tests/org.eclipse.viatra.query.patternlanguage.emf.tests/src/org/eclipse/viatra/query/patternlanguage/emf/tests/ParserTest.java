@@ -281,6 +281,11 @@ public class ParserTest {
     public void annotationNoParam() {
         testParserRule("@Optional", ANNOTATION_RULE);
     }
+    
+    @Test
+    public void annotationNoParam2() {
+        testParserRule("@Optional()", ANNOTATION_RULE);
+    }
 
     @Test
     public void annotationOneParam() {
