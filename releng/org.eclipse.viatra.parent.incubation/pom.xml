@@ -44,9 +44,6 @@
         <version>2.9.0-SNAPSHOT</version>
         <relativePath>../org.eclipse.viatra.parent.all/pom.xml</relativePath>
     </parent>
-    <properties>
-        <viatra.incubation.version>0.29.0-SNAPSHOT</viatra.incubation.version>
-    </properties>
     <build>
         <pluginManagement>
             <plugins>
