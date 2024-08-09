@@ -11,3 +11,13 @@ More information:: https://projects.eclipse.org/projects/modeling.viatra/release
 == New and Noteworthy
 
 TBD
+
+In previous versions, annotation without parameters did not support adding the parentheses in the syntax. VIATRA 2.9 extended the syntax to support such annotations, so the further code works:
+
+[source,vql]
+----
+@QueryExplorer() // Equivalent to @QueryExplorer
+pattern emptyIpAddress(host: HostInstance) {
+    HostInstance.nodeIp(host, "");
+}
+----
