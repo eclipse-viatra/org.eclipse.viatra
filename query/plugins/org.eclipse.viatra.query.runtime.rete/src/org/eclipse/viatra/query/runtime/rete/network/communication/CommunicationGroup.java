@@ -97,7 +97,7 @@ public abstract class CommunicationGroup implements Comparable<CommunicationGrou
 
     @Override
     public int compareTo(final CommunicationGroup that) {
-        return this.identifier - that.identifier;
+        return Integer.compare(this.identifier, that.identifier);
     }
 
 }

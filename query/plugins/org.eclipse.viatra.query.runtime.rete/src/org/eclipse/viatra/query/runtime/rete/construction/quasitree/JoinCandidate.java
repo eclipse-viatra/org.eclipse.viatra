@@ -30,7 +30,7 @@ import org.eclipse.viatra.query.runtime.matchers.util.CollectionsFactory;
  * @author Gabor Bergmann
  * 
  */
-class JoinCandidate {
+public class JoinCandidate {
     private QueryAnalyzer analyzer;
     
     SubPlan primary;
@@ -44,7 +44,7 @@ class JoinCandidate {
     List<PConstraint> consSecondary;
     
 
-    JoinCandidate(SubPlan primary, SubPlan secondary, QueryAnalyzer analyzer) {
+    public JoinCandidate(SubPlan primary, SubPlan secondary, QueryAnalyzer analyzer) {
         super();
         this.primary = primary;
         this.secondary = secondary;
