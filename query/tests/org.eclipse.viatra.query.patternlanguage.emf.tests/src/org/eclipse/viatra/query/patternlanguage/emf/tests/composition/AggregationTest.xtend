@@ -24,7 +24,7 @@ import org.eclipse.viatra.query.patternlanguage.emf.types.ITypeInferrer
 import org.junit.Assert
 import org.eclipse.viatra.query.runtime.matchers.context.common.JavaTransitiveInstancesKey
 import org.junit.Before
-import org.eclipse.xtext.junit4.validation.ValidatorTester
+import org.eclipse.xtext.testing.validation.ValidatorTester
 import com.google.inject.Injector
 import org.eclipse.viatra.query.patternlanguage.emf.tests.util.AbstractValidatorTest
 import org.eclipse.viatra.query.patternlanguage.emf.validation.EMFPatternLanguageValidator
@@ -581,21 +581,21 @@ class AggregationTest extends AbstractValidatorTest {
     @Test
     def void testInvalidAggregator() {
         var parsed = parseHelper.parse('''
-				package org.eclipse.viatra.query.patternlanguage.emf.tests
-				
-				import "http://www.eclipse.org/viatra/query/patternlanguage/emf/PatternLanguage"
-				import "http://www.eclipse.org/emf/2002/Ecore"
-				
-				pattern smallestValue(value) {
-				    value == Integer find extractValue(_, #v);
-				}
-				            
-				// helper patterns
-				pattern extractValue(reference : IntValue, value : EInt) {
-				    IntValue(reference);
-				    IntValue.value(reference, value);
-				}
-			'''
+                package org.eclipse.viatra.query.patternlanguage.emf.tests
+                
+                import "http://www.eclipse.org/viatra/query/patternlanguage/emf/PatternLanguage"
+                import "http://www.eclipse.org/emf/2002/Ecore"
+                
+                pattern smallestValue(value) {
+                    value == Integer find extractValue(_, #v);
+                }
+                            
+                // helper patterns
+                pattern extractValue(reference : IntValue, value : EInt) {
+                    IntValue(reference);
+                    IntValue.value(reference, value);
+                }
+            '''
         )
         tester.validate(parsed).assertAll(
             getErrorCode(IssueCodes.INVALID_AGGREGATOR)
@@ -730,5 +730,38 @@ class AggregationTest extends AbstractValidatorTest {
             getWarningCode(IssueCodes.MISSING_PARAMETER_TYPE)
         )
     }
-
+    
+    @Test
+    def void testAggregatorChainWarning() {
+        var parsed = parseHelper.parse('''
+                package org.eclipse.viatra.query.patternlanguage.emf.tests
+                
+                import "http://www.eclipse.org/emf/2002/Ecore"
+                
+                pattern diamondCount(feature1 : EReference, feature2 : EReference, n: java Integer) {
+                    EReference.eOpposite(feature1, feature2); // just to avoid Cartesian warning
+                    n == count EStructuralFeature.eContainingClass.eSuperTypes.eSuperTypes.eStructuralFeatures(feature1, feature2);
+                }
+            '''
+        )
+        tester.validate(parsed).assertAll(
+            getWarningCode(IssueCodes.AGGREGATED_FEATURE_CHAIN)
+        )
+    }
+    
+    @Test
+    def void testAggregatorChainOK() {
+        var parsed = parseHelper.parse('''
+                package org.eclipse.viatra.query.patternlanguage.emf.tests
+                
+                import "http://www.eclipse.org/emf/2002/Ecore"
+                
+                pattern isFromDirectSupertype(feature1 : EReference, feature2 : EReference, n: java Integer) {
+                    EReference.eOpposite(feature1, feature2); // just to avoid Cartesian warning
+                    n == count EStructuralFeature.eContainingClass.eSuperTypes.eStructuralFeatures(feature1, feature2);
+                }
+            '''
+        )
+        tester.validate(parsed).assertOK
+    }
 }

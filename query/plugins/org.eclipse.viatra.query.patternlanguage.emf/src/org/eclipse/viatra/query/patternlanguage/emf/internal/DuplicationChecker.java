@@ -17,6 +17,8 @@ import java.util.Set;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.util.IProjectHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Pattern;
@@ -27,6 +29,7 @@ import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.IContainer;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescription;
+import org.eclipse.xtext.resource.impl.AbstractResourceDescription;
 import org.eclipse.xtext.resource.impl.LiveShadowedResourceDescriptions;
 
 import com.google.common.base.Predicate;
@@ -94,13 +97,38 @@ public class DuplicationChecker {
         }
     }
     
+    /**
+     * Copied from {@link AbstractResourceDescription#getNormalizedURI} to handle normalization issues found when
+     * updating to Xtext 2.35 in duplication tests
+     */
+    protected URI getNormalizedURI(Resource resource) {
+        URI uri = resource.getURI();
+        URIConverter uriConverter = resource.getResourceSet()!=null?resource.getResourceSet().getURIConverter():null;
+        if (uri != null && uriConverter != null) {
+            if (!uri.isPlatform()) {
+                return uriConverter.normalize(uri);
+            }
+            // This is a fix for resources which have been loaded using a platform:/plugin URI
+            // This happens when one resource has absolute references using a platform:/plugin uri and the corresponding
+            // ResourceDescriptionManager resolves references in the first phase, i.e. during EObjectDecription computation.
+            // EMF's GenModelResourceDescriptionStrategy does so as it needs to call GenModel.reconcile() eagerly.
+            if (uri.isPlatformPlugin()) {
+                URI resourceURI = uri.replacePrefix(URI.createURI("platform:/plugin/"), URI.createURI("platform:/resource/"));
+                if (uriConverter.normalize(uri).equals(uriConverter.normalize(resourceURI)))
+                    return resourceURI;
+            }
+        }
+        return uri;
+    }
+    
     private Set<IEObjectDescription> processDuplicateCandidates(Pattern pattern, boolean calculateVisibility,
             final Iterable<IEObjectDescription> shadowingPatternDescriptions) {
         Set<IEObjectDescription> duplicates = Sets.newHashSet();
         for (IEObjectDescription shadowingPatternDescription : shadowingPatternDescriptions) {
             EObject shadowingPattern = shadowingPatternDescription.getEObjectOrProxy();
             if (!Objects.equals(shadowingPattern, pattern)) {
-                URI resourceUri = pattern.eResource().getURI();
+                final Resource resource = pattern.eResource();
+                URI resourceUri = getNormalizedURI(resource);
                 // not using shadowingPattern because it might be proxy
                 URI otherResourceUri = shadowingPatternDescription.getEObjectURI().trimFragment(); 
                 if (!Objects.equals(resourceUri, otherResourceUri) && projectHelper.isStandaloneFileURI(shadowingPattern, otherResourceUri)) {

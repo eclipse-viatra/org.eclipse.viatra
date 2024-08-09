@@ -18,6 +18,9 @@ import org.eclipse.viatra.examples.cps.cyberPhysicalSystem.CyberPhysicalSystemPa
 import org.eclipse.viatra.gui.tests.queries.IdIsNotUnique;
 import org.eclipse.viatra.gui.tests.queries.IdIsNotUnique.Match;
 import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine;
+import org.eclipse.viatra.query.runtime.api.IPatternMatch;
+import org.eclipse.viatra.query.runtime.api.ViatraQueryEngineLifecycleListener;
+import org.eclipse.viatra.query.runtime.api.ViatraQueryMatcher;
 import org.eclipse.viatra.query.runtime.emf.EMFScope;
 import org.eclipse.viatra.transformation.evm.api.ExecutionSchema;
 import org.eclipse.viatra.transformation.evm.api.Job;
@@ -74,5 +77,30 @@ public class LifecycleTest {
         schema.dispose();
     }
 
-    
+    @Test
+    public void initAndShutdownWithPropagatingLifecycleListener() {
+        AdvancedViatraQueryEngine queryEngine = initializeQueryEngine();
+        ExecutionSchema schema = initializeExecutionSchema(queryEngine);
+        queryEngine.addLifecycleListener(new ViatraQueryEngineLifecycleListener() {
+            
+            @Override
+            public void matcherInstantiated(ViatraQueryMatcher<? extends IPatternMatch> matcher) {
+            }
+            
+            @Override
+            public void engineWiped() {
+                schema.dispose(); // reproduces bug #132
+            }
+            
+            @Override
+            public void engineDisposed() {
+            }
+            
+            @Override
+            public void engineBecameTainted(String message, Throwable t) {
+            }
+        });
+        queryEngine.dispose();
+    }
+
 }

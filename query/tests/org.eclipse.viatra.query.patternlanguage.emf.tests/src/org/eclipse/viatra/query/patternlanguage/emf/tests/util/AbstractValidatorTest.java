@@ -14,9 +14,9 @@ import static org.eclipse.emf.common.util.Diagnostic.INFO;
 import java.util.Iterator;
 
 import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.xtext.junit4.validation.AssertableDiagnostics;
-import org.eclipse.xtext.junit4.validation.AssertableDiagnostics.DiagnosticPredicate;
-import org.eclipse.xtext.junit4.validation.AssertableDiagnostics.Pred;
+import org.eclipse.xtext.testing.validation.AssertableDiagnostics;
+import org.eclipse.xtext.testing.validation.AssertableDiagnostics.DiagnosticPredicate;
+import org.eclipse.xtext.testing.validation.AssertableDiagnostics.Pred;
 
 public abstract class AbstractValidatorTest {
 

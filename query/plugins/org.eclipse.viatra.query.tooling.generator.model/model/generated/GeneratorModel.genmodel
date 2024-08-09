@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.viatra.query.tooling.generator.model/src-gen"
-    editDirectory="/org.eclipse.viatra.query.tooling.generator.model.edit/src" editorDirectory="/org.eclipse.viatra.query.tooling.generator.model.editor/src"
-    modelPluginID="org.eclipse.viatra.query.tooling.generator.model" forceOverwrite="true"
-    modelName="GeneratorModel" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    complianceLevel="8.0" copyrightFields="false" editPluginID="org.eclipse.viatra.query.tooling.generator.model.edit"
-    editorPluginID="org.eclipse.viatra.query.tooling.generator.model.editor" runtimeVersion="2.11"
-    usedGenPackages="platform:/resource/org.eclipse.emf.codegen.ecore/model/GenModel.genmodel#//genmodel platform:/resource/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore">
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2010-2018, Zoltan Ujhelyi, Istvan Rath and Daniel Varro&#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License v. 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-v20.html.&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;This file was generated from GeneratorModel.xtext"
+    modelDirectory="/org.eclipse.viatra.query.tooling.generator.model/src-gen" modelPluginID="org.eclipse.viatra.query.tooling.generator.model"
+    forceOverwrite="true" modelName="GeneratorModel" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    complianceLevel="11.0" copyrightFields="false" runtimeVersion="2.29" usedGenPackages="platform:/resource/org.eclipse.emf.codegen.ecore/model/GenModel.genmodel#//genmodel platform:/resource/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore">
   <genPackages prefix="GeneratorModel" basePackage="org.eclipse.viatra.query.tooling.generator.model"
-      disposableProviderFactory="true" ecorePackage="GeneratorModel.ecore#/">
+      disposableProviderFactory="true" fileExtensions="vqgen" ecorePackage="GeneratorModel.ecore#/">
     <genClasses ecoreClass="GeneratorModel.ecore#//ViatraQueryGeneratorModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GeneratorModel.ecore#//ViatraQueryGeneratorModel/genmodels"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GeneratorModel.ecore#//ViatraQueryGeneratorModel/configuration"/>

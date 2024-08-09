@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -58,6 +59,7 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternCall;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternCompositionConstraint;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternLanguagePackage;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.ReferenceType;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.StringValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.UnaryTypeConstraint;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ValueReference;
@@ -66,6 +68,7 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.VariableReference;
 import org.eclipse.viatra.query.patternlanguage.emf.util.ASTStringProvider;
 import org.eclipse.viatra.query.patternlanguage.emf.util.AggregatorUtil;
 import org.eclipse.viatra.query.patternlanguage.emf.validation.whitelist.PureWhitelist;
+import org.eclipse.viatra.query.runtime.emf.EMFQueryMetaContext;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
 import org.eclipse.viatra.query.runtime.matchers.psystem.aggregations.IAggregatorFactory;
 import org.eclipse.xtext.EcoreUtil2;
@@ -306,9 +309,35 @@ public class PatternLanguageValidator extends AbstractDeclarativeValidator imple
     public void checkEmbeddedAggregatorLength(AggregatedValue value) {
         if (value.getCall() instanceof PathExpressionConstraint) {
             PathExpressionConstraint constraint = (PathExpressionConstraint) value.getCall();
-            if (constraint.getEdgeTypes().size() > 1) {
-                warning("Aggregating feature chains might provide unexpected results.", value, null, IssueCodes.AGGREGATED_FEATURE_CHAIN);
+            // Aggregation of multi-step path constraints is misleading if multiple intermediate values can correspond to a substitution of the two constrained variables
+            // The multiplicity of intermediate values can be constrained from the left by to-one features, or from the right by one-to features
+            // If all intermediate hops are constrained from either the left or the right to be single valued (for a given soruce and target), then there is no problem
+            EList<ReferenceType> steps = constraint.getEdgeTypes();
+            int stepCount = steps.size();
+           
+            // DEF intermediate value at position k := the result of traversing constraint.getEdgeTypes() [0..k-1] from the source
+            // Note that position 0 == path expression source && position stepCount == path expression target
+            
+            // Find largest position k for which intermediate values up to k are functionally dependent on (uniquely determined by) the source
+            int determinedFromLeft;
+            for (
+                    determinedFromLeft = 0;
+                    determinedFromLeft < stepCount && EMFQueryMetaContext.isFeatureToOneMultiplicity(steps.get(determinedFromLeft).getRefname()); 
+                    determinedFromLeft++
+            );
+            // Find smallest position k for which intermediate values k and up are functionally dependent on (uniquely determined by) the target
+            int determinedFromRight;
+            for (
+                    determinedFromRight = stepCount;
+                    determinedFromRight > 0 && EMFQueryMetaContext.isFeatureOneToMultiplicity(steps.get(determinedFromRight-1).getRefname()); 
+                    determinedFromRight--
+            );
+            
+            if (determinedFromRight > determinedFromLeft + 1) {
+                // in this case, position determinedFromLeft + 1 is not determined from the left nor from the right                 
+                warning("Aggregating feature chains where intermediate values have multiplicity might provide unexpected results.", value, null, IssueCodes.AGGREGATED_FEATURE_CHAIN);
             }
+            
         }
     }
     

@@ -43,6 +43,33 @@ class SimpleQueryGeneratorTest extends AbstractQueryCompilerTest {
     }
     
     @Test
+    def void compileUnaryObjectPattern() {
+        testFileCreationAndBuild('''
+        package test
+        
+        import "http://www.eclipse.org/emf/2002/Ecore"
+        
+        pattern testPattern(o: java Object) {
+            o == eval(4 as Object);
+        }
+        ''', 0)
+    }
+    
+    @Test
+    def void testStringLiteralEscaping() {
+        testFileCreationAndBuild('''
+        package test
+        
+        import "http://www.eclipse.org/emf/2002/Ecore"
+        
+        @SomeAnnotation(stringParam = "This is a\" string annotation param \n with many escaped chars \t that must be properly quoted")
+        pattern testPattern(x) {
+            x == "This is a\" string literal \n with many escaped chars \t that would not compile in source code unless properly quoted";
+        }
+        ''', 0)
+    }
+    
+    @Test
     def void compileUnresolvablePattern() {
         testFileCreationAndBuild('''
         package test

@@ -496,7 +496,7 @@ class PatternQuerySpecificationClassInferrer {
                     '''new «ParameterReference»("«value.name»")'''
                 }
                 String: {
-                    '''"«value»"'''
+                    '''"«value.escapeToQuotedString»"'''
                 }
                 default: {
                     '''«value.toString»'''

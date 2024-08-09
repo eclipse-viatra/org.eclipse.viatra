@@ -68,6 +68,9 @@
 		<module>../../documentation/org.eclipse.viatra.documentation.help</module>
 		<module>../../releng/org.eclipse.viatra.docs</module>
 
+		<!-- Test reports -->
+		<module>../../releng/org.eclipse.viatra.testreports</module>
+
 	</modules>
 	<parent>
 		<groupId>org.eclipse.viatra</groupId>
@@ -75,11 +78,6 @@
 		<version>2.9.0-SNAPSHOT</version>
 		<relativePath>../org.eclipse.viatra.parent/pom.xml</relativePath>
 	</parent>
-	<properties>
-		<!-- Sonar -->
-		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-		<sonar.jacoco.reportPaths>${jacoco.targetdir}/jacoco.exec</sonar.jacoco.reportPaths>
-	</properties>
 	<repositories>
 		<repository>
 			<id>viatra.nexus</id>

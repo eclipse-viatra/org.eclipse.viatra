@@ -16,7 +16,7 @@ import org.eclipse.viatra.addon.querybasedfeatures.runtime.validation.QueryBased
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.XtextRunner
 import org.eclipse.xtext.testing.util.ParseHelper
-import org.eclipse.xtext.junit4.validation.ValidatorTester
+import org.eclipse.xtext.testing.validation.ValidatorTester
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -19,7 +19,7 @@
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Xmx"
-      value="2048m"
+      value="4G"
       vm="true">
     <description>Set the heap space needed to work with the projects of ${scope.project.label}</description>
   </setupTask>
@@ -152,9 +152,11 @@
     <requirement
         name="org.eclipse.sirius.specifier.ide.ui.aql.feature.group"/>
     <requirement
-        name="org.eclipse.rcptt.platform.feature.group"/>
+        name="org.sonarlint.eclipse.feature.feature.group"/>
     <repository
         url="http://download.eclipse.org/sirius/updates/releases/6.6.0/2020-09/"/>
+    <repository
+        url="https://eclipse-uc.sonarlint.org"/>
     <description>Install the tools needed in the IDE to work with the source code for ${scope.project.label}</description>
   </setupTask>
   <setupTask
@@ -314,26 +316,15 @@
       xsi:type="projects:ProjectsImportTask"
       predecessor="git.clone.viatra">
     <sourceLocator
-        rootFolder="${git.clone.viatra.location}/addon"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/integration"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/query"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/transformation"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/documentation"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/releng"
-        locateNestedProjects="true"/>
-    <sourceLocator
-        rootFolder="${git.clone.viatra.location}/dse"
-        locateNestedProjects="true"/>
+        rootFolder="${git.clone.viatra.location}"
+        locateNestedProjects="true">
+      <predicate
+          xsi:type="predicates:NotPredicate">
+        <operand
+            xsi:type="predicates:NamePredicate"
+            pattern="org.eclipse.viatra.query.patternlanguage.metamodel.queries.test"/>
+      </predicate>
+    </sourceLocator>
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
@@ -373,8 +364,7 @@
         xsi:type="projects:ProjectsBuildTask"
         id="viatra.xtext.pregen"
         predecessor="//@setupTasks.11/@setupTasks.1 //@setupTasks.11/@setupTasks.2 //@setupTasks.11/@setupTasks.3"
-        onlyNewProjects="true"
-        refresh="true"/>
+        onlyNewProjects="true"/>
     <setupTask
         xsi:type="launching:LaunchTask"
         predecessor="viatra.xtext.pregen"
@@ -413,8 +403,7 @@
         xsi:type="projects:ProjectsBuildTask"
         id="viatra.xtext.postgen"
         predecessor="//@setupTasks.12/@setupTasks.2"
-        onlyNewProjects="true"
-        refresh="true"/>
+        onlyNewProjects="true"/>
     <setupTask
         xsi:type="launching:LaunchTask"
         predecessor="viatra.xtext.postgen"
@@ -457,6 +446,12 @@
         xsi:type="launching:LaunchTask"
         predecessor="viatra.xtext.pregen"
         launcher="org.eclipse.viatra.setup/GeneratePatternLanguageSiriusQueries.mwe2.launch">
+      <description></description>
+    </setupTask>
+    <setupTask
+        xsi:type="launching:LaunchTask"
+        predecessor="viatra.xtext.pregen"
+        launcher="org.eclipse.viatra.setup/GenerateDocumentationQueries.mwe2.launch">
       <description></description>
     </setupTask>
   </setupTask>
@@ -510,11 +505,6 @@
     <setupTask
         xsi:type="setup:EclipseIniTask"
         option="-Doomph.redirection.viatra.setup"
-        value="=https://git.eclipse.org/c/viatra/org.eclipse.viatra.git/plain/releng/org.eclipse.viatra.setup/VIATRAEMF.setup->${git.clone.viatra.location|uri}/releng/org.eclipse.viatra.setup/VIATRAEMF.setup"
-        vm="true"/>
-    <setupTask
-        xsi:type="setup:EclipseIniTask"
-        option="-Doomph.redirection.viatra.setup"
         value="=https://raw.githubusercontent.com/eclipse-viatra/org.eclipse.viatra/master/releng/org.eclipse.viatra.setup/VIATRAEMF.setup->${git.clone.viatra.location|uri}/releng/org.eclipse.viatra.setup/VIATRAEMF.setup"
         vm="true"/>
     <setupTask
@@ -536,6 +526,7 @@
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask"
+        predecessor="//@streams[name='master']/@setupTasks.5 //@streams[name='master']/@setupTasks.6"
         targetName="">
       <targlet
           name="${scope.project.label}"
@@ -549,6 +540,8 @@
         <requirement
             name="org.eclipse.uml2.sdk.feature.group"
             versionRange="[5.0.0,6.0.0)"/>
+        <requirement
+            name="org.eclipse.collections.feature.source.feature.group"/>
         <repositoryList
             name="2022-06">
           <repository
@@ -604,6 +597,20 @@
             name="2024-03">
           <repository
               url="http://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
           <repository
               url="http://download.eclipse.org/cbi/updates/license"/>
         </repositoryList>
@@ -679,6 +686,20 @@
           <repository
               url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
         </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
+        </repositoryList>
       </targlet>
       <targlet
           name="Xtext"
@@ -687,7 +708,7 @@
             name="de.itemis.xtext.antlr.feature.feature.group"/>
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"
-            versionRange="[2.33.0,3.0.0)"/>
+            versionRange="[2.35.0,3.0.0)"/>
         <repositoryList
             name="2022-06">
           <repository
@@ -695,9 +716,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2022-09">
@@ -706,9 +727,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2022-12">
@@ -717,9 +738,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2023-03">
@@ -728,9 +749,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2023-06">
@@ -739,9 +760,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2023-09">
@@ -750,9 +771,9 @@
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.33.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.16.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2023-12">
@@ -760,6 +781,10 @@
               url="http://download.eclipse.org/releases/2023-12"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
         </repositoryList>
         <repositoryList
             name="2024-03">
@@ -767,18 +792,24 @@
               url="http://download.eclipse.org/releases/2024-03"/>
           <repository
               url="http://download.itemis.com/updates/releases/2.1.1/"/>
-        </repositoryList>
-      </targlet>
-      <targlet
-          name="Eclipse Collections"
-          activeRepositoryList="10.2.0">
-        <requirement
-            name="org.eclipse.collections.feature.source.feature.group"
-            versionRange="[10.1.0,11.0.0)"/>
-        <repositoryList
-            name="10.2.0">
           <repository
-              url="http://download.eclipse.org/collections/10.2.0/repository"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="http://download.itemis.com/updates/releases/2.1.1/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
+          <repository
+              url="http://download.itemis.com/updates/releases/2.1.1/"/>
         </repositoryList>
       </targlet>
       <targlet
@@ -792,11 +823,7 @@
         <requirement
             name="org.eclipse.sdk.feature.group"/>
         <requirement
-            name="com.google.inject"
-            versionRange="[3.0.0,4.0.0)"/>
-        <requirement
-            name="com.google.inject.multibindings"
-            versionRange="[3.0.0,4.0.0)"/>
+            name="com.google.inject"/>
         <requirement
             name="org.mockito"/>
         <requirement
@@ -804,11 +831,7 @@
         <requirement
             name="com.google.guava"/>
         <requirement
-            name="org.eclipse.zest.feature.group"/>
-        <requirement
             name="org.eclipse.zest.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.zest.source.feature.group"/>
         <repositoryList
             name="2022-06">
           <repository
@@ -881,6 +904,24 @@
           <repository
               url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
         </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="http://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="http://download.eclipse.org/releases/2024-09"/>
+          <repository
+              url="http://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
       </targlet>
       <targlet
           name="CPS metamodels"
@@ -901,9 +942,16 @@
         value="master"/>
     <setupTask
         xsi:type="jdt:JRETask"
-        version="JavaSE-1.8"
+        version="JavaSE-11"
         location="${jre.location-11}"
         name="JRE for JavaSE-11">
+      <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
+    </setupTask>
+    <setupTask
+        xsi:type="jdt:JRETask"
+        version="JavaSE-17"
+        location="${jre.location-17}"
+        name="JRE for JavaSE-17">
       <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
     </setupTask>
   </stream>

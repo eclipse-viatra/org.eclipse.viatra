@@ -7,30 +7,32 @@
 	<groupId>org.eclipse.viatra</groupId>
 	<artifactId>org.eclipse.viatra.parent</artifactId>
 	<name>VIATRA Parent job</name>
-	<url>http://eclipse.org/viatra</url>
+	<url>http://eclipse.dev/viatra</url>
 	<version>2.9.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
-		<tycho.version>4.0.6</tycho.version>
-		<tycho.scmUrl>scm:git:git://git.eclipse.org/gitroot/viatra/org.eclipse.viatra.git</tycho.scmUrl>
-		<eclipse.bugzillaUrl>https://bugs.eclipse.org/bugs/enter_bug.cgi?product=viatra</eclipse.bugzillaUrl>
+		<tycho.version>4.0.8</tycho.version>
+		<tycho.scmUrl>scm:git:https://github.com/eclipse-viatra/org.eclipse.viatra.git</tycho.scmUrl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
-		<jacoco.version>0.8.11</jacoco.version>
-		<jacoco.targetdir>${project.basedir}/../../jacoco</jacoco.targetdir>
-		<xtend.compiler.version>2.33.0</xtend.compiler.version>
+		<jacoco.version>0.8.12</jacoco.version>
+		<xtend.compiler.version>2.35.0</xtend.compiler.version>
 		<guava.version>32.1.3-jre</guava.version>
 		<mwe.version>2.16.0</mwe.version>
 		<java.version>11</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<viatra.main.version>2.9.0-SNAPSHOT</viatra.main.version>
+		<viatra.incubation.version>0.29.0-SNAPSHOT</viatra.incubation.version>
 		<cbi.jarsigner.version>1.4.3</cbi.jarsigner.version>
 		<sign.build>false</sign.build>
 		<simrel.repository.url>https://download.eclipse.org/releases/2022-06</simrel.repository.url>
 		<!-- Maven deploy related properties -->
 		<viatra.deploy.release>https://repo.eclipse.org/content/repositories/viatra2-releases/</viatra.deploy.release>
 		<viatra.deploy.snapshot>https://repo.eclipse.org/content/repositories/viatra2-snapshots/</viatra.deploy.snapshot>
+		<!-- Sonar -->
+		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+		<sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/../org.eclipse.viatra.testreports/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 	<build>
 		<plugins>
@@ -106,13 +108,6 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<configuration>
-					<destFile>${jacoco.targetdir}/jacoco.exec</destFile>
-					<!-- Only include classes coming from VIATRA to avoid excessive instrumentation -->
-					<includes>
-                        <include>org/eclipse/viatra/**/*.class</include>
-                    </includes>
-				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -212,10 +207,6 @@
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>${jacoco.version}</version>
-					<configuration>
-						<destFile>${jacoco.targetdir}/jacoco.exec</destFile>
-						<append>true</append>
-					</configuration>
 					<executions>
 						<execution>
 							<goals>
@@ -281,11 +272,11 @@
 	</scm>
 	<ciManagement>
 		<url>https://ci.eclipse.org/viatra/</url>
-		<system>Hudson</system>
+		<system>Jenkins</system>
 	</ciManagement>
 	<issueManagement>
-		<url>${eclipse.bugzillaUrl}</url>
-		<system>Bugzilla</system>
+		<url>https://github.com/eclipse-viatra/org.eclipse.viatra/issues/</url>
+		<system>Github</system>
 	</issueManagement>
 	<pluginRepositories>
 		<pluginRepository>
