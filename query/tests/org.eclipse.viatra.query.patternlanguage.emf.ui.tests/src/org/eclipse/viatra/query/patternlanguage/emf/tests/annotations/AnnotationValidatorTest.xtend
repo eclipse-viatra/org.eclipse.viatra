@@ -55,6 +55,32 @@ class AnnotationValidatorTest extends AbstractValidatorTest {
         tester.validate(model).assertWarning(IssueCodes::UNKNOWN_ANNOTATION);
     }
     @Test
+    def void emptyAnnotationParameterList1() {
+        val model = parseHelper.parse(
+            'package org.eclipse.viatra.query.patternlanguage.emf.tests
+            import "http://www.eclipse.org/viatra/query/patternlanguage/PatternLanguage"
+
+            @Optional
+            pattern pattern2(p : Pattern) = {
+                Pattern(p);
+            }'
+        ) 
+        tester.validate(model).assertError(IssueCodes::UNKNOWN_ANNOTATION_PARAMETER);
+    }
+    @Test
+    def void emptyAnnotationParameterList2() {
+        val model = parseHelper.parse(
+            'package org.eclipse.viatra.query.patternlanguage.emf.tests
+            import "http://www.eclipse.org/viatra/query/patternlanguage/PatternLanguage"
+
+            @Optional()
+            pattern pattern2(p : Pattern) = {
+                Pattern(p);
+            }'
+        ) 
+        tester.validate(model).assertError(IssueCodes::UNKNOWN_ANNOTATION_PARAMETER);
+    }
+    @Test
     def void unknownAnnotationAttribute() {
         val model = parseHelper.parse(
             'package org.eclipse.viatra.query.patternlanguage.emf.tests
