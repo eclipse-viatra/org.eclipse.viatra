@@ -58,7 +58,6 @@ import org.eclipse.xtext.diagnostics.Severity
 import static com.google.common.base.Preconditions.checkArgument
 import org.eclipse.xtext.common.types.JvmIdentifiableElement
 import org.eclipse.xtext.common.types.util.JavaReflectAccess
-import com.google.inject.Injector
 import org.eclipse.xtext.common.types.JvmType
 
 /** 
@@ -105,7 +104,7 @@ class EMFTypeSystem extends AbstractTypeSystem {
     @Inject TypeReferences typeReferences
     @Inject IClassLoaderProvider classLoaderProvider 
     @Inject IJvmTypeProvider.Factory typeProviderFactory;
-    @Inject Injector injector;
+    @Inject(optional = true) ClassLoader injectedClassloader;
 
     @Inject new(Logger logger) {
         super(EMFQueryMetaContext.DEFAULT)
@@ -338,10 +337,15 @@ class EMFTypeSystem extends AbstractTypeSystem {
     override fromJvmType(JvmType jvmType, EObject context) {
         try {
             // if the class is loadable, even from source files, try to use it directly for instance filtering
-            val javaReflect = injector.getInstance(JavaReflectAccess);            
+            // Instead of asking for the reflection helper from the injector, we are initializing it manually
+            // to make sure it always loads with the appropriate classloader
+            val javaReflect = new JavaReflectAccess;            
             val classLoader = classLoaderProvider.getClassLoader(context);
             if (classLoader !== null) {
                 javaReflect.setClassLoader(classLoader);
+            } else if (injectedClassloader !== null) {
+                // If no classloader can be selected from the context, we should rely on the classloader of the language injector
+                javaReflect.setClassLoader(injectedClassloader);
             }
             val Class<?> loadedClass = javaReflect.getRawType(jvmType);
             return new JavaTransitiveInstancesKey(loadedClass);
