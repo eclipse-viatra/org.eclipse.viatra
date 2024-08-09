@@ -38,7 +38,7 @@ class PatternParserTest {
             }
         '''
         val results = PatternParser.parser.parse(pattern) 
-        assertTrue(results.querySpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 1)
+        assertTrue(results.querySpecifications.filter[it.status === PQueryStatus.OK].size === 1)
         assertFalse(results.hasError)
     }
     
@@ -52,7 +52,7 @@ class PatternParserTest {
             }
         '''
         val results = PatternParser.parser.parse(pattern)
-        assertTrue(results.querySpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].isEmpty)
+        assertTrue(results.querySpecifications.filter[it.status === PQueryStatus.OK].isEmpty)
         assertTrue(results.hasError)
     }
     
@@ -67,8 +67,8 @@ class PatternParserTest {
             }
         '''
         val results = PatternParser.parser.parse(pattern)
-        assertTrue(results.querySpecifications.forall[it.internalQueryRepresentation.status === PQueryStatus.ERROR])
-        results.querySpecifications.map[it.internalQueryRepresentation.PProblems].flatten.exists[location.contains("Line 5")]
+        assertTrue(results.querySpecifications.forall[it.status === PQueryStatus.ERROR])
+        results.querySpecifications.map[it.PProblems].flatten.exists[location.contains("Line 5")]
         assertTrue(results.hasError)
     }
     
@@ -87,8 +87,8 @@ class PatternParserTest {
             }
         '''
         val results = PatternParser.parser.parse(pattern)
-        assertFalse(results.querySpecifications.forall[it.internalQueryRepresentation.status === PQueryStatus.OK])
-        assertTrue(results.querySpecifications.forall[it.internalQueryRepresentation.status === PQueryStatus.ERROR])
+        assertFalse(results.querySpecifications.forall[it.status === PQueryStatus.OK])
+        assertTrue(results.querySpecifications.forall[it.status === PQueryStatus.ERROR])
         assertTrue(results.hasError)
     }
     
@@ -105,8 +105,8 @@ class PatternParserTest {
         parser.enableReuseSpecificationBuilder(true)
         val results1 = parser.parse(pattern)
         val results2 = parser.parse(pattern)
-        assertTrue(results1.querySpecifications.forall[it.internalQueryRepresentation.status === PQueryStatus.OK])
-        assertTrue(results2.querySpecifications.forall[it.internalQueryRepresentation.status === PQueryStatus.ERROR])
+        assertTrue(results1.querySpecifications.forall[it.status === PQueryStatus.OK])
+        assertTrue(results2.querySpecifications.forall[it.status === PQueryStatus.ERROR])
         assertTrue(results2.hasError)
     }
     

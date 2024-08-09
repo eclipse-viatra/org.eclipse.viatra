@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <component id="org.eclipse.viatra.query.runtime" version="2">
+    <resource path="src/org/eclipse/viatra/query/runtime/api/IQuerySpecification.java" type="org.eclipse.viatra.query.runtime.api.IQuerySpecification">
+        <filter comment="The query specification instances are closely managed, this change won't cause incompatibilities" id="404000815">
+            <message_arguments>
+                <message_argument value="org.eclipse.viatra.query.runtime.api.IQuerySpecification"/>
+                <message_argument value="getPProblems()"/>
+            </message_arguments>
+        </filter>
+        <filter comment="The query specification instances are closely managed, this change won't cause incompatibilities" id="404000815">
+            <message_arguments>
+                <message_argument value="org.eclipse.viatra.query.runtime.api.IQuerySpecification"/>
+                <message_argument value="getStatus()"/>
+            </message_arguments>
+        </filter>
+    </resource>
     <resource path="src/org/eclipse/viatra/query/runtime/api/impl/BaseMatcher.java" type="org.eclipse.viatra.query.runtime.api.impl.BaseMatcher">
         <filter comment="QueryResultWrapper has no API methods" id="576720909">
             <message_arguments>

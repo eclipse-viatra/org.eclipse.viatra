@@ -236,7 +236,7 @@ class QueryResultTreeInput implements IFilteredMatcherCollection {
         }
         try{
             val specification = entry.provider.specificationOfProvider as IQuerySpecification
-            if(specification.internalQueryRepresentation.status == PQueryStatus.ERROR){
+            if(specification.status == PQueryStatus.ERROR){
                 entry.addErroneousMatcher(new IllegalArgumentException("Query definition contains errors"))
             } else {
                 val currentHint = hintForBackendSelection.overrideBy(RuntimePreferencesInterpreter.getHintOverridesFromPreferences()) 

@@ -63,7 +63,7 @@ class GenericMatcherTest {
         '''
         val results = PatternParserBuilder.instance.parse(pattern) 
         val querySpecification = results.getQuerySpecification("b").get
-        assertTrue(querySpecification.internalQueryRepresentation.status == PQueryStatus.ERROR)
+        assertTrue(querySpecification.status == PQueryStatus.ERROR)
         ViatraQueryEngine.on(getScope()).getMatcher(querySpecification)
     }
 }

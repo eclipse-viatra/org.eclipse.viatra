@@ -49,7 +49,7 @@ class AdvancedPatternParserTest {
 
         val results = PatternParserBuilder.instance.buildAdvanced.addSpecifications(input);
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 1)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 1)
 
     }
 
@@ -74,7 +74,7 @@ class AdvancedPatternParserTest {
 
         val results = PatternParserBuilder.instance.buildAdvanced.addSpecifications(input);
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.ERROR].size === 2)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.ERROR].size === 2)
 
     }
 
@@ -108,7 +108,7 @@ class AdvancedPatternParserTest {
 
         val results = PatternParserBuilder.instance.buildAdvanced.addSpecifications(input);
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 2)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 2)
 
     }
     
@@ -200,7 +200,7 @@ class AdvancedPatternParserTest {
         var results = parser.addSpecifications(input);
         
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 1)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 1)
         assertTrue('''Erroneous Specifications: expected: 0 result: «results.erroneousSpecifications.size»''',
             results.erroneousSpecifications.size === 0)
         assertTrue('''Registered Uris: expected: 1 result: «parser.registeredURIs.size»''',
@@ -213,7 +213,7 @@ class AdvancedPatternParserTest {
         results = parser.addSpecifications(input);
         
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 1)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 1)
         assertTrue('''Erroneous Specifications: expected: 0 result: «results.erroneousSpecifications.size»''',
             results.erroneousSpecifications.size === 0)
         assertTrue('''Registered Uris: expected: 1 result: «parser.registeredURIs.size»''',
@@ -250,7 +250,7 @@ class AdvancedPatternParserTest {
 
         val results = PatternParserBuilder.instance.buildAdvanced.addSpecifications(input);
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 2)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 2)
     }
 
    @Test
@@ -285,7 +285,7 @@ class AdvancedPatternParserTest {
 
         val results = parser.addSpecifications(input);
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 2)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 2)
             
         val uri3 = URI.createURI('''__synthetic_pattern3''').resolve(URI.createFileURI(System.getProperty("user.dir")))
         
@@ -294,7 +294,7 @@ class AdvancedPatternParserTest {
         
         val results2 = parser.addSpecifications(input)
         assertTrue(
-            results2.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.ERROR].size === 1)
+            results2.getAddedSpecifications.filter[it.status === PQueryStatus.ERROR].size === 1)
     }
 
     
@@ -330,15 +330,15 @@ class AdvancedPatternParserTest {
 
         val results = parser.addSpecifications(input);
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 2)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 2)
             
         input.remove(uri2)
         
         val removedResults = parser.removeSpecifications(input)
         assertTrue(
-            removedResults.getRemovedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 1)
+            removedResults.getRemovedSpecifications.filter[it.status === PQueryStatus.OK].size === 1)
         assertTrue(
-            removedResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.ERROR].size === 1)
+            removedResults.getImpactedSpecifications.filter[it.status === PQueryStatus.ERROR].size === 1)
     }
     
     @Test
@@ -385,7 +385,7 @@ class AdvancedPatternParserTest {
 
         val results = parser.addSpecifications(input);
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 3)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 3)
         assertTrue('''Erroneous Specifications: expected: 0 result: «results.erroneousSpecifications.size»''',
             results.erroneousSpecifications.size === 0)
         assertTrue('''Registered Uris: expected: 3 result: «parser.registeredURIs.size»''',
@@ -397,9 +397,9 @@ class AdvancedPatternParserTest {
         
         val removedResults = parser.removeSpecifications(input)
         assertTrue(
-            removedResults.getRemovedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 1)
+            removedResults.getRemovedSpecifications.filter[it.status === PQueryStatus.OK].size === 1)
         assertTrue(
-            removedResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.ERROR].size === 2)
+            removedResults.getImpactedSpecifications.filter[it.status === PQueryStatus.ERROR].size === 2)
         assertTrue('''Erroneous Specifications: expected: 2 result: «removedResults.erroneousSpecifications.size»''',
             removedResults.erroneousSpecifications.size === 2)
         assertTrue('''Registered Uris: expected: 2 result: «parser.registeredURIs.size»''',
@@ -411,9 +411,9 @@ class AdvancedPatternParserTest {
         val reAddResults = parser.addSpecifications(input);
         
         assertTrue(
-            reAddResults.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 1)
+            reAddResults.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 1)
         assertTrue(
-            reAddResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 2)
+            reAddResults.getImpactedSpecifications.filter[it.status === PQueryStatus.OK].size === 2)
         assertTrue('''Erroneous Specifications: expected: 0 result: «reAddResults.erroneousSpecifications.size»''',
             reAddResults.erroneousSpecifications.size === 0)
         assertTrue('''Registered Uris: expected: 3 result: «parser.registeredURIs.size»''',
@@ -464,7 +464,7 @@ class AdvancedPatternParserTest {
 
         val results = parser.addSpecifications(input);
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 3)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 3)
          
         input.clear    
         val String updatedPattern1 = '''
@@ -481,9 +481,9 @@ class AdvancedPatternParserTest {
         
         val updatedResults = parser.updateSpecifications(input)
         assertTrue(
-            updatedResults.getUpdatedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 1)
+            updatedResults.getUpdatedSpecifications.filter[it.status === PQueryStatus.OK].size === 1)
         assertTrue(
-            updatedResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.ERROR].size === 2)
+            updatedResults.getImpactedSpecifications.filter[it.status === PQueryStatus.ERROR].size === 2)
             
         input.clear    
         input.put(uri1, pattern1)  
@@ -491,9 +491,9 @@ class AdvancedPatternParserTest {
         val reAddResults = parser.updateSpecifications(input);
         
         assertTrue(
-            reAddResults.getUpdatedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 1)
+            reAddResults.getUpdatedSpecifications.filter[it.status === PQueryStatus.OK].size === 1)
         assertTrue(
-            reAddResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 2)
+            reAddResults.getImpactedSpecifications.filter[it.status === PQueryStatus.OK].size === 2)
             
     }
     
@@ -533,14 +533,14 @@ class AdvancedPatternParserTest {
 
         val results = parser.addSpecifications(input);
         assertEquals(2,
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size)
          
         input.clear    
         input.put(uri, afterRemoval)
         
         val updatedResults = parser.updateSpecifications(input)
         assertEquals(1,
-            updatedResults.getUpdatedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size)
+            updatedResults.getUpdatedSpecifications.filter[it.status === PQueryStatus.OK].size)
         assertEquals(1,
             updatedResults.getRemovedSpecifications.size)
     }
@@ -579,7 +579,7 @@ class AdvancedPatternParserTest {
 
         val results = parser.addSpecifications(input);
         assertTrue(
-            results.getAddedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size === 2)
+            results.getAddedSpecifications.filter[it.status === PQueryStatus.OK].size === 2)
          
         input.clear    
         val String updatedPattern1 = '''
@@ -600,9 +600,9 @@ class AdvancedPatternParserTest {
         
         val updatedResults = parser.updateSpecifications(input)
         assertEquals(2,
-            updatedResults.getUpdatedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size)
+            updatedResults.getUpdatedSpecifications.filter[it.status === PQueryStatus.OK].size)
         assertEquals(0,
-            updatedResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.ERROR].size)
+            updatedResults.getImpactedSpecifications.filter[it.status === PQueryStatus.ERROR].size)
             
         input.clear    
         val String updatedPattern2 = '''
@@ -620,21 +620,21 @@ class AdvancedPatternParserTest {
         val readdWithDifferentNameResults = parser.updateSpecifications(input);
         
         assertEquals(1,
-            readdWithDifferentNameResults.getUpdatedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size)
+            readdWithDifferentNameResults.getUpdatedSpecifications.filter[it.status === PQueryStatus.OK].size)
         assertEquals(1,
-            readdWithDifferentNameResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size)
+            readdWithDifferentNameResults.getImpactedSpecifications.filter[it.status === PQueryStatus.OK].size)
         assertEquals(1,
-            readdWithDifferentNameResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.ERROR].size)
+            readdWithDifferentNameResults.getImpactedSpecifications.filter[it.status === PQueryStatus.ERROR].size)
             
         input.put(uri2, pattern2)
         
         val fixedCalledNameResults = parser.updateSpecifications(input)
         assertEquals(1,
-            fixedCalledNameResults.getUpdatedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size)
+            fixedCalledNameResults.getUpdatedSpecifications.filter[it.status === PQueryStatus.OK].size)
         assertEquals(2,
-            fixedCalledNameResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.OK].size)
+            fixedCalledNameResults.getImpactedSpecifications.filter[it.status === PQueryStatus.OK].size)
         assertEquals(0,
-            fixedCalledNameResults.getImpactedSpecifications.filter[it.internalQueryRepresentation.status === PQueryStatus.ERROR].size)
+            fixedCalledNameResults.getImpactedSpecifications.filter[it.status === PQueryStatus.ERROR].size)
             
     }
     
@@ -665,14 +665,14 @@ class AdvancedPatternParserTest {
 
         val results = parser.addSpecifications(input);
         assertEquals(
-            2, results.getAddedSpecifications.filter[internalQueryRepresentation.status === PQueryStatus.OK].size)
+            2, results.getAddedSpecifications.filter[status === PQueryStatus.OK].size)
          
         val afterDeleteResults = parser.removeSpecifications(input)
         
         assertEquals(
-            0, afterDeleteResults.getUpdatedSpecifications.filter[internalQueryRepresentation.status === PQueryStatus.OK].size)
+            0, afterDeleteResults.getUpdatedSpecifications.filter[status === PQueryStatus.OK].size)
         assertEquals(
-            0, afterDeleteResults.getImpactedSpecifications.filter[internalQueryRepresentation.status === PQueryStatus.OK].size)
+            0, afterDeleteResults.getImpactedSpecifications.filter[status === PQueryStatus.OK].size)
             
     }
     
@@ -711,14 +711,14 @@ class AdvancedPatternParserTest {
 
         val results = parser.addSpecifications(input);
         assertEquals(
-            2, results.getAddedSpecifications.filter[internalQueryRepresentation.status === PQueryStatus.OK].size)
+            2, results.getAddedSpecifications.filter[status === PQueryStatus.OK].size)
          
         val afterDeleteResults = parser.removeSpecifications(input)
         
         assertEquals(
-            0, afterDeleteResults.getUpdatedSpecifications.filter[internalQueryRepresentation.status === PQueryStatus.OK].size)
+            0, afterDeleteResults.getUpdatedSpecifications.filter[status === PQueryStatus.OK].size)
         assertEquals(
-            0, afterDeleteResults.getImpactedSpecifications.filter[internalQueryRepresentation.status === PQueryStatus.OK].size)
+            0, afterDeleteResults.getImpactedSpecifications.filter[status === PQueryStatus.OK].size)
             
     }
     
@@ -770,7 +770,7 @@ class AdvancedPatternParserTest {
         val usingLibraryUri = URI.createURI("usingLibrary")
 
         val results = new PatternParserBuilder().withLibrary(libraryUri).buildAdvanced.addSpecifications(usingLibraryUri, usingLibrarySource)
-        assertEquals(1, results.addedSpecifications.filter[internalQueryRepresentation.status === PQueryStatus.OK].size)
+        assertEquals(1, results.addedSpecifications.filter[status === PQueryStatus.OK].size)
     }
     
     @Rule

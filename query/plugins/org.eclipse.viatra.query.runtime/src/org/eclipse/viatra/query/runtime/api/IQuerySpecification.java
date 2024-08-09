@@ -9,10 +9,14 @@
 
 package org.eclipse.viatra.query.runtime.api;
 
+import java.util.List;
+
 import org.eclipse.viatra.query.runtime.api.scope.QueryScope;
 import org.eclipse.viatra.query.runtime.emf.EMFScope;
 import org.eclipse.viatra.query.runtime.matchers.ViatraQueryRuntimeException;
+import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PProblem;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PQuery;
+import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PQuery.PQueryStatus;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PQueryHeader;
 
 /**
@@ -74,6 +78,26 @@ public interface IQuerySpecification<Matcher extends ViatraQueryMatcher<? extend
      * @return the internal representation of the query.
      */
     public PQuery getInternalQueryRepresentation();
+    
+    /**
+     * Returns the initialization status of the query specification
+     * @see PQuery#getStatus() 
+     * @since 2.9
+     */
+    default PQueryStatus getStatus() {
+        return getInternalQueryRepresentation().getStatus();
+    }
+    
+    /**
+     * Returns a list describing the problems that were found in this query.
+     * 
+     * @return a non-null, but possibly empty list of problems
+     * @see PQuery#getPProblems()
+     * @since 2.9
+     */
+    default List<PProblem> getPProblems() {
+        return getInternalQueryRepresentation().getPProblems();
+    }
     
     /**
      * Creates a new uninitialized matcher, which is not functional until an engine initializes it. Clients

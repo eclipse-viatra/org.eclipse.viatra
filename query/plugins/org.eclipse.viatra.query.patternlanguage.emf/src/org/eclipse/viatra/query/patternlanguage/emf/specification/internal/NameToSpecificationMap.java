@@ -150,6 +150,6 @@ public class NameToSpecificationMap implements Map<String, IQuerySpecification<?
     }
     
     private Stream<IQuerySpecification<?>> getSpecificationStreamWithStatus(final PQueryStatus status) {
-        return map.values().stream().filter(specification -> specification.getInternalQueryRepresentation().getStatus().equals(status));
+        return map.values().stream().filter(specification -> specification.getStatus().equals(status));
     }
 }
