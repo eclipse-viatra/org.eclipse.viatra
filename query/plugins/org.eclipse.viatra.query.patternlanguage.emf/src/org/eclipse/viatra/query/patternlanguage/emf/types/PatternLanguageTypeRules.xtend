@@ -266,7 +266,9 @@ class PatternLanguageTypeRules {
    def dispatch void inferTypes(NumberValue reference, TypeInformation information) {
        if (reference.value !== null && !reference.value.eIsProxy) {
            val type = literals.getJavaType(reference.value)
-           information.provideType(new TypeJudgement(reference, new JavaTransitiveInstancesKey(type)))
+           if (type !== null) {
+               information.provideType(new TypeJudgement(reference, new JavaTransitiveInstancesKey(type)))
+           }
        }
    }
    

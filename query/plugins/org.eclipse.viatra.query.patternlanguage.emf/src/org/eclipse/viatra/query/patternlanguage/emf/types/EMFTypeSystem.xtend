@@ -28,8 +28,6 @@ import org.eclipse.emf.ecore.EcorePackage
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper
 import org.eclipse.viatra.query.patternlanguage.emf.jvmmodel.EMFPatternLanguageJvmModelInferrer
 import org.eclipse.viatra.query.patternlanguage.emf.scoping.IMetamodelProvider
-import org.eclipse.viatra.query.patternlanguage.emf.types.AbstractTypeSystem
-import org.eclipse.viatra.query.patternlanguage.emf.types.BottomTypeKey
 import org.eclipse.viatra.query.patternlanguage.emf.util.IClassLoaderProvider
 import org.eclipse.viatra.query.patternlanguage.emf.util.IErrorFeedback
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ClassType
@@ -49,16 +47,15 @@ import org.eclipse.viatra.query.runtime.matchers.context.IInputKey
 import org.eclipse.viatra.query.runtime.matchers.context.common.JavaTransitiveInstancesKey
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.common.types.JvmDeclaredType
+import org.eclipse.xtext.common.types.JvmType
 import org.eclipse.xtext.common.types.JvmTypeReference
 import org.eclipse.xtext.common.types.access.IJvmTypeProvider
+import org.eclipse.xtext.common.types.util.JavaReflectAccess
 import org.eclipse.xtext.common.types.util.Primitives
 import org.eclipse.xtext.common.types.util.TypeReferences
 import org.eclipse.xtext.diagnostics.Severity
 
 import static com.google.common.base.Preconditions.checkArgument
-import org.eclipse.xtext.common.types.JvmIdentifiableElement
-import org.eclipse.xtext.common.types.util.JavaReflectAccess
-import org.eclipse.xtext.common.types.JvmType
 
 /** 
  * @author Zoltan Ujhelyi
