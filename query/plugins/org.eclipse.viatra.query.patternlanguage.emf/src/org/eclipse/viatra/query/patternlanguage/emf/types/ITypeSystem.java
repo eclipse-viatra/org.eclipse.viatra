@@ -15,7 +15,6 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.RelationType;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Type;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
 import org.eclipse.viatra.query.runtime.matchers.context.common.JavaTransitiveInstancesKey;
-import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 

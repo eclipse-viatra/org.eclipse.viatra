@@ -28,7 +28,6 @@ import org.eclipse.viatra.query.patternlanguage.emf.internal.XtextInjectorProvid
 import org.eclipse.viatra.query.patternlanguage.emf.types.BottomTypeKey;
 import org.eclipse.viatra.query.patternlanguage.emf.types.EMFTypeInferrer;
 import org.eclipse.viatra.query.patternlanguage.emf.types.EMFTypeSystem;
-import org.eclipse.viatra.query.patternlanguage.emf.types.ITypeInferrer;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.AggregatedValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.BoolValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.CallableRelation;
