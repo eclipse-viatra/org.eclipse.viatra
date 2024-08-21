@@ -25,6 +25,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.eclipse.emf.common.util.Diagnostic
 import static org.junit.Assert.assertNotEquals
+import org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.ExperimentalAnnotations
+import org.eclipse.xtext.junit4.validation.AssertableDiagnostics.DiagnosticPredicate
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(CustomizedEMFPatternLanguageInjectorProvider))
@@ -285,11 +287,12 @@ class RecursivePatternCallTest extends AbstractValidatorTest {
                 neg find p1(p);
             }'
         )
-        val results = tester.validate(model)
-        results.assertDiagnostic(Diagnostic.INFO, IssueCodes::RECURSIVE_PATTERN_CALL, "[SUPPRESSED]")
-        
+        val results = tester.validate(model)        
         assertNotEquals(Diagnostic.ERROR, results.diagnostic.severity)
-        assertNotEquals(Diagnostic.WARNING, results.diagnostic.severity)
+        results.assertAll(
+            AssertableDiagnostics.diagnostic(Diagnostic.WARNING, IssueCodes::RECURSIVE_PATTERN_CALL, "Recursive"),
+            AssertableDiagnostics.diagnostic(Diagnostic.INFO, IssueCodes::EXPERIMENTAL_ANNOTATION, "experimental")
+        )
     }
     
 }

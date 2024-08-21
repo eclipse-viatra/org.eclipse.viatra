@@ -292,7 +292,7 @@ class CheckConstraintTest extends AbstractValidatorTest {
             }
         ''')
         val results = tester.validate(model)
-        results.assertDiagnostic(Diagnostic.INFO, IssueCodes::CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR, "[SUPPRESSED]")
+        results.assertDiagnostic(Diagnostic.INFO, IssueCodes::EXPERIMENTAL_ANNOTATION, "experimental")
         
         assertNotEquals(Diagnostic.ERROR, results.diagnostic.severity)
     }

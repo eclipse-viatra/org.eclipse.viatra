@@ -820,8 +820,7 @@ public class EMFPatternLanguageValidator extends AbstractEMFPatternLanguageValid
             
             if (null != detectedError) {
                 if (hasSafeElementInExpressionAnnotation) {
-                    info(IssueCodes.SUPPRESSED_MESSAGE_PREFIX + detectedError, 
-                            expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
+                    // SUPPRESSED
                 } else {
                     error(detectedError, 
                             expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
@@ -947,6 +946,11 @@ public class EMFPatternLanguageValidator extends AbstractEMFPatternLanguageValid
                 error("Inconsistent type constraint: type constraint should have a single parameter.", null, IssueCodes.OTHER_ISSUE);
             }
         }
+    }
+    
+    @Override
+    public void info(String message, EObject source, EStructuralFeature feature, String code, String... issueData) {
+        super.info(message, source, feature, code, issueData);
     }
     
     @Override

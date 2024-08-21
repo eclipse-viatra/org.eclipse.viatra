@@ -8,7 +8,14 @@
  *******************************************************************************/
 package org.eclipse.viatra.query.patternlanguage.emf.annotations.impl;
 
+import java.util.Optional;
+
+import org.eclipse.viatra.query.patternlanguage.emf.annotations.IPatternAnnotationAdditionalValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.annotations.PatternAnnotationValidator;
+import org.eclipse.viatra.query.patternlanguage.emf.validation.IIssueCallback;
+import org.eclipse.viatra.query.patternlanguage.emf.validation.IssueCodes;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.Annotation;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternLanguagePackage;
 
 /**
  * Annotation information for the <pre>SafeRecursion</pre> annotation for VQL.
@@ -19,7 +26,7 @@ public class SafeRecursionAnnotationValidator extends PatternAnnotationValidator
 
     
     public static final String ANNOTATION_NAME = "SafeRecursion";
-    private static final String ANNOTATION_DESCRIPTION = "<b>[EXPERIMENTAL] [EXPERT USERS ONLY]</b> " 
+    private static final String ANNOTATION_DESCRIPTION = ExperimentalAnnotations.EXPERIMENTAL_ANNOTATION_FORMATTED_DISCLAIMER
             + "This annotation is for expert users only; misuse may break correctness guarantees.<p>"
             + "Patterns decorated with this annotation are permitted to recurse through"
             + " negative, aggregating or transitive pattern calls. <p>"
@@ -31,6 +38,17 @@ public class SafeRecursionAnnotationValidator extends PatternAnnotationValidator
     
     public SafeRecursionAnnotationValidator() {
         super(ANNOTATION_NAME, ANNOTATION_DESCRIPTION);
+    }
+    
+    @Override
+    public Optional<IPatternAnnotationAdditionalValidator> getAdditionalValidator() {
+        return Optional.of((Annotation annotation, IIssueCallback validator) -> 
+            validator.info(
+                    ExperimentalAnnotations.EXPERIMENTAL_ANNOTATION_MESSAGE, 
+                    annotation, PatternLanguagePackage.Literals.ANNOTATION__NAME, 
+                    IssueCodes.EXPERIMENTAL_ANNOTATION
+            )
+        );
     }
 
 }

@@ -700,21 +700,16 @@ public class PatternLanguageValidator extends AbstractDeclarativeValidator imple
                 detectedErrorTemplate = RECURSIVE_PATTERN_CALL_AGGREGATION;
             }            
             
-            if (detectedErrorTemplate == null) {
+            Pattern containingPattern = EcoreUtil2.getContainerOfType(call, Pattern.class);
+            boolean hasSafeRecursionAnnotation = PatternLanguageHelper.getFirstAnnotationByName(
+                    containingPattern, SafeRecursionAnnotationValidator.ANNOTATION_NAME).isPresent();
+            
+            if (detectedErrorTemplate == null || hasSafeRecursionAnnotation) {
                 warning(String.format(RECURSIVE_PATTERN_CALL, buffer.toString()), call,
                         PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
             } else {
-                Pattern containingPattern = EcoreUtil2.getContainerOfType(call, Pattern.class);
-                boolean hasSafeRecursionAnnotation = PatternLanguageHelper.getFirstAnnotationByName(
-                        containingPattern, SafeRecursionAnnotationValidator.ANNOTATION_NAME).isPresent();
-                
-                if (hasSafeRecursionAnnotation) {
-                    info(String.format(IssueCodes.SUPPRESSED_MESSAGE_PREFIX + detectedErrorTemplate, buffer.toString()), call,
-                            PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
-                } else {
-                    error(String.format(detectedErrorTemplate, buffer.toString()), call,
-                        PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
-                }
+                error(String.format(detectedErrorTemplate, buffer.toString()), call,
+                    PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
             }
             
         }
@@ -1062,6 +1057,11 @@ public class PatternLanguageValidator extends AbstractDeclarativeValidator imple
                         callVariables.get(i), null, IssueCodes.MISTYPED_PARAMETER);
             }
         }
+    }
+
+    @Override
+    public void info(String message, EObject source, EStructuralFeature feature, String code, String... issueData) {
+        super.info(message, source, feature, code, issueData);
     }
 
     @Override

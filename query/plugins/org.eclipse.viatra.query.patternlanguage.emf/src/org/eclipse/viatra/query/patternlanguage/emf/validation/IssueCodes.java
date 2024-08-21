@@ -152,15 +152,15 @@ public final class IssueCodes {
      * @since 2.7
      */
     public static final String INVALID_EXECUTION_TYPE = ISSUE_CODE_PREFIX + "invalid_execution_type";
+    /**
+     * @since 2.9
+     */
+    public static final String EXPERIMENTAL_ANNOTATION = ISSUE_CODE_PREFIX + "experimental_annotation";
+    
     
     /**
      * This prefix is used to distinguish between Java and EMF parameter type proposals
      * @since 1.4
      */
     public static final String JAVA_TYPE_PREFIX = "java:";
-    /**
-     * This prefixed to the message of info messages that inform of suppressed errors or warnings 
-     * @since 2.9
-     */
-    public static final String SUPPRESSED_MESSAGE_PREFIX = "[SUPPRESSED] ";
 }
