@@ -240,7 +240,7 @@ class PatternMatcherClassInferrer {
                         parameters += variable.toParameter("parameters", typeRef(Object).addArrayTypeDimension)
                         visibility = JvmVisibility::PROTECTED
                         body = '''
-                            return rawStreamAllValues(«variable.positionConstant», parameters).map(«typeOfVariable».class::cast);
+                            return rawStreamAllValues(«variable.positionConstant», parameters).map(«typeOfVariable.type».class::cast);
                         '''
                     ]
                 type.members += pattern.toMethod("getAllValuesOf" + variable.name, typeRef(Set, typeOfVariable)) [

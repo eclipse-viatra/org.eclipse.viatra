@@ -18,7 +18,6 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.Type;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Variable;
 import org.eclipse.viatra.query.patternlanguage.emf.util.AggregatorUtil;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
-import org.eclipse.viatra.query.runtime.matchers.context.common.JavaTransitiveInstancesKey;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 
@@ -66,7 +65,8 @@ public abstract class AbstractTypeInferrer implements ITypeInferrer {
             List<JvmType> returnTypes = AggregatorUtil.getReturnTypes(((AggregatedValue) ex).getAggregator());
             if (returnTypes.size() == 1) {
                 JvmType jvmType = returnTypes.get(0);
-                return new JavaTransitiveInstancesKey(jvmType.getIdentifier());
+                return typeSystem.fromJvmType(jvmType, ex);
+
             }
         }
         return null;
