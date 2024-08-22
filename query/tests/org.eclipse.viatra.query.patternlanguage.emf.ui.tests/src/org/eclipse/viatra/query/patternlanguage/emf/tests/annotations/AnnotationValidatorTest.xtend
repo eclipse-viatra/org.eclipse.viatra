@@ -23,6 +23,7 @@ import com.google.inject.Injector
 import org.eclipse.viatra.query.patternlanguage.emf.tests.util.AbstractValidatorTest
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel
 import org.eclipse.viatra.query.patternlanguage.emf.ui.tests.EMFPatternLanguageUiInjectorProvider
+import static org.junit.Assert.assertTrue
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(EMFPatternLanguageUiInjectorProvider))
@@ -65,7 +66,10 @@ class AnnotationValidatorTest extends AbstractValidatorTest {
                 Pattern(p);
             }'
         ) 
-        tester.validate(model).assertError(IssueCodes::UNKNOWN_ANNOTATION_PARAMETER);
+        tester.validate(model).assertOK
+        assertTrue(model.patterns.get(0).annotations.get(0).parameters.isEmpty)
+        
+        
     }
     @Test
     def void emptyAnnotationParameterList2() {
@@ -78,7 +82,8 @@ class AnnotationValidatorTest extends AbstractValidatorTest {
                 Pattern(p);
             }'
         ) 
-        tester.validate(model).assertError(IssueCodes::UNKNOWN_ANNOTATION_PARAMETER);
+        tester.validate(model).assertOK
+        assertTrue(model.patterns.get(0).annotations.get(0).parameters.isEmpty)
     }
     @Test
     def void unknownAnnotationAttribute() {
