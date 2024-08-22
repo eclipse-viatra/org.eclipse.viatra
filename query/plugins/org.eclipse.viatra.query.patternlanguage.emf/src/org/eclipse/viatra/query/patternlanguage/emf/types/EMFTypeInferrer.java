@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.EnumValue;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.BoolValue;
@@ -110,9 +109,7 @@ public class EMFTypeInferrer extends AbstractTypeInferrer {
     }
 
     private TypeInformation collectConstraints(final Pattern pattern) {
-        Resource eResource = pattern.eResource();
-        if (null == eResource) return new TypeInformation(typeSystem);
-        final TypeInformation types = cache.get(this, eResource, () -> new TypeInformation(typeSystem));
+        final TypeInformation types = cache.get(this, pattern.eResource(), () -> new TypeInformation(typeSystem));
 
         // XXX requiring an ordered call graph might be expensive, but it avoids inconsistent errors during type inference
         // The UNTYPED_PARAMETER_PREDICATE is used to return a reduced call graph where pattern with only declared types are (transitively) ignored.
