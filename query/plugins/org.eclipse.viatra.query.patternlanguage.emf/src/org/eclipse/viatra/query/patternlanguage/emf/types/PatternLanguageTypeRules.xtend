@@ -9,9 +9,16 @@
 package org.eclipse.viatra.query.patternlanguage.emf.types
 
 import com.google.inject.Inject
+import java.util.HashSet
 import java.util.List
 import java.util.logging.Logger
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper
+import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.ConditionalJudgement
+import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.ParameterTypeJudgement
+import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.TypeConformJudgement
+import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.TypeJudgement
+import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.XbaseExpressionTypeJudgement
+import org.eclipse.viatra.query.patternlanguage.emf.util.AggregatorUtil
 import org.eclipse.viatra.query.patternlanguage.emf.vql.AggregatedValue
 import org.eclipse.viatra.query.patternlanguage.emf.vql.BoolValue
 import org.eclipse.viatra.query.patternlanguage.emf.vql.CheckConstraint
@@ -19,29 +26,22 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.CompareConstraint
 import org.eclipse.viatra.query.patternlanguage.emf.vql.CompareFeature
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Expression
 import org.eclipse.viatra.query.patternlanguage.emf.vql.FunctionEvaluationValue
+import org.eclipse.viatra.query.patternlanguage.emf.vql.JavaConstantValue
+import org.eclipse.viatra.query.patternlanguage.emf.vql.JavaType
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ListValue
+import org.eclipse.viatra.query.patternlanguage.emf.vql.NumberValue
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PathExpressionConstraint
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Pattern
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternCall
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternCompositionConstraint
 import org.eclipse.viatra.query.patternlanguage.emf.vql.StringValue
 import org.eclipse.viatra.query.patternlanguage.emf.vql.TypeCheckConstraint
-import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.ConditionalJudgement
-import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.ParameterTypeJudgement
-import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.TypeConformJudgement
-import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.TypeJudgement
-import org.eclipse.viatra.query.patternlanguage.emf.types.judgements.XbaseExpressionTypeJudgement
-import org.eclipse.viatra.query.patternlanguage.emf.util.AggregatorUtil
+import org.eclipse.viatra.query.patternlanguage.emf.vql.UnaryTypeConstraint
+import org.eclipse.viatra.query.patternlanguage.emf.vql.ValueReference
+import org.eclipse.viatra.query.patternlanguage.emf.vql.VariableReference
 import org.eclipse.viatra.query.runtime.matchers.context.common.JavaTransitiveInstancesKey
 import org.eclipse.xtext.xbase.typesystem.IBatchTypeResolver
-import org.eclipse.viatra.query.patternlanguage.emf.vql.JavaType
 import org.eclipse.xtext.xbase.typesystem.computation.NumberLiterals
-import org.eclipse.viatra.query.patternlanguage.emf.vql.NumberValue
-import java.util.HashSet
-import org.eclipse.viatra.query.patternlanguage.emf.vql.VariableReference
-import org.eclipse.viatra.query.patternlanguage.emf.vql.ValueReference
-import org.eclipse.viatra.query.patternlanguage.emf.vql.UnaryTypeConstraint
-import org.eclipse.viatra.query.patternlanguage.emf.vql.JavaConstantValue
 
 /**
  * @author Zoltan Ujhelyi
@@ -171,7 +171,7 @@ class PatternLanguageTypeRules {
                 return
             } 
             val returnType = (returnTypes).get(0)
-            information.provideType(new TypeJudgement(reference, new JavaTransitiveInstancesKey(returnType.identifier)))
+            information.provideType(new TypeJudgement(reference, typeSystem.fromJvmType(returnType, reference)))
            } else {
             if (values.size !== 1 || !AggregatorUtil.mustHaveAggregatorVariables(reference)) {
                 //Incorrect aggregation; reported separately
@@ -195,17 +195,17 @@ class PatternLanguageTypeRules {
             for (var i=0; i < returnTypes.size; i++) {
                 information.provideType(new ConditionalJudgement(
                     reference, 
-                    new JavaTransitiveInstancesKey(returnTypes.get(i).identifier),
+                    typeSystem.fromJvmType(returnTypes.get(i), reference),
                     callParameters.get(index), 
-                    new JavaTransitiveInstancesKey(parameterTypes.get(i).identifier)
+                    typeSystem.fromJvmType(parameterTypes.get(i), reference)
                 ))
                 // If return types are not unique for each source type, do not provide backward conditions
                 if (returnTypeUnique) {
                     information.provideType(new ConditionalJudgement(
                         callParameters.get(index), 
-                        new JavaTransitiveInstancesKey(parameterTypes.get(i).identifier),
+                        typeSystem.fromJvmType(parameterTypes.get(i), reference),
                         reference, 
-                        new JavaTransitiveInstancesKey(returnTypes.get(i).identifier)
+                        typeSystem.fromJvmType(returnTypes.get(i), reference)
                     ))
                 }
             }
@@ -245,12 +245,15 @@ class PatternLanguageTypeRules {
     * @since 2.7
     */
    def dispatch void inferTypes(JavaConstantValue reference, TypeInformation information) {
-       val type = new JavaTransitiveInstancesKey(reference.fieldRef.type.type.identifier)
-       information.provideType(new TypeJudgement(reference, type))
+       val fieldRef = reference.fieldRef
+       if (null !== fieldRef && null !== fieldRef.type && null !== fieldRef.type.type) {
+           val type = typeSystem.fromJvmType(fieldRef.type.type, reference)
+           information.provideType(new TypeJudgement(reference, type))
+       }
    }
    
    def dispatch void inferTypes(FunctionEvaluationValue reference, TypeInformation information) {
-       information.provideType(new XbaseExpressionTypeJudgement(reference, reference.expression, typeResolver, reference.isUnwind()))
+       information.provideType(new XbaseExpressionTypeJudgement(reference, reference.expression, typeResolver, typeSystem, reference.isUnwind()))
    }
    
    def dispatch void inferTypes(BoolValue reference, TypeInformation information) {
@@ -263,7 +266,9 @@ class PatternLanguageTypeRules {
    def dispatch void inferTypes(NumberValue reference, TypeInformation information) {
        if (reference.value !== null && !reference.value.eIsProxy) {
            val type = literals.getJavaType(reference.value)
-           information.provideType(new TypeJudgement(reference, new JavaTransitiveInstancesKey(type)))
+           if (type !== null) {
+               information.provideType(new TypeJudgement(reference, new JavaTransitiveInstancesKey(type)))
+           }
        }
    }
    

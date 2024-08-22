@@ -16,7 +16,7 @@ import org.eclipse.viatra.query.patternlanguage.emf.validation.IssueCodes
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.XtextRunner
 import org.eclipse.xtext.testing.util.ParseHelper
-import org.eclipse.xtext.junit4.validation.ValidatorTester
+import org.eclipse.xtext.testing.validation.ValidatorTester
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test

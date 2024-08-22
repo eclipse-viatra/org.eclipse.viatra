@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 import org.eclipse.xtext.testing.InjectWith
 import com.google.inject.Inject
 import org.eclipse.viatra.query.patternlanguage.emf.validation.EMFPatternLanguageValidator
-import org.eclipse.xtext.junit4.validation.ValidatorTester
+import org.eclipse.xtext.testing.validation.ValidatorTester
 import com.google.inject.Injector
 import org.eclipse.viatra.query.patternlanguage.emf.tests.util.AbstractValidatorTest
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel
@@ -53,6 +53,32 @@ class AnnotationValidatorTest extends AbstractValidatorTest {
             }'
         ) 
         tester.validate(model).assertWarning(IssueCodes::UNKNOWN_ANNOTATION);
+    }
+    @Test
+    def void emptyAnnotationParameterList1() {
+        val model = parseHelper.parse(
+            'package org.eclipse.viatra.query.patternlanguage.emf.tests
+            import "http://www.eclipse.org/viatra/query/patternlanguage/PatternLanguage"
+
+            @Optional
+            pattern pattern2(p : Pattern) = {
+                Pattern(p);
+            }'
+        ) 
+        tester.validate(model).assertError(IssueCodes::UNKNOWN_ANNOTATION_PARAMETER);
+    }
+    @Test
+    def void emptyAnnotationParameterList2() {
+        val model = parseHelper.parse(
+            'package org.eclipse.viatra.query.patternlanguage.emf.tests
+            import "http://www.eclipse.org/viatra/query/patternlanguage/PatternLanguage"
+
+            @Optional()
+            pattern pattern2(p : Pattern) = {
+                Pattern(p);
+            }'
+        ) 
+        tester.validate(model).assertError(IssueCodes::UNKNOWN_ANNOTATION_PARAMETER);
     }
     @Test
     def void unknownAnnotationAttribute() {

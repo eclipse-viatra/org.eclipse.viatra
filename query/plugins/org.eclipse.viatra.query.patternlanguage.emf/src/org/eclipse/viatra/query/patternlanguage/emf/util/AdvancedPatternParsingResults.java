@@ -125,7 +125,7 @@ public class AdvancedPatternParsingResults {
         return Lists
                 .newArrayList(Iterables.concat(addedSpecifications, updatedSpecifications, removedSpecifications,
                         impactedSpecifications))
-                .stream().filter(spec -> spec.getInternalQueryRepresentation().getStatus().equals(PQueryStatus.ERROR))
+                .stream().filter(spec -> spec.getStatus().equals(PQueryStatus.ERROR))
                 .collect(Collectors.toList());
     }
 

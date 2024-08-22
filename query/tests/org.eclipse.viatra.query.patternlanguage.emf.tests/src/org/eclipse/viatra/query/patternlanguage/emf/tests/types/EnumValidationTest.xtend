@@ -18,7 +18,7 @@ import com.google.inject.Inject
 import org.eclipse.xtext.testing.validation.ValidationTestHelper
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel
 import org.junit.Test
-import org.eclipse.xtext.junit4.validation.ValidatorTester
+import org.eclipse.xtext.testing.validation.ValidatorTester
 import com.google.inject.Injector
 import org.junit.Before
 import org.eclipse.viatra.query.patternlanguage.emf.validation.IssueCodes
