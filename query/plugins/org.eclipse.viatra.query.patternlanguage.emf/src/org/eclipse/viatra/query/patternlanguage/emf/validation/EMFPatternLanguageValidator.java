@@ -35,14 +35,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.BasicEObjectImpl;
-import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternLanguagePackage;
-import org.eclipse.viatra.query.patternlanguage.emf.vql.EnumValue;
-import org.eclipse.viatra.query.patternlanguage.emf.vql.ExecutionType;
-import org.eclipse.viatra.query.patternlanguage.emf.vql.PackageImport;
-import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternImport;
-import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel;
-import org.eclipse.viatra.query.patternlanguage.emf.vql.ReferenceType;
-import org.eclipse.viatra.query.patternlanguage.emf.vql.VQLImportSection;
+import org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.SafeElementInExpressionAnnotationValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.jvmmodel.EMFPatternLanguageJvmModelInferrerUtil;
 import org.eclipse.viatra.query.patternlanguage.emf.services.EMFPatternLanguageGrammarAccess;
@@ -54,14 +47,21 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.CompareConstraint;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.CompareFeature;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ComputationValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Constraint;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.EnumValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.FunctionEvaluationValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.LiteralValueReference;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.PackageImport;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ParameterRef;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PathExpressionConstraint;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Pattern;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternBody;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternCall;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternCompositionConstraint;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternImport;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternLanguagePackage;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.PatternModel;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.ReferenceType;
+import org.eclipse.viatra.query.patternlanguage.emf.vql.VQLImportSection;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ValueReference;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Variable;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.VariableReference;
@@ -799,19 +799,32 @@ public class EMFPatternLanguageValidator extends AbstractEMFPatternLanguageValid
     }
 
     private void checkForWrongVariablesInXExpressionsInternal(final XExpression expression) {
+        Pattern containingPattern = EcoreUtil2.getContainerOfType(expression, Pattern.class);
+        boolean hasSafeElementInExpressionAnnotation = PatternLanguageHelper.getFirstAnnotationByName(
+                containingPattern, SafeElementInExpressionAnnotationValidator.ANNOTATION_NAME).isPresent();
+        
         for (Variable variable : PatternLanguageHelper.getReferencedPatternVariablesOfXExpression(expression,
                 associations)) {
             IInputKey classifier = typeInferrer.getType(variable);
+            
+            String detectedError = null;
             if (classifier instanceof BottomTypeKey) {
-                error("Only simple EDataTypes are allowed in check() and eval() expressions. The variable "
-                        + variable.getName() + " has an unknown type.",
-                        expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
+                detectedError = "Only simple EDataTypes are allowed in check() and eval() expressions. The variable "
+                        + variable.getName() + " has an unknown type.";
             } else if (classifier != null && !(classifier instanceof EDataTypeInSlotsKey)
                     && !(classifier instanceof JavaTransitiveInstancesKey)) {// null-check needed, otherwise code throws
                                                                              // NPE for classifier.getName()
-                error("Only simple EDataTypes are allowed in check() and eval() expressions. The variable "
-                        + variable.getName() + " has a type of " + classifier.getPrettyPrintableName() + ".",
-                        expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
+                detectedError = "Only simple EDataTypes are allowed in check() and eval() expressions. The variable "
+                        + variable.getName() + " has a type of " + classifier.getPrettyPrintableName() + ".";
+            }
+            
+            if (null != detectedError) {
+                if (hasSafeElementInExpressionAnnotation) {
+                    // SUPPRESSED
+                } else {
+                    error(detectedError, 
+                            expression.eContainer(), null, IssueCodes.CHECK_CONSTRAINT_SCALAR_VARIABLE_ERROR);
+                }
             }
         }
     }
@@ -933,6 +946,11 @@ public class EMFPatternLanguageValidator extends AbstractEMFPatternLanguageValid
                 error("Inconsistent type constraint: type constraint should have a single parameter.", null, IssueCodes.OTHER_ISSUE);
             }
         }
+    }
+    
+    @Override
+    public void info(String message, EObject source, EStructuralFeature feature, String code, String... issueData) {
+        super.info(message, source, feature, code, issueData);
     }
     
     @Override

@@ -14,10 +14,17 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 /**
  * @author Zoltan Ujhelyi
  * @since 2.0
- * 
+ * @noimplement This interface is not intended to be implemented by clients.
  */
 public interface IIssueCallback {
 
+    
+    /**
+     * @since 2.9
+     */
+    public abstract void info(String message, EObject source, EStructuralFeature feature, String code,
+            String... issueData);
+    
     public abstract void warning(String message, EObject source, EStructuralFeature feature, String code,
             String... issueData);
 

@@ -32,13 +32,17 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.viatra.query.patternlanguage.emf.EMFPatternLanguageConfigurationConstants;
 import org.eclipse.viatra.query.patternlanguage.emf.annotations.IPatternAnnotationValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.annotations.PatternAnnotationProvider;
+import org.eclipse.viatra.query.patternlanguage.emf.annotations.impl.SafeRecursionAnnotationValidator;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.JavaTypesHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.internal.DuplicationChecker;
 import org.eclipse.viatra.query.patternlanguage.emf.types.BottomTypeKey;
 import org.eclipse.viatra.query.patternlanguage.emf.types.ITypeInferrer;
 import org.eclipse.viatra.query.patternlanguage.emf.types.ITypeSystem;
+import org.eclipse.viatra.query.patternlanguage.emf.util.ASTStringProvider;
+import org.eclipse.viatra.query.patternlanguage.emf.util.AggregatorUtil;
 import org.eclipse.viatra.query.patternlanguage.emf.util.IExpectedPackageNameProvider;
+import org.eclipse.viatra.query.patternlanguage.emf.validation.whitelist.PureWhitelist;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.AggregatedValue;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Annotation;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.AnnotationParameter;
@@ -65,9 +69,6 @@ import org.eclipse.viatra.query.patternlanguage.emf.vql.UnaryTypeConstraint;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.ValueReference;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Variable;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.VariableReference;
-import org.eclipse.viatra.query.patternlanguage.emf.util.ASTStringProvider;
-import org.eclipse.viatra.query.patternlanguage.emf.util.AggregatorUtil;
-import org.eclipse.viatra.query.patternlanguage.emf.validation.whitelist.PureWhitelist;
 import org.eclipse.viatra.query.runtime.emf.EMFQueryMetaContext;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
 import org.eclipse.viatra.query.runtime.matchers.psystem.aggregations.IAggregatorFactory;
@@ -97,6 +98,7 @@ import org.eclipse.xtext.xbase.typesystem.IBatchTypeResolver;
 import org.eclipse.xtext.xbase.typesystem.IResolvedTypes;
 import org.eclipse.xtext.xbase.typesystem.computation.NumberLiterals;
 import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
@@ -145,6 +147,10 @@ public class PatternLanguageValidator extends AbstractDeclarativeValidator imple
      * @since 2.0
      */
     public static final String RECURSIVE_PATTERN_CALL_NEGATIVE = "Negative pattern calls are not supported in recursive pattern calls: %s";
+    /**
+     * @since 2.9
+     */
+    public static final String RECURSIVE_PATTERN_CALL_AGGREGATION = "Aggregating pattern calls are not supported in recursive pattern calls: %s";
     /**
      * @since 1.4
      */
@@ -683,17 +689,29 @@ public class PatternLanguageValidator extends AbstractDeclarativeValidator imple
                 }
                 buffer.append(prettyPrintPatternCall(elem));
             }
+            
 
-            if (isNegativePatternCall(call)) {
-                error(String.format(RECURSIVE_PATTERN_CALL_NEGATIVE, buffer.toString()), call,
-                        PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
+            String detectedErrorTemplate = null;
+            if (PatternLanguageHelper.isNegative(call)) {
+                detectedErrorTemplate = RECURSIVE_PATTERN_CALL_NEGATIVE;
             } else if (PatternLanguageHelper.isTransitive(call)) {
-                error(String.format(RECURSIVE_PATTERN_CALL_TRANSITIVE, buffer.toString()), call,
-                        PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
-            } else {
+                detectedErrorTemplate = RECURSIVE_PATTERN_CALL_TRANSITIVE;
+            } else if (PatternLanguageHelper.isAggregated(call)) {
+                detectedErrorTemplate = RECURSIVE_PATTERN_CALL_AGGREGATION;
+            }            
+            
+            Pattern containingPattern = EcoreUtil2.getContainerOfType(call, Pattern.class);
+            boolean hasSafeRecursionAnnotation = PatternLanguageHelper.getFirstAnnotationByName(
+                    containingPattern, SafeRecursionAnnotationValidator.ANNOTATION_NAME).isPresent();
+            
+            if (detectedErrorTemplate == null || hasSafeRecursionAnnotation) {
                 warning(String.format(RECURSIVE_PATTERN_CALL, buffer.toString()), call,
                         PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
+            } else {
+                error(String.format(detectedErrorTemplate, buffer.toString()), call,
+                    PatternLanguagePackage.Literals.PATTERN_CALL__PATTERN_REF, IssueCodes.RECURSIVE_PATTERN_CALL);
             }
+            
         }
     }
 
@@ -731,13 +749,14 @@ public class PatternLanguageValidator extends AbstractDeclarativeValidator imple
         return null;
     }
 
-    private boolean isNegativePatternCall(PatternCall call) {
-        return (call.eContainer() instanceof PatternCompositionConstraint
-                && ((PatternCompositionConstraint) call.eContainer()).isNegative());
-    }
-
-    private String prettyPrintPatternCall(PatternCall call) {
-        return (isNegativePatternCall(call) ? "neg " : "") + call.getPatternRef().getName();
+    private String prettyPrintPatternCall(PatternCall call) { 
+        return 
+                (PatternLanguageHelper.isNegative(call) ? "neg " :
+                    (PatternLanguageHelper.isAggregated(call) ? "# " : "")
+                ) + call.getPatternRef().getName()
+                + (ClosureType.REFLEXIVE_TRANSITIVE == call.getTransitive() ? "*" : (
+                   ClosureType.TRANSITIVE == call.getTransitive() ? "+" : ""       
+                ));
     }
 
     private static final Comparator<PatternCall> patternCallComparator = (p1, p2) -> {
@@ -1038,6 +1057,11 @@ public class PatternLanguageValidator extends AbstractDeclarativeValidator imple
                         callVariables.get(i), null, IssueCodes.MISTYPED_PARAMETER);
             }
         }
+    }
+
+    @Override
+    public void info(String message, EObject source, EStructuralFeature feature, String code, String... issueData) {
+        super.info(message, source, feature, code, issueData);
     }
 
     @Override

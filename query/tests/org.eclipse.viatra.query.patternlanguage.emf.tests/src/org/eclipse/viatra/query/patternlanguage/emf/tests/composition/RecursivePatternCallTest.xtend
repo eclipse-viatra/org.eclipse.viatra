@@ -10,7 +10,9 @@ package org.eclipse.viatra.query.patternlanguage.emf.tests.composition
 
 import com.google.inject.Inject
 import com.google.inject.Injector
+import org.eclipse.emf.common.util.Diagnostic
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.viatra.query.patternlanguage.emf.tests.CustomizedEMFPatternLanguageInjectorProvider
 import org.eclipse.viatra.query.patternlanguage.emf.tests.util.AbstractValidatorTest
 import org.eclipse.viatra.query.patternlanguage.emf.validation.EMFPatternLanguageValidator
 import org.eclipse.viatra.query.patternlanguage.emf.validation.IssueCodes
@@ -22,7 +24,8 @@ import org.eclipse.xtext.testing.validation.ValidatorTester
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.eclipse.viatra.query.patternlanguage.emf.tests.CustomizedEMFPatternLanguageInjectorProvider
+
+import static org.junit.Assert.assertNotEquals
 
 @RunWith(typeof(XtextRunner))
 @InjectWith(typeof(CustomizedEMFPatternLanguageInjectorProvider))
@@ -86,6 +89,20 @@ class RecursivePatternCallTest extends AbstractValidatorTest {
                 Pattern(p);
             } or {
                 neg find p1(p);
+            }'
+        )
+        tester.validate(model).assertError(IssueCodes::RECURSIVE_PATTERN_CALL)
+    }
+    
+    @Test
+    def void testSelfRecursionAggr() {
+        val model = parseHelper.parse(
+            'package org.eclipse.viatra.query.patternlanguage.emf.tests
+            import "http://www.eclipse.org/viatra/query/patternlanguage/emf/PatternLanguage"
+
+            pattern p1(p : Pattern) = {
+                Pattern(p);
+                7 == count find p1(_);
             }'
         )
         tester.validate(model).assertError(IssueCodes::RECURSIVE_PATTERN_CALL)
@@ -255,4 +272,26 @@ class RecursivePatternCallTest extends AbstractValidatorTest {
             AssertableDiagnostics.warning(IssueCodes::RECURSIVE_PATTERN_CALL,
                 "Recursive pattern call: p4 -> p1 -> p2 -> p4"))
     }
+    
+    @Test
+    def void testSelfRecursionNegSuppressed() {
+        val model = parseHelper.parse(
+            'package org.eclipse.viatra.query.patternlanguage.emf.tests
+            import "http://www.eclipse.org/viatra/query/patternlanguage/emf/PatternLanguage"
+            
+            @SafeRecursion
+            pattern p1(p : Pattern) = {
+                Pattern(p);
+            } or {
+                neg find p1(p);
+            }'
+        )
+        val results = tester.validate(model)        
+        assertNotEquals(Diagnostic.ERROR, results.diagnostic.severity)
+        results.assertAll(
+            AssertableDiagnostics.diagnostic(Diagnostic.WARNING, IssueCodes::RECURSIVE_PATTERN_CALL, "Recursive"),
+            AssertableDiagnostics.diagnostic(Diagnostic.INFO, IssueCodes::EXPERIMENTAL_ANNOTATION, "experimental")
+        )
+    }
+    
 }
