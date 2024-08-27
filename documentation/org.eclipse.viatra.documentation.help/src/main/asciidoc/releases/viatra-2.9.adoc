@@ -5,13 +5,29 @@ ifndef::imagesdir[:imagesdir: {rootdir}/../images]
 
 = VIATRA 2.9
 
-Release date:: 2024-xx-xx
+Release date:: 2024-08-28
 More information:: https://projects.eclipse.org/projects/modeling.viatra/releases/2.9.0
+
+== Dependency updates
+
+To reduce maintenance efforts, the VIATRA project increased the minimum required versions of its dependencies. The most important ones are as follows:
+
+ * VIATRA 2.9 does not work with Java 8 anymore, but increased its minimum requirement to *Java 11* or newer (was tested with up to *Java 21*).
+ * Correspondingly, the development environment cannot be installed on Eclipse versions older than the one shipped with version *Eclipse 2022-06* (but support was tested on *Eclipse 2024-09* as well).
+ * Additional dependency updates:
+   * *Xtext 2.35*
+   * *Eclipse Collections 11.1*
+ * The build environment was also updated to *Tycho 4.0.4* and *Maven 3.8.1*. For users of the *viatra-maven-plugin* it is required to follow these updates as well.
+
+== Development in Github
+
+Since version 2.8 was released, development of VIATRA has moved to Github, into the https://github.com/eclipse-viatra[Eclipse-VIATRA organization]. All code, issue tracking and discussions are available from there.
 
 == New and Noteworthy
 
-TBD
+In addition to behind-the-scenes work with the Github migration and dependency updates, VIATRA 2.9 also includes a few smaller features and bugfixes. In the following we mention a some of these.
 
+=== Improved Annotation Syntax
 In previous versions, annotation without parameters did not support adding the parentheses in the syntax. VIATRA 2.9 extended the syntax to support such annotations, so the further code works:
 
 [source,vql]
@@ -21,3 +37,10 @@ pattern emptyIpAddress(host: HostInstance) {
     HostInstance.nodeIp(host, "");
 }
 ----
+
+=== Extended IQuerySpecification Interface
+
+Previously, to get the status of a query specification (to check whether it has been initialized correctly) was not possible from the IQuerySpecification interface, but required accessing the internal query representation. To make this access less common, two new default methods were introduced to the IQuerySpecification interface:
+
+ * `getStatus` is used to return the initialization status of the query (e.g. initialized or erroneous)
+ * `getPProblems` returns all the found issues during initialization
