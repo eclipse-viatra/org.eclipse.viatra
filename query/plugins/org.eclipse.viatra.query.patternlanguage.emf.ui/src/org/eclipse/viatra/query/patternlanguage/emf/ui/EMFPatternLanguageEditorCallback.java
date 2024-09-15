@@ -14,7 +14,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.pde.internal.core.natures.PDE;
+import org.eclipse.viatra.query.tooling.core.project.ProjectGenerationHelper;
 import org.eclipse.viatra.query.tooling.core.project.ViatraQueryNature;
 import org.eclipse.viatra.query.tooling.ui.migrator.JavaProjectMigrator;
 import org.eclipse.viatra.query.tooling.ui.migrator.metadata.NatureUpdaterJob;
@@ -43,7 +43,7 @@ public class EMFPatternLanguageEditorCallback extends NatureAddingEditorCallback
             if (resource != null) {
                 final IProject project = resource.getProject();
                 if (project.isAccessible() && !project.isHidden() && !project.hasNature(ViatraQueryNature.NATURE_ID)) {
-                    String question = (PDE.hasPluginNature(project))
+                    String question = (ProjectGenerationHelper.isOpenPDEProject(project))
                             ? String.format("Do you want to convert project %s to a VIATRA Query Project?",
                                     project.getName())
                             : String.format(

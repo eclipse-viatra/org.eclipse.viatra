@@ -10,6 +10,8 @@
 package org.eclipse.viatra.query.tooling.core.project;
 
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,8 +43,8 @@ import org.eclipse.pde.core.project.IPackageExportDescription;
 import org.eclipse.pde.core.project.IPackageImportDescription;
 import org.eclipse.pde.core.project.IRequiredBundleDescription;
 import org.eclipse.pde.internal.core.PDECore;
-import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.viatra.query.runtime.ViatraQueryRuntimePlugin;
+import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.util.Preconditions;
 import org.eclipse.viatra.query.tooling.core.generator.ExtensionData;
 import org.eclipse.viatra.query.tooling.core.generator.ViatraQueryGeneratorPlugin;
@@ -71,19 +73,26 @@ public abstract class ProjectGenerationHelper {
     private static final String UTF8_ENCODING = "UTF-8";
 
     /**
-     * Contains the default bundle requirements for VIATRA in a format that can be loaded into {@link #ensureBundleDependencies(IProject, List)}.
+     * Contains the default bundle requirements for VIATRA in a format that can be loaded into
+     * {@link #ensureBundleDependencies(IProject, List)}.
+     * 
      * @since 2.0
      */
-    public static final List<String> DEFAULT_VIATRA_BUNDLE_REQUIREMENTS = Arrays.asList("org.eclipse.emf.ecore", ViatraQueryRuntimePlugin.PLUGIN_ID,
-            "org.eclipse.viatra.query.runtime.rete", "org.eclipse.viatra.query.runtime.localsearch", "org.eclipse.xtext.xbase.lib");
+    public static final List<String> DEFAULT_VIATRA_BUNDLE_REQUIREMENTS = Arrays.asList("org.eclipse.emf.ecore",
+            ViatraQueryRuntimePlugin.PLUGIN_ID, "org.eclipse.viatra.query.runtime.rete",
+            "org.eclipse.viatra.query.runtime.localsearch", "org.eclipse.xtext.xbase.lib");
     /**
-     * Contains the default import package requirements for VIATRA in a format that can be loaded into {@link #ensurePackageImports(IProject, List)}.
+     * Contains the default import package requirements for VIATRA in a format that can be loaded into
+     * {@link #ensurePackageImports(IProject, List)}.
+     * 
      * @since 2.0
      */
-    public static final List<String> DEFAULT_VIATRA_IMPORT_PACKAGES = Arrays.asList("org.apache.log4j", "javax.annotation");
-    
-    private ProjectGenerationHelper() {/*Utility class constructor*/}
-    
+    public static final List<String> DEFAULT_VIATRA_IMPORT_PACKAGES = Arrays.asList("org.apache.log4j",
+            "javax.annotation");
+
+    private ProjectGenerationHelper() {
+        /* Utility class constructor */}
+
     private static final class IDToPackageImportTransformer implements Function<String, IPackageImportDescription> {
         private final IBundleProjectService service;
 
@@ -109,25 +118,50 @@ public abstract class ProjectGenerationHelper {
             return service.newRequiredBundle(input, null, false, false);
         }
     }
-    
+
+    private static boolean isPDEProject(IProject project) {
+        /* 
+         * In SimRel 2024-09 the PDE#hasPluginNature call was moved to
+         * PluginProject#isPluginProject, but this is incompatible with 2022-06
+         * TODO Rreplace this with a direct method call after minimum requirements are updated
+         */
+        try {
+            Method checkMethod;
+
+            try {
+                final Class<?> pluginProjectClass = Class
+                        .forName("org.eclipse.pde.internal.core.natures.PluginProject");
+                checkMethod = pluginProjectClass.getMethod("isPluginProject", IProject.class);
+            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
+                final Class<?> pdeClass = Class.forName("org.eclipse.pde.internal.core.natures.PDE");
+                checkMethod = pdeClass.getMethod("hasPluginNature", IProject.class);
+            }
+
+            return (Boolean) checkMethod.invoke(checkMethod, project);
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            throw new ViatraQueryException("Unsupported PDE version", "Erroneous installation, required PDE method cannot be called", e); 
+        }
+    }
+
     /**
      * Return true if the given project exists, is open and has PDE plug-in nature configured
+     * 
      * @param project
      */
-    public static boolean isOpenPDEProject(IProject project){
-        return project.exists() && project.isOpen() && (PDE.hasPluginNature(project));
+    public static boolean isOpenPDEProject(IProject project) {
+        return project.exists() && project.isOpen() && (isPDEProject(project));
     }
-    
+
     /**
-     * Checks whether the given project exists, is open and has PDE plug-in nature configured. Throws
-     * an {@link IllegalArgumentException} otherwise.
+     * Checks whether the given project exists, is open and has PDE plug-in nature configured. Throws an
+     * {@link IllegalArgumentException} otherwise.
+     * 
      * @param project
      */
-    public static void checkOpenPDEProject(IProject project){
-        Preconditions.checkArgument(isOpenPDEProject(project),
-                INVALID_PROJECT_MESSAGE, project.getName());
+    public static void checkOpenPDEProject(IProject project) {
+        Preconditions.checkArgument(isOpenPDEProject(project), INVALID_PROJECT_MESSAGE, project.getName());
     }
- 
+
     /**
      * A single source folder named src
      */
@@ -155,16 +189,17 @@ public abstract class ProjectGenerationHelper {
             final IBundleProjectService service = context.getService(ref);
             IBundleProjectDescription bundleDesc = service.getDescription(proj);
             bundleDesc.setLocationURI(description.getLocationURI());
-            IPath[] additionalBinIncludes = new IPath[] { new Path("plugin.xml")};
-            ProjectGenerationHelper.fillProjectMetadata(proj, dependencies, DEFAULT_VIATRA_IMPORT_PACKAGES, service, bundleDesc, additionalBinIncludes);
+            IPath[] additionalBinIncludes = new IPath[] { new Path("plugin.xml") };
+            ProjectGenerationHelper.fillProjectMetadata(proj, dependencies, DEFAULT_VIATRA_IMPORT_PACKAGES, service,
+                    bundleDesc, additionalBinIncludes);
             bundleDesc.apply(monitor);
-            //Ensure UTF-8 encoding
+            // Ensure UTF-8 encoding
             proj.setDefaultCharset(UTF8_ENCODING, monitor);
 
             // Adding VIATRA Query-specific natures
             ProjectGenerationHelper.updateNatures(proj,
                     ImmutableList.of(ViatraQueryNature.XTEXT_NATURE_ID, ViatraQueryNature.NATURE_ID),
-                    ImmutableList.<String>of(), monitor);
+                    ImmutableList.<String> of(), monitor);
         } finally {
             monitor.done();
             if (context != null && ref != null) {
@@ -176,8 +211,8 @@ public abstract class ProjectGenerationHelper {
     /**
      * Updates the set of project natures of a selected project
      */
-    public static void updateNatures(IProject proj, Collection<String> naturesToAdd,
-            Collection<String> naturesToRemove, IProgressMonitor monitor) throws CoreException {
+    public static void updateNatures(IProject proj, Collection<String> naturesToAdd, Collection<String> naturesToRemove,
+            IProgressMonitor monitor) throws CoreException {
         IProjectDescription desc = proj.getDescription();
         Set<String> newNatures = new LinkedHashSet<>();
         newNatures.addAll(Arrays.asList(desc.getNatureIds()));
@@ -225,7 +260,8 @@ public abstract class ProjectGenerationHelper {
             ref = context.getServiceReference(IBundleProjectService.class);
             final IBundleProjectService service = context.getService(ref);
             IBundleProjectDescription bundleDesc = service.getDescription(project);
-            fillProjectMetadata(project, dependencies, Collections.<String>emptyList(), service, bundleDesc, additionalBinIncludes);
+            fillProjectMetadata(project, dependencies, Collections.<String> emptyList(), service, bundleDesc,
+                    additionalBinIncludes);
             bundleDesc.apply(monitor);
         } finally {
             if (context != null && ref != null) {
@@ -244,9 +280,9 @@ public abstract class ProjectGenerationHelper {
      * @param service
      * @param bundleDesc
      */
-    public static void fillProjectMetadata(IProject project, final List<String> dependencies, final List<String> packageImports,
-            final IBundleProjectService service, IBundleProjectDescription bundleDesc,
-            final IPath[] additionalBinIncludes) {
+    public static void fillProjectMetadata(IProject project, final List<String> dependencies,
+            final List<String> packageImports, final IBundleProjectService service,
+            IBundleProjectDescription bundleDesc, final IPath[] additionalBinIncludes) {
         bundleDesc.setBundleName(project.getName());
         bundleDesc.setBundleVersion(new Version(0, 0, 1, "qualifier"));
         bundleDesc.setSingleton(true);
@@ -255,14 +291,16 @@ public abstract class ProjectGenerationHelper {
         bundleDesc.setExtensionRegistry(true);
         bundleDesc.setBinIncludes(additionalBinIncludes);
 
-        bundleDesc.setBundleClasspath(getUpdatedBundleClasspathEntries(new IBundleClasspathEntry[0], SINGLESOURCEFOLDER, service));
+        bundleDesc.setBundleClasspath(
+                getUpdatedBundleClasspathEntries(new IBundleClasspathEntry[0], SINGLESOURCEFOLDER, service));
         bundleDesc.setExecutionEnvironments(new String[] { ViatraQueryNature.EXECUTION_ENVIRONMENT });
         // Adding dependencies
-        IRequiredBundleDescription[] reqBundles = Lists.transform(dependencies,
-                new IDToRequireBundleTransformer(service)).toArray(new IRequiredBundleDescription[dependencies.size()]);
+        IRequiredBundleDescription[] reqBundles = Lists
+                .transform(dependencies, new IDToRequireBundleTransformer(service))
+                .toArray(new IRequiredBundleDescription[dependencies.size()]);
         bundleDesc.setRequiredBundles(reqBundles);
-        IPackageImportDescription[] importArray = Lists.transform(packageImports,
-                new IDToPackageImportTransformer(service))
+        IPackageImportDescription[] importArray = Lists
+                .transform(packageImports, new IDToPackageImportTransformer(service))
                 .toArray(new IPackageImportDescription[packageImports.size()]);
         bundleDesc.setPackageImports(importArray);
     }
@@ -304,6 +342,7 @@ public abstract class ProjectGenerationHelper {
 
     /**
      * Ensures that the given plug-in project is declared a singleton. This is required for extensions.
+     * 
      * @param project
      * @throws CoreException
      * @since 2.0
@@ -325,7 +364,7 @@ public abstract class ProjectGenerationHelper {
             }
         }
     }
-    
+
     /**
      * Updates project manifest to ensure the selected bundle dependencies are set. Does not change existing
      * dependencies.
@@ -334,22 +373,25 @@ public abstract class ProjectGenerationHelper {
      * @param dependencies
      * @throws CoreException
      */
-    public static void ensureBundleDependencies(IProject project, final List<String> dependencies) throws CoreException {
-        ensureBundleDependenciesAndPackageImports(project, dependencies, Collections.<String>emptyList(), new NullProgressMonitor());
+    public static void ensureBundleDependencies(IProject project, final List<String> dependencies)
+            throws CoreException {
+        ensureBundleDependenciesAndPackageImports(project, dependencies, Collections.<String> emptyList(),
+                new NullProgressMonitor());
     }
 
     /**
-     * Updates project manifest to ensure the selected package imports are set. Does not change existing
-     * package imports or required bundle declarations.
+     * Updates project manifest to ensure the selected package imports are set. Does not change existing package imports
+     * or required bundle declarations.
      *
      * @param project
      * @param packageImports
      * @throws CoreException
      */
     public static void ensurePackageImports(IProject project, final List<String> packageImports) throws CoreException {
-        ensureBundleDependenciesAndPackageImports(project, Collections.<String>emptyList(), packageImports, new NullProgressMonitor());
+        ensureBundleDependenciesAndPackageImports(project, Collections.<String> emptyList(), packageImports,
+                new NullProgressMonitor());
     }
-    
+
     /**
      * Updates project manifest to ensure the selected bundle dependencies are set. Does not change existing
      * dependencies.
@@ -360,8 +402,8 @@ public abstract class ProjectGenerationHelper {
      * @param monitor
      * @throws CoreException
      */
-    public static void ensureBundleDependenciesAndPackageImports(IProject project, final List<String> dependencies, final List<String> importPackages,
-            IProgressMonitor monitor) throws CoreException {
+    public static void ensureBundleDependenciesAndPackageImports(IProject project, final List<String> dependencies,
+            final List<String> importPackages, IProgressMonitor monitor) throws CoreException {
         checkOpenPDEProject(project);
         if (dependencies.isEmpty() && importPackages.isEmpty()) {
             return;
@@ -373,7 +415,9 @@ public abstract class ProjectGenerationHelper {
             ref = context.getServiceReference(IBundleProjectService.class);
             final IBundleProjectService service = context.getService(ref);
             IBundleProjectDescription bundleDesc = service.getDescription(project);
-            List<String> nonSelfDependencies = dependencies.stream().filter(dependency -> !Objects.equals(bundleDesc.getSymbolicName(), dependency)).collect(Collectors.toList());
+            List<String> nonSelfDependencies = dependencies.stream()
+                    .filter(dependency -> !Objects.equals(bundleDesc.getSymbolicName(), dependency))
+                    .collect(Collectors.toList());
             if (!nonSelfDependencies.isEmpty()) {
                 ensureBundleDependencies(service, bundleDesc, nonSelfDependencies);
             }
@@ -392,15 +436,18 @@ public abstract class ProjectGenerationHelper {
      * Updates the plugin dependency settings of the given project by replacing entries according to the given map. This
      * method preserves optional and re-export flags, and updates version settings (if was originally set)
      * 
-     * @param project the project to apply changes on
-     * @param replacedDependencies bundle IDs to replace dependencies
-     * @param versions version ranges to set for the new entries
+     * @param project
+     *            the project to apply changes on
+     * @param replacedDependencies
+     *            bundle IDs to replace dependencies
+     * @param versions
+     *            version ranges to set for the new entries
      * @param monitor
      * @throws CoreException
      * @since 1.5
      */
-    public static void replaceBundleDependencies(IProject project, 
-            final Map<String, String> replacedDependencies, final Map<String, VersionRange> versions, IProgressMonitor monitor) throws CoreException{
+    public static void replaceBundleDependencies(IProject project, final Map<String, String> replacedDependencies,
+            final Map<String, VersionRange> versions, IProgressMonitor monitor) throws CoreException {
         checkOpenPDEProject(project);
         BundleContext context = null;
         ServiceReference<IBundleProjectService> ref = null;
@@ -420,7 +467,7 @@ public abstract class ProjectGenerationHelper {
             }
         }
     }
-    
+
     /**
      * Updates plugin Manifest file to replace plug-in dependencies according to the given Map
      * 
@@ -428,41 +475,40 @@ public abstract class ProjectGenerationHelper {
      * @param bundleDesc
      * @param replacedDependencies
      */
-    public static void replaceBundleDependencies(IBundleProjectService service, IBundleProjectDescription bundleDesc, 
-            final Map<String, String> replacedDependencies, final Map<String, VersionRange> versions){
-        
+    public static void replaceBundleDependencies(IBundleProjectService service, IBundleProjectDescription bundleDesc,
+            final Map<String, String> replacedDependencies, final Map<String, VersionRange> versions) {
+
         IRequiredBundleDescription[] existingDependencies = bundleDesc.getRequiredBundles();
         if (existingDependencies == null) {
             existingDependencies = new IRequiredBundleDescription[0];
         }
-        
+
         Set<String> toRemove = new HashSet<>();
         Set<IRequiredBundleDescription> toAdd = new LinkedHashSet<>();
-        
-        for(IRequiredBundleDescription r : existingDependencies){
+
+        for (IRequiredBundleDescription r : existingDependencies) {
             String id = r.getName();
-            String replacedId = replacedDependencies.get(id); 
-            if (replacedId != null){
+            String replacedId = replacedDependencies.get(id);
+            if (replacedId != null) {
                 VersionRange v = r.getVersionRange();
                 toRemove.add(id);
-                if (v != null){
+                if (v != null) {
                     v = versions.get(replacedId);
                 }
                 toAdd.add(service.newRequiredBundle(replacedId, v, r.isOptional(), r.isExported()));
             }
         }
-        
+
         List<IRequiredBundleDescription> dependencies = new LinkedList<>();
-        for(IRequiredBundleDescription r : existingDependencies){
-            if (!toRemove.contains(r.getName())){
+        for (IRequiredBundleDescription r : existingDependencies) {
+            if (!toRemove.contains(r.getName())) {
                 dependencies.add(r);
             }
         }
         dependencies.addAll(toAdd);
         bundleDesc.setRequiredBundles(dependencies.toArray(new IRequiredBundleDescription[dependencies.size()]));
     }
-    
-    
+
     /**
      * Updates project manifest to ensure the selected bundle dependencies are set. Does not change existing
      * dependencies.
@@ -473,12 +519,13 @@ public abstract class ProjectGenerationHelper {
      */
     static void ensureBundleDependencies(IBundleProjectService service, IBundleProjectDescription bundleDesc,
             final List<String> dependencyNames) {
-        
+
         IRequiredBundleDescription[] existingDependencies = bundleDesc.getRequiredBundles();
         if (existingDependencies == null) {
-            List<IRequiredBundleDescription> missingDependencies = Lists.transform(dependencyNames, new IDToRequireBundleTransformer(service));
+            List<IRequiredBundleDescription> missingDependencies = Lists.transform(dependencyNames,
+                    new IDToRequireBundleTransformer(service));
             bundleDesc.setRequiredBundles(Iterables.toArray(missingDependencies, IRequiredBundleDescription.class));
-            
+
         } else {
             List<String> missingDependencyNames = new ArrayList<>(dependencyNames);
             for (IRequiredBundleDescription bundle : existingDependencies) {
@@ -486,16 +533,17 @@ public abstract class ProjectGenerationHelper {
                     missingDependencyNames.remove(bundle.getName());
                 }
             }
-            List<IRequiredBundleDescription> missingDependencies = Lists.transform(missingDependencyNames, new IDToRequireBundleTransformer(service));
+            List<IRequiredBundleDescription> missingDependencies = Lists.transform(missingDependencyNames,
+                    new IDToRequireBundleTransformer(service));
 
             // Since Kepler setRequiredBundles overwrites existing dependencies
-            Iterable<IRequiredBundleDescription> dependenciesToSet =
-                Iterables.concat(missingDependencies, Arrays.asList(existingDependencies));
+            Iterable<IRequiredBundleDescription> dependenciesToSet = Iterables.concat(missingDependencies,
+                    Arrays.asList(existingDependencies));
 
             bundleDesc.setRequiredBundles(Iterables.toArray(dependenciesToSet, IRequiredBundleDescription.class));
         }
     }
-    
+
     /**
      * Updates project manifest to ensure the selected bundle dependencies are set. Does not change existing
      * dependencies.
@@ -507,8 +555,9 @@ public abstract class ProjectGenerationHelper {
     static void ensurePackageImports(final IBundleProjectService service, IBundleProjectDescription bundleDesc,
             final List<String> packageImports) {
         IPackageImportDescription[] importArray = bundleDesc.getPackageImports();
-        List<IPackageImportDescription> importList = importArray == null ? Lists
-                .<IPackageImportDescription> newArrayList() : Arrays.asList(importArray);
+        List<IPackageImportDescription> importList = importArray == null
+                ? Lists.<IPackageImportDescription> newArrayList()
+                : Arrays.asList(importArray);
         List<String> newImports = Lists.newArrayList(packageImports);
         for (IPackageImportDescription importDecl : importList) {
             final String packageName = importDecl.getName();
@@ -542,9 +591,9 @@ public abstract class ProjectGenerationHelper {
      * @param monitor
      * @throws CoreException
      */
-    public static void ensurePackageExports(IProject project, final Collection<String> exports, IProgressMonitor monitor)
-            throws CoreException {
-        Preconditions.checkArgument(project.exists() && project.isOpen() && (PDE.hasPluginNature(project)),
+    public static void ensurePackageExports(IProject project, final Collection<String> exports,
+            IProgressMonitor monitor) throws CoreException {
+        Preconditions.checkArgument(project.exists() && project.isOpen() && (isPDEProject(project)),
                 INVALID_PROJECT_MESSAGE, project.getName());
         if (exports.isEmpty()) {
             return;
@@ -577,7 +626,7 @@ public abstract class ProjectGenerationHelper {
      */
     public static void removePackageExports(IProject project, final List<String> dependencies, IProgressMonitor monitor)
             throws CoreException {
-        Preconditions.checkArgument(project.exists() && project.isOpen() && (PDE.hasPluginNature(project)),
+        Preconditions.checkArgument(project.exists() && project.isOpen() && (isPDEProject(project)),
                 INVALID_PROJECT_MESSAGE, project.getName());
         if (dependencies.isEmpty()) {
             return;
@@ -617,7 +666,8 @@ public abstract class ProjectGenerationHelper {
                 exportList.add(export);
             }
         }
-        exportList.addAll(Collections2.transform(missingExports, input -> service.newPackageExport(input, null, true, null)));
+        exportList.addAll(Collections2.transform(missingExports,
+                input -> service.newPackageExport(input, null, true, (String[]) null)));
 
         bundleDesc.setPackageExports(exportList.toArray(new IPackageExportDescription[exportList.size()]));
     }
@@ -668,7 +718,7 @@ public abstract class ProjectGenerationHelper {
      */
     public static void ensureExtensions(IProject project, Iterable<ExtensionData> contributedExtensions,
             Iterable<Pair<String, String>> removedExtensions, IProgressMonitor monitor) throws CoreException {
-        Preconditions.checkArgument(project.exists() && project.isOpen() && (PDE.hasPluginNature(project)),
+        Preconditions.checkArgument(project.exists() && project.isOpen() && (isPDEProject(project)),
                 INVALID_PROJECT_MESSAGE, project.getName());
 
         if (StringExtensions.isNullOrEmpty(project.getName())) {
@@ -680,7 +730,7 @@ public abstract class ProjectGenerationHelper {
         modifier.addExtensions(contributedExtensions);
         modifier.savePluginXml();
     }
-    
+
     /**
      * Updates project manifest to ensure the selected packages are removed. Does not change existing exports.
      *
@@ -703,7 +753,7 @@ public abstract class ProjectGenerationHelper {
      */
     public static void removeAllExtension(IProject project,
             Collection<Pair<String, String>> removableExtensionIdentifiers) throws CoreException {
-        Preconditions.checkArgument(project.exists() && project.isOpen() && (PDE.hasPluginNature(project)));
+        Preconditions.checkArgument(project.exists() && project.isOpen() && (isPDEProject(project)));
 
         if (StringExtensions.isNullOrEmpty(project.getName())) {
             return;
@@ -713,18 +763,20 @@ public abstract class ProjectGenerationHelper {
         modifier.removeExtensions(removableExtensionIdentifiers);
         modifier.savePluginXml();
     }
-    
+
     /**
      * Ensures that the project contains the output folder specified by its configuration as source folder.
      *
      * @param project
      *            an existing, open plug-in project
-     * @param outputConfigurations output configurations defining the output folder
+     * @param outputConfigurations
+     *            output configurations defining the output folder
      * @param monitor
      * @throws CoreException
      * @since 2.0
      */
-    public static void ensureSourceFolder(IProject project, Collection<OutputConfiguration> outputConfigurations, IProgressMonitor monitor) throws CoreException {
+    public static void ensureSourceFolder(IProject project, Collection<OutputConfiguration> outputConfigurations,
+            IProgressMonitor monitor) throws CoreException {
         if (!outputConfigurations.isEmpty()) {
             String sourceFolder = outputConfigurations.iterator().next().getOutputDirectory();
             ProjectGenerationHelper.ensureSourceFolder(project, sourceFolder, monitor);
@@ -736,12 +788,14 @@ public abstract class ProjectGenerationHelper {
      *
      * @param project
      *            an existing, open plug-in project
-     * @param folder a project-relative path encoded as a string           
+     * @param folder
+     *            a project-relative path encoded as a string
      * @param monitor
      * @throws CoreException
      * @since 1.5
      */
-    public static void ensureSourceFolder(IProject project, String folder, IProgressMonitor monitor) throws CoreException {
+    public static void ensureSourceFolder(IProject project, String folder, IProgressMonitor monitor)
+            throws CoreException {
         ensureSourceFolders(project, ImmutableList.of(folder), monitor);
     }
 
@@ -750,13 +804,15 @@ public abstract class ProjectGenerationHelper {
      *
      * @param project
      *            an existing, open plug-in project
-     * @param requiredSourceFolders a list of strings representing project-relative paths for source folders
+     * @param requiredSourceFolders
+     *            a list of strings representing project-relative paths for source folders
      * @param monitor
      * @throws CoreException
      * @since 1.5
      */
-    public static void ensureSourceFolders(IProject project, List<String> requiredSourceFolders, IProgressMonitor monitor) throws CoreException {
-        Preconditions.checkArgument(project.exists() && project.isOpen() && (PDE.hasPluginNature(project)),
+    public static void ensureSourceFolders(IProject project, List<String> requiredSourceFolders,
+            IProgressMonitor monitor) throws CoreException {
+        Preconditions.checkArgument(project.exists() && project.isOpen() && (isPDEProject(project)),
                 INVALID_PROJECT_MESSAGE, project.getName());
         BundleContext context = null;
         ServiceReference<IBundleProjectService> ref = null;
@@ -765,7 +821,8 @@ public abstract class ProjectGenerationHelper {
             ref = context.getServiceReference(IBundleProjectService.class);
             final IBundleProjectService service = context.getService(ref);
             IBundleProjectDescription bundleDesc = service.getDescription(project);
-            bundleDesc.setBundleClasspath(getUpdatedBundleClasspathEntries(bundleDesc.getBundleClasspath(), requiredSourceFolders, service));
+            bundleDesc.setBundleClasspath(
+                    getUpdatedBundleClasspathEntries(bundleDesc.getBundleClasspath(), requiredSourceFolders, service));
             bundleDesc.apply(monitor);
         } finally {
             if (context != null && ref != null) {
@@ -782,10 +839,12 @@ public abstract class ProjectGenerationHelper {
      */
     private static IBundleClasspathEntry[] getUpdatedBundleClasspathEntries(final IBundleClasspathEntry[] oldClasspath,
             final List<String> requiredSourceFolders, final IBundleProjectService service) {
-        
-        final Collection<String> existingSourceEntries = (oldClasspath == null) ? new ArrayList<>() : getExistingSourceEntries(oldClasspath);
-        
-        Collection<String> missingSourceFolders = Collections2.filter(requiredSourceFolders, entry -> !existingSourceEntries.contains(entry));
+
+        final Collection<String> existingSourceEntries = (oldClasspath == null) ? new ArrayList<>()
+                : getExistingSourceEntries(oldClasspath);
+
+        Collection<String> missingSourceFolders = Collections2.filter(requiredSourceFolders,
+                entry -> !existingSourceEntries.contains(entry));
         Collection<IBundleClasspathEntry> newClasspathEntries = Collections2.transform(missingSourceFolders,
                 input -> service.newBundleClasspathEntry(new Path(input), null, null));
 
@@ -793,12 +852,11 @@ public abstract class ProjectGenerationHelper {
         modifiedClasspathEntries.addAll(newClasspathEntries);
         return modifiedClasspathEntries.toArray(new IBundleClasspathEntry[modifiedClasspathEntries.size()]);
     }
-    
+
     private static Collection<String> getExistingSourceEntries(final IBundleClasspathEntry[] oldClasspath) {
         Collection<IBundleClasspathEntry> classPathSourceList = Collections2.filter(Lists.newArrayList(oldClasspath),
                 entry -> entry.getSourcePath() != null && !entry.getSourcePath().isEmpty());
-        return Collections2.transform(classPathSourceList,
-                entry -> entry.getSourcePath().toString());
+        return Collections2.transform(classPathSourceList, entry -> entry.getSourcePath().toString());
     }
 
     public static String getBundleSymbolicName(IProject project) {
