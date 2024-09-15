@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.pde.internal.core.natures.PDE;
+import org.eclipse.viatra.query.tooling.core.project.ProjectGenerationHelper;
 import org.eclipse.viatra.query.tooling.core.project.ViatraQueryNature;
 import org.eclipse.viatra.query.tooling.ui.migrator.MigratorConstants;
 import org.eclipse.xtext.ui.XtextProjectHelper;
@@ -26,7 +26,6 @@ import org.eclipse.xtext.ui.XtextProjectHelper;
  * @author Zoltan Ujhelyi
  *
  */
-@SuppressWarnings("restriction")
 public class QueryProjectVersionTester extends PropertyTester {
 
     private static final String VERSION_TESTER = "outdated";
@@ -71,7 +70,7 @@ public class QueryProjectVersionTester extends PropertyTester {
                     return project.findMember(MigratorConstants.GLOBAL_EIQ_PATH) != null
                        || hasIncorrectBuildCommandOrdering(project) || hasLog4jDependency(project);
                } else {
-                   return project.hasNature(PDE.PLUGIN_NATURE);
+                   return ProjectGenerationHelper.isOpenPDEProject(project);
                }
             }
         } catch (Exception e) {
