@@ -54,14 +54,14 @@ class DependencyTest extends AbstractWorkbenchTest {
     @Test
     def void ensureSelfDependency() {
         ProjectGenerationHelper.ensureBundleDependencies(project, Collections.singletonList(testProjectName))
-        assertFalse(project.dependencies.map[it.name].contains(testProjectName))
+        assertFalse(project.dependencies.map[it.getName()].contains(testProjectName))
     }
     
     @Test
     def void ensureDependency() {
         val projectName = "org.eclipse.emf"
         ProjectGenerationHelper.ensureBundleDependencies(project, Collections.singletonList(projectName))
-        assertTrue(project.dependencies.map[it.name].contains(projectName))
+        assertTrue(project.dependencies.map[it.getName()].contains(projectName))
     }
     
     private def getDependencies(IProject project) {
