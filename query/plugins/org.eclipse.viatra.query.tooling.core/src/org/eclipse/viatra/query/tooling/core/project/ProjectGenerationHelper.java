@@ -10,8 +10,6 @@
 package org.eclipse.viatra.query.tooling.core.project;
 
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,7 +42,6 @@ import org.eclipse.pde.core.project.IPackageImportDescription;
 import org.eclipse.pde.core.project.IRequiredBundleDescription;
 import org.eclipse.pde.internal.core.PDECore;
 import org.eclipse.viatra.query.runtime.ViatraQueryRuntimePlugin;
-import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.util.Preconditions;
 import org.eclipse.viatra.query.tooling.core.generator.ExtensionData;
 import org.eclipse.viatra.query.tooling.core.generator.ViatraQueryGeneratorPlugin;
@@ -71,6 +68,9 @@ public abstract class ProjectGenerationHelper {
 
     private static final String INVALID_PROJECT_MESSAGE = "Invalid project %s. Only existing, open plug-in projects are supported by the generator.";
     private static final String UTF8_ENCODING = "UTF-8";
+    
+    // PDE does not have any non-internal API where this nature ID is defined
+    private static final String PDE_PLUGIN_NATURE = "org.eclipse.pde.PluginNature";
 
     /**
      * Contains the default bundle requirements for VIATRA in a format that can be loaded into
@@ -119,28 +119,8 @@ public abstract class ProjectGenerationHelper {
         }
     }
 
-    private static boolean isPDEProject(IProject project) {
-        /* 
-         * In SimRel 2024-09 the PDE#hasPluginNature call was moved to
-         * PluginProject#isPluginProject, but this is incompatible with 2022-06
-         * TODO Rreplace this with a direct method call after minimum requirements are updated
-         */
-        try {
-            Method checkMethod;
-
-            try {
-                final Class<?> pluginProjectClass = Class
-                        .forName("org.eclipse.pde.internal.core.natures.PluginProject");
-                checkMethod = pluginProjectClass.getMethod("isPluginProject", IProject.class);
-            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
-                final Class<?> pdeClass = Class.forName("org.eclipse.pde.internal.core.natures.PDE");
-                checkMethod = pdeClass.getMethod("hasPluginNature", IProject.class);
-            }
-
-            return (Boolean) checkMethod.invoke(checkMethod, project);
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            throw new ViatraQueryException("Unsupported PDE version", "Erroneous installation, required PDE method cannot be called", e); 
-        }
+    private static boolean isPDEProject(IProject project) throws CoreException {
+        return project.hasNature(PDE_PLUGIN_NATURE);
     }
 
     /**
@@ -149,7 +129,14 @@ public abstract class ProjectGenerationHelper {
      * @param project
      */
     public static boolean isOpenPDEProject(IProject project) {
-        return project.exists() && project.isOpen() && (isPDEProject(project));
+        try {
+            return project.exists() && project.isOpen() && isPDEProject(project);
+        } catch (CoreException e) {
+         // Should not happen (the exists and isOpen checks should catch most errors),
+            // but if for any reason the PDE nature cannot be identified consider the 
+            // project incorrect
+            return false;
+        }
     }
 
     /**
