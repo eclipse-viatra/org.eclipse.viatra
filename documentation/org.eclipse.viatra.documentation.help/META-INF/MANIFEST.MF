@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: VIATRA Documentation
 Bundle-SymbolicName: org.eclipse.viatra.documentation.help;singleton:=true
-Bundle-Version: 2.9.0.qualifier
+Bundle-Version: 2.9.1.qualifier
 Require-Bundle: org.eclipse.help
 Bundle-Vendor: Eclipse VIATRA Project
 Automatic-Module-Name: org.eclipse.viatra.documentation.help
