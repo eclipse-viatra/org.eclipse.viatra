@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.viatra.query.patternlanguage.emf.ui.EMFPatternLanguageUIPlugin;
 import org.eclipse.viatra.query.tooling.core.project.ProjectGenerationHelper;
 import org.eclipse.viatra.query.tooling.core.project.ViatraQueryNature;
@@ -48,7 +47,6 @@ import com.google.common.collect.Lists;
  * @author Zoltan Ujhelyi
  *
  */
-@SuppressWarnings("restriction")
 public class NatureUpdaterJob extends Job {
 
     private final IProject project;
@@ -188,7 +186,7 @@ public class NatureUpdaterJob extends Job {
             removeGlobalEiq(project);
             renamePatternDefinitionFiles(project);
             
-            if (PDE.hasPluginNature(project)) {
+            if (ProjectGenerationHelper.isOpenPDEProject(project)) {
                 ProjectGenerationHelper.ensureSourceFolder(project,
                         outputConfigurationProvider.getOutputConfigurations(), monitor);
                 ProjectGenerationHelper.ensureSingletonDeclaration(project);

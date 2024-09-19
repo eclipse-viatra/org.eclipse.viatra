@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.viatra.query.patternlanguage.emf.ui.builder.configuration.EMFPatternLanguageBuilderPreferenceAccess;
 import org.eclipse.viatra.query.tooling.core.generator.ExtensionData;
 import org.eclipse.viatra.query.tooling.core.project.ProjectGenerationHelper;
@@ -94,11 +93,10 @@ public class EnsurePluginSupport {
      * @param monitor
      * @throws CoreException
      */
-    @SuppressWarnings("restriction")
     public void ensure(IProject modelProject, IProgressMonitor monitor) {
         // normal code generation done, extensions, packages ready to add to the plug-ins
         try {
-            if (PDE.hasPluginNature(modelProject)) {
+            if (ProjectGenerationHelper.isOpenPDEProject(modelProject)) {
                 internalEnsure(modelProject, monitor);
             } else {
                 logger.info(String.format("Project %s is not a plug-in project, metadata has to be managed manually.", modelProject.getName()));
