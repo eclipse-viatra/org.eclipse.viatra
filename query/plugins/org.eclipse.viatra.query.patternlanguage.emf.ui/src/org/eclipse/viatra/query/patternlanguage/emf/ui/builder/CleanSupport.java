@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.viatra.query.patternlanguage.emf.helper.PatternLanguageHelper;
 import org.eclipse.viatra.query.patternlanguage.emf.ui.builder.configuration.EMFPatternLanguageBuilderPreferenceAccess;
 import org.eclipse.viatra.query.patternlanguage.emf.jvmmodel.EMFPatternLanguageJvmModelInferrerUtil;
@@ -100,7 +99,7 @@ public class CleanSupport {
         // clean current model project
         List<Pair<String, String>> removableExtensions = new ArrayList<>();
         removableExtensions.addAll(GenerateQuerySpecificationExtension.getRemovableExtensionIdentifiers());
-        if (builderPreferenceAccess.isExtensionGenerationEnabled(modelProject)  && PDE.hasPluginNature(modelProject)) {
+        if (builderPreferenceAccess.isExtensionGenerationEnabled(modelProject)  && ProjectGenerationHelper.isOpenPDEProject(modelProject)) {
             ProjectGenerationHelper.removeAllExtension(modelProject, removableExtensions);
         }
     }
@@ -131,7 +130,7 @@ public class CleanSupport {
             for (OutputConfiguration config : fsa.getOutputConfigurations().values()) {
                 cleanFragmentFolder(fragmentProject, config);
             }
-            if (PDE.hasPluginNature(fragmentProject) && builderPreferenceAccess.isExtensionGenerationEnabled(modelProject)) {
+            if (ProjectGenerationHelper.isOpenPDEProject(fragmentProject) && builderPreferenceAccess.isExtensionGenerationEnabled(modelProject)) {
             ProjectGenerationHelper.removeAllExtension(fragmentProject, fragment.getRemovableExtensions());
             }
             // removing all fragment-related markers

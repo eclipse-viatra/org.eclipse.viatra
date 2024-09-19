@@ -18,7 +18,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.pde.internal.core.natures.PDE;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Annotation;
 import org.eclipse.viatra.query.patternlanguage.emf.vql.Pattern;
 import org.eclipse.viatra.query.tooling.core.project.ProjectGenerationHelper;
@@ -93,10 +92,9 @@ public class ExtensionBasedGenerationFragmentProvider implements IGenerationFrag
         return workspaceRoot.getProject(projectName);
     }
 
-    @SuppressWarnings("restriction")
     private String getFragmentProjectName(IProject base, IGenerationFragment fragment) {
         String name = "";
-        if (PDE.hasPluginNature(base)) {
+        if (ProjectGenerationHelper.isOpenPDEProject(base)) {
             name = ProjectGenerationHelper.getBundleSymbolicName(base);
         } else {
             base.getName();
