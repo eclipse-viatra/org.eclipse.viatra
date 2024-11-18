@@ -17,8 +17,8 @@
             name: 'INCUBATION_VERSION'
 	}
 	options {
-		buildDiscarder(logRotator(numToKeepStr: '5'))
-        timeout(120 /*minutes*/) 
+		buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '1'))
+        	timeout(120 /*minutes*/) 
 	}
 	environment {
 	   VERSION_MAVEN_PARAMETER = " ${params.RELEASE_VERSION ? '-Drepository.version=' + params.RELEASE_VERSION : ''} "
