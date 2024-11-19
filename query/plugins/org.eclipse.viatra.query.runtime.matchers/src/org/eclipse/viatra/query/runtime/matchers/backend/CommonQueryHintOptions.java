@@ -8,6 +8,7 @@
  *******************************************************************************/
 package org.eclipse.viatra.query.runtime.matchers.backend;
 
+import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.ExternalQueryPlanProvider;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.IRewriterTraceCollector;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.NopTraceCollector;
 
@@ -27,6 +28,15 @@ public final class CommonQueryHintOptions {
      */
     public static final QueryHintOption<IRewriterTraceCollector> normalizationTraceCollector = 
             hintOption("normalizationTraceCollector", NopTraceCollector.INSTANCE);
+    
+    /**
+     * This hint allows to plug in an external query planner.
+     * 
+     * @since 2.8
+     */
+    public static final QueryHintOption<ExternalQueryPlanProvider> externalQueryPlanProvider = 
+            hintOption("externalQueryPlanProvider", null);
+
     
     // internal helper for conciseness
     private static <T> QueryHintOption<T> hintOption(String hintKeyLocalName, T defaultValue) {
