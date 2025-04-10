@@ -82,17 +82,6 @@ public class PQueryFlattener extends PDisjunctionRewriter {
 
     @Override
     public PDisjunction rewrite(PDisjunction disjunction) {
-        PQuery query = disjunction.getQuery();
-
-        // Check for recursion
-        Set<PQuery> allReferredQueries = disjunction.getAllReferredQueries();
-        for (PQuery referredQuery : allReferredQueries) {
-            if (referredQuery.getAllReferredQueries().contains(referredQuery)) {
-                throw new RewriterException("Recursive queries are not supported, can't flatten query named \"{1}\"",
-                        new String[] { query.getFullyQualifiedName() }, "Unsupported recursive query", query);
-            }
-        }
-
         return this.doFlatten(disjunction);
     }
 
@@ -118,8 +107,18 @@ public class PQueryFlattener extends PDisjunctionRewriter {
                     if (constraint instanceof PositivePatternCall) {
                         PositivePatternCall positivePatternCall = (PositivePatternCall) constraint;
                         if (flattenCallPredicate.shouldFlatten(positivePatternCall)) {
+                            PQuery referredQuery = positivePatternCall.getReferredQuery();
+
+                            // Check for recursion - cannot flatten recursive queries
+                            if (referredQuery.isRecursive()) {
+                                throw new RewriterException(
+                                    "Recursive queries are not supported (consider using the incremental backend instead), can't flatten query \"{1}\" due to recursion at \"{2}\"",
+                                    new String[] { rootDisjunction.getQuery().getFullyQualifiedName(), referredQuery.getFullyQualifiedName() }, 
+                                    "Unsupported recursion in referred query", rootDisjunction.getQuery());
+                            }
+                            
                             // If the above preconditions meet, the call should be flattened
-                            PDisjunction calledDisjunction = positivePatternCall.getReferredQuery().getDisjunctBodies();
+                            PDisjunction calledDisjunction = referredQuery.getDisjunctBodies();
                             stack.push(calledDisjunction);
                             list.add(calledDisjunction);
                         }

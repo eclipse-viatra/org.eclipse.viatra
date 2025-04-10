@@ -146,6 +146,12 @@ public abstract class BasePQuery implements PQuery {
 	    ensureInitialized();
 	    return canonicalDisjunction.getAllReferredQueries();
 	}
+	
+	@Override
+	public boolean isRecursive() {
+        ensureInitialized();
+        return canonicalDisjunction.isRecursive();
+	}
 
 
 	@Override
