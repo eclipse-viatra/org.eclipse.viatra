@@ -25,6 +25,7 @@ import org.eclipse.viatra.query.runtime.localsearch.planner.compiler.IOperationC
 import org.eclipse.viatra.query.runtime.matchers.backend.ResultProviderRequestor;
 import org.eclipse.viatra.query.runtime.matchers.context.IQueryBackendContext;
 import org.eclipse.viatra.query.runtime.matchers.context.IQueryRuntimeContext;
+import org.eclipse.viatra.query.runtime.matchers.planning.QueryProcessingException;
 import org.eclipse.viatra.query.runtime.matchers.planning.SubPlan;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PBody;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
@@ -36,6 +37,7 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PBodyNormaliz
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionRewriter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionRewriterCacher;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PQueryFlattener;
+import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.RewriterException;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.SurrogateQueryRewriter;
 
 /**
@@ -108,6 +110,14 @@ public class LocalSearchPlanner implements ILocalSearchPlanner {
      */
     @Override
     public Collection<SearchPlanForBody> plan(PQuery querySpec, Set<PParameter> boundParameters) {
+        // 0. Precondition check
+        if (querySpec.isRecursive()) {
+            throw new QueryProcessingException(
+                "Recursive queries are not supported (consider using the incremental backend instead), can't flatten query \"{1}\"",
+                    new String[] { querySpec.getFullyQualifiedName() }, "Unsupported recursive query", querySpec);
+        }
+
+        
         // 1. Preparation
         preprocessor.setTraceCollector(configuration.getTraceCollector());
         Set<PBody> normalizedBodies = preprocessor.rewrite(querySpec.getDisjunctBodies()).getBodies();
