@@ -11,6 +11,7 @@ package org.eclipse.viatra.query.runtime.localsearch.matcher.integration;
 import org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint;
 import org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint.BackendRequirement;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.PositivePatternCall;
+import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PQuery;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.IFlattenCallPredicate;
 
 /**
@@ -25,19 +26,27 @@ public class DontFlattenIncrementalPredicate implements IFlattenCallPredicate {
 
     @Override
     public boolean shouldFlatten(PositivePatternCall positivePatternCall) {
-        QueryEvaluationHint evaluationHints = positivePatternCall.getReferredQuery().getEvaluationHints();
-        if (evaluationHints == null) return true;
+        PQuery referredQuery = positivePatternCall.getReferredQuery();
+        return !isIncrementalRequired(referredQuery);
+    }
+
+    /**
+     * @since 2.10
+     */
+    public static boolean isIncrementalRequired(PQuery referredQuery) {
+        QueryEvaluationHint evaluationHints = referredQuery.getEvaluationHints();
+        if (evaluationHints == null) return false;
         
         BackendRequirement backendRequirementType = evaluationHints.getQueryBackendRequirementType();
         switch(backendRequirementType) {
         case DEFAULT_CACHING:
-            return false;
+            return true;
         case SPECIFIC:
-            return !evaluationHints.getQueryBackendFactory().isCaching();
+            return evaluationHints.getQueryBackendFactory().isCaching();
         case UNSPECIFIED:
         case DEFAULT_SEARCH:
         default:
-            return true;
+            return false;
         }
     }
 

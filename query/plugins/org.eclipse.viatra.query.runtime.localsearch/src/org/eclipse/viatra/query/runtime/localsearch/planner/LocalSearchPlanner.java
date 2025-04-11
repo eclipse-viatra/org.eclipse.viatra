@@ -113,7 +113,7 @@ public class LocalSearchPlanner implements ILocalSearchPlanner {
         // 0. Precondition check
         if (querySpec.isRecursive()) {
             throw new QueryProcessingException(
-                "Recursive queries are not supported (consider using the incremental backend instead), can't flatten query \"{1}\"",
+                "Recursive queries are not supported (consider using the incremental backend instead), can't produce plan for query \"{1}\"",
                     new String[] { querySpec.getFullyQualifiedName() }, "Unsupported recursive query", querySpec);
         }
 
