@@ -149,8 +149,8 @@ public abstract class BasePQuery implements PQuery {
 	
 	@Override
 	public boolean isRecursive() {
-        ensureInitialized();
-        return canonicalDisjunction.isRecursive();
+	    ensureInitialized();
+	    return canonicalDisjunction.isRecursive();
 	}
 
 

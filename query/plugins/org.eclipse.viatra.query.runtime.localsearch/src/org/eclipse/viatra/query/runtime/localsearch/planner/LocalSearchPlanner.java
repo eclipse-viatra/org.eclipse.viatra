@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHintOptions;
 import org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHints;
 import org.eclipse.viatra.query.runtime.localsearch.operations.ISearchOperation;
 import org.eclipse.viatra.query.runtime.localsearch.plan.SearchPlanForBody;
@@ -37,7 +36,6 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PBodyNormaliz
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionRewriter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionRewriterCacher;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PQueryFlattener;
-import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.RewriterException;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.SurrogateQueryRewriter;
 
 /**
