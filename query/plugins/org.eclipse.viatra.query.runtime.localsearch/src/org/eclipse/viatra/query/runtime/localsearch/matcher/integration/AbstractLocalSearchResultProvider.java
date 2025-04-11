@@ -263,9 +263,7 @@ public abstract class AbstractLocalSearchResultProvider implements IQueryResultP
                             queue.add(dep);
                         }
                     } else {
-                        if (!DontFlattenIncrementalPredicate.isIncrementalRequired(call.getReferredQuery())) {                            
-                            result.add(call);
-                        }
+                        result.add(call);
                     }
                 }
             }
