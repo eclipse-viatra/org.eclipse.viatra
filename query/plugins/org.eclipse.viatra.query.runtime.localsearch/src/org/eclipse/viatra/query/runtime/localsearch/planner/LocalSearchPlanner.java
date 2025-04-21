@@ -37,6 +37,7 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionR
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionRewriterCacher;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PQueryFlattener;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.SurrogateQueryRewriter;
+import org.eclipse.viatra.query.runtime.matchers.util.Preconditions;
 
 /**
  * 
@@ -109,12 +110,11 @@ public class LocalSearchPlanner implements ILocalSearchPlanner {
     @Override
     public Collection<SearchPlanForBody> plan(PQuery querySpec, Set<PParameter> boundParameters) {
         // 0. Precondition check
-        if (querySpec.isRecursive()) {
-            throw new QueryProcessingException(
-                "Recursive queries are not supported (consider using the incremental backend instead), can't produce plan for query \"{1}\"",
-                    new String[] { querySpec.getFullyQualifiedName() }, "Unsupported recursive query", querySpec);
-        }
-
+        Preconditions.checkState(
+            !querySpec.isRecursive(), 
+            "Recursive queries are not supported (consider using the incremental backend instead), can't produce plan for query \"%s\"",
+            querySpec.getFullyQualifiedName()
+        );
         
         // 1. Preparation
         preprocessor.setTraceCollector(configuration.getTraceCollector());
