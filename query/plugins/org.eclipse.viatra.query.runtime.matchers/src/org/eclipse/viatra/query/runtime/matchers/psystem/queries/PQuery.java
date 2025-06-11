@@ -87,6 +87,17 @@ public interface PQuery extends PQueryHeader, PTraceable {
      * @return a non-null, but possibly empty list of query definitions
      */
     Set<PQuery> getAllReferredQueries();
+    
+    /**
+     * Determines whether the query transitively refers to itself. 
+     * Note that even if false is returned, 
+     *  the query may refer to another query that is recursive, but not mutually recursive with this query.
+     * 
+     * @return true if the query transitively calls itself.
+     * 
+     *  @since 2.10
+     */
+    public boolean isRecursive();
 
     /**
      * Returns the initialization status of the definition

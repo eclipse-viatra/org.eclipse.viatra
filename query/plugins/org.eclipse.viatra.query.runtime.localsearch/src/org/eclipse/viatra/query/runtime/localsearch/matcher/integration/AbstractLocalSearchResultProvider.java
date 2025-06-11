@@ -206,6 +206,13 @@ public abstract class AbstractLocalSearchResultProvider implements IQueryResultP
     }
 
     protected void prepareDirectDependencies() {
+        // Precondition check
+        if (query.isRecursive()) {
+            throw new QueryProcessingException(
+                "Recursive queries are not supported (consider using the incremental backend instead), can't prepare query \"{1}\"",
+                    new String[] { query.getFullyQualifiedName() }, "Unsupported recursive query", query);
+        }
+        
         // Do not prepare for any adornment at this point
         IAdornmentProvider adornmentProvider = input -> Collections.emptySet();
         QueryEvaluationHint adornmentHint = IAdornmentProvider.toHint(adornmentProvider);

@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHintOptions;
 import org.eclipse.viatra.query.runtime.localsearch.matcher.integration.LocalSearchHints;
 import org.eclipse.viatra.query.runtime.localsearch.operations.ISearchOperation;
 import org.eclipse.viatra.query.runtime.localsearch.plan.SearchPlanForBody;
@@ -25,6 +24,7 @@ import org.eclipse.viatra.query.runtime.localsearch.planner.compiler.IOperationC
 import org.eclipse.viatra.query.runtime.matchers.backend.ResultProviderRequestor;
 import org.eclipse.viatra.query.runtime.matchers.context.IQueryBackendContext;
 import org.eclipse.viatra.query.runtime.matchers.context.IQueryRuntimeContext;
+import org.eclipse.viatra.query.runtime.matchers.planning.QueryProcessingException;
 import org.eclipse.viatra.query.runtime.matchers.planning.SubPlan;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PBody;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
@@ -37,6 +37,7 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionR
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PDisjunctionRewriterCacher;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.PQueryFlattener;
 import org.eclipse.viatra.query.runtime.matchers.psystem.rewriters.SurrogateQueryRewriter;
+import org.eclipse.viatra.query.runtime.matchers.util.Preconditions;
 
 /**
  * 
@@ -108,6 +109,13 @@ public class LocalSearchPlanner implements ILocalSearchPlanner {
      */
     @Override
     public Collection<SearchPlanForBody> plan(PQuery querySpec, Set<PParameter> boundParameters) {
+        // 0. Precondition check
+        Preconditions.checkState(
+            !querySpec.isRecursive(), 
+            "Recursive queries are not supported (consider using the incremental backend instead), can't produce plan for query \"%s\"",
+            querySpec.getFullyQualifiedName()
+        );
+        
         // 1. Preparation
         preprocessor.setTraceCollector(configuration.getTraceCollector());
         Set<PBody> normalizedBodies = preprocessor.rewrite(querySpec.getDisjunctBodies()).getBodies();
