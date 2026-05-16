@@ -156,7 +156,7 @@
     <requirement
         name="org.eclipse.m2e.feature.feature.group"/>
     <repository
-        url="https://download.eclipse.org/sirius/updates/releases/6.6.0/2020-09/"/>
+        url="https://download.eclipse.org/sirius/updates/releases/7.5.0/2025-09"/>
     <repository
         url="https://eclipse-uc.sonarlint.org"/>
     <description>Install the tools needed in the IDE to work with the source code for ${scope.project.label}</description>
@@ -643,120 +643,8 @@
               url="https://download.eclipse.org/releases/2025-09"/>
           <repository
               url="https://download.eclipse.org/cbi/updates/license"/>
-        </repositoryList>
-      </targlet>
-      <targlet
-          name="Sirius"
-          activeRepositoryList="${eclipse.target.platform}">
-        <requirement
-            name="org.eclipse.sirius.runtime.ide.ui.source.feature.group"/>
-        <requirement
-            name="org.eclipse.sirius.runtime.aql.source.feature.group"/>
-        <requirement
-            name="org.eclipse.sirius.properties.feature.source.feature.group"/>
-        <requirement
-            name="org.eclipse.sirius.specifier.properties.feature.source.feature.group"/>
-        <requirement
-            name="org.eclipse.sirius.runtime.ide.xtext.source.feature.group"/>
-        <requirement
-            name="org.eclipse.sirius.diagram.elk.feature.feature.group"/>
-        <repositoryList
-            name="2022-06">
           <repository
-              url="https://download.eclipse.org/releases/2022-06"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.0.0/2021-06/"/>
-        </repositoryList>
-        <repositoryList
-            name="2022-09">
-          <repository
-              url="https://download.eclipse.org/releases/2022-09"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.0.4/2021-06/"/>
-        </repositoryList>
-        <repositoryList
-            name="2022-12">
-          <repository
-              url="https://download.eclipse.org/releases/2022-12"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.0.6/2021-06/"/>
-        </repositoryList>
-        <repositoryList
-            name="2023-03">
-          <repository
-              url="https://download.eclipse.org/releases/2023-03"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.0.7/2021-06/"/>
-        </repositoryList>
-        <repositoryList
-            name="2023-06">
-          <repository
-              url="https://download.eclipse.org/releases/2023-06"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.2.0/2023-03/"/>
-        </repositoryList>
-        <repositoryList
-            name="2023-09">
-          <repository
-              url="https://download.eclipse.org/releases/2023-09"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
-        </repositoryList>
-        <repositoryList
-            name="2023-12">
-          <repository
-              url="https://download.eclipse.org/releases/2023-12"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.3.0/2023-03/"/>
-        </repositoryList>
-        <repositoryList
-            name="2024-03">
-          <repository
-              url="https://download.eclipse.org/releases/2024-03"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
-        </repositoryList>
-        <repositoryList
-            name="2024-06">
-          <repository
-              url="https://download.eclipse.org/releases/2024-06"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
-        </repositoryList>
-        <repositoryList
-            name="2024-09">
-          <repository
-              url="https://download.eclipse.org/releases/2024-09"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
-        </repositoryList>
-        <repositoryList
-            name="2024-12">
-          <repository
-              url="https://download.eclipse.org/releases/2024-12"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.4.4/2023-03/"/>
-        </repositoryList>
-        <repositoryList
-            name="2025-03">
-          <repository
-              url="https://download.eclipse.org/releases/2025-03"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.4.6/2023-03/"/>
-        </repositoryList>
-        <repositoryList
-            name="2025-06">
-          <repository
-              url="https://download.eclipse.org/releases/2025-06"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.4.10/2023-03/"/>
-        </repositoryList>
-        <repositoryList
-            name="2025-09">
-          <repository
-              url="https://download.eclipse.org/releases/2025-09"/>
-          <repository
-              url="https://download.eclipse.org/sirius/updates/releases/7.4.10/2023-03/"/>
+              url="http://download.eclipse.org/collections/11.1.0/repository"/>
         </repositoryList>
       </targlet>
       <targlet
@@ -766,136 +654,144 @@
             name="de.itemis.xtext.antlr.feature.feature.group"/>
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"
-            versionRange="[2.35.0,3.0.0)"/>
+            versionRange="[2.37.0,3.0.0)"/>
         <repositoryList
             name="2022-06">
           <repository
               url="https://download.eclipse.org/releases/2022-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2022-09">
           <repository
               url="https://download.eclipse.org/releases/2022-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2022-12">
           <repository
               url="https://download.eclipse.org/releases/2022-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2023-03">
           <repository
               url="https://download.eclipse.org/releases/2022-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2023-06">
           <repository
               url="https://download.eclipse.org/releases/2022-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2023-09">
           <repository
               url="https://download.eclipse.org/releases/2023-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2023-12">
           <repository
               url="https://download.eclipse.org/releases/2023-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2024-03">
           <repository
               url="https://download.eclipse.org/releases/2024-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
-              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
           <repository
-              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.18.0"/>
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2024-06">
           <repository
               url="https://download.eclipse.org/releases/2024-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2024-09">
           <repository
               url="https://download.eclipse.org/releases/2024-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
+          <repository
+              url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.37.0"/>
+          <repository
+              url="https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.20.0"/>
         </repositoryList>
         <repositoryList
             name="2024-12">
           <repository
               url="https://download.eclipse.org/releases/2024-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2025-03">
           <repository
               url="https://download.eclipse.org/releases/2025-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2025-06">
           <repository
               url="https://download.eclipse.org/releases/2025-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2025-09">
           <repository
               url="https://download.eclipse.org/releases/2025-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
       </targlet>
       <targlet
@@ -1035,6 +931,15 @@
           <repository
               url="https://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
         </repositoryList>
+        <repositoryList
+            name="2025-09">
+          <repository
+              url="https://download.eclipse.org/releases/2025-09"/>
+          <repository
+              url="https://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="https://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
       </targlet>
       <targlet
           name="CPS metamodels"
@@ -1046,6 +951,121 @@
             name="">
           <repository
               url="https://download.eclipse.org/viatra/examples/cps/2.0.0.201801280453"/>
+        </repositoryList>
+      </targlet>
+      <targlet
+          name="Sirius"
+          activeRepositoryList="${eclipse.target.platform}">
+        <requirement
+            name="org.eclipse.sirius.runtime.ide.ui.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.runtime.aql.source.feature.group"
+            optional="true"/>
+        <requirement
+            name="org.eclipse.sirius.properties.feature.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.specifier.properties.feature.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.runtime.ide.xtext.source.feature.group"/>
+        <requirement
+            name="org.eclipse.sirius.diagram.elk.feature.feature.group"/>
+        <repositoryList
+            name="2022-06">
+          <repository
+              url="https://download.eclipse.org/releases/2022-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.0/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-09">
+          <repository
+              url="https://download.eclipse.org/releases/2022-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.4/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2022-12">
+          <repository
+              url="https://download.eclipse.org/releases/2022-12"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.6/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-03">
+          <repository
+              url="https://download.eclipse.org/releases/2023-03"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.0.7/2021-06/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-06">
+          <repository
+              url="https://download.eclipse.org/releases/2023-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.2.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-09">
+          <repository
+              url="https://download.eclipse.org/releases/2023-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2023-12">
+          <repository
+              url="https://download.eclipse.org/releases/2023-12"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.3.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-03">
+          <repository
+              url="https://download.eclipse.org/releases/2024-03"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.2.1/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-06">
+          <repository
+              url="https://download.eclipse.org/releases/2024-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-09">
+          <repository
+              url="https://download.eclipse.org/releases/2024-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.0/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2024-12">
+          <repository
+              url="https://download.eclipse.org/releases/2024-12"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.4/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2025-03">
+          <repository
+              url="https://download.eclipse.org/releases/2025-03"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.6/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2025-06">
+          <repository
+              url="https://download.eclipse.org/releases/2025-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.10/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2025-09">
+          <repository
+              url="https://download.eclipse.org/releases/2025-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.10/2023-03/"/>
         </repositoryList>
       </targlet>
     </setupTask>
@@ -1357,7 +1377,7 @@
           <repository
               url="https://download.eclipse.org/releases/2019-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.20.0"/>
           <repository
@@ -1368,7 +1388,7 @@
           <repository
               url="https://download.eclipse.org/releases/2019-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.20.0"/>
           <repository
@@ -1379,126 +1399,126 @@
           <repository
               url="https://download.eclipse.org/releases/2019-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2020-03">
           <repository
               url="https://download.eclipse.org/releases/2020-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2020-06">
           <repository
               url="https://download.eclipse.org/releases/2020-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2020-09">
           <repository
               url="https://download.eclipse.org/releases/2020-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2020-12">
           <repository
               url="https://download.eclipse.org/releases/2020-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2021-03">
           <repository
               url="https://download.eclipse.org/releases/2021-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2021-06">
           <repository
               url="https://download.eclipse.org/releases/2021-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2021-09">
           <repository
               url="https://download.eclipse.org/releases/2021-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2021-12">
           <repository
               url="https://download.eclipse.org/releases/2021-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2022-03">
           <repository
               url="https://download.eclipse.org/releases/2022-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2022-06">
           <repository
               url="https://download.eclipse.org/releases/2022-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2022-09">
           <repository
               url="https://download.eclipse.org/releases/2022-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2022-12">
           <repository
               url="https://download.eclipse.org/releases/2022-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2023-03">
           <repository
               url="https://download.eclipse.org/releases/2022-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2023-06">
           <repository
               url="https://download.eclipse.org/releases/2022-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2023-09">
           <repository
               url="https://download.eclipse.org/releases/2023-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2023-12">
           <repository
               url="https://download.eclipse.org/releases/2023-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2024-03">
           <repository
               url="https://download.eclipse.org/releases/2024-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
       </targlet>
       <targlet
@@ -2005,7 +2025,7 @@
           <repository
               url="https://download.eclipse.org/releases/2022-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
@@ -2016,7 +2036,7 @@
           <repository
               url="https://download.eclipse.org/releases/2022-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
@@ -2027,7 +2047,7 @@
           <repository
               url="https://download.eclipse.org/releases/2022-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
@@ -2038,7 +2058,7 @@
           <repository
               url="https://download.eclipse.org/releases/2022-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
@@ -2049,7 +2069,7 @@
           <repository
               url="https://download.eclipse.org/releases/2022-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
@@ -2060,7 +2080,7 @@
           <repository
               url="https://download.eclipse.org/releases/2023-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
@@ -2071,7 +2091,7 @@
           <repository
               url="https://download.eclipse.org/releases/2023-12"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
@@ -2082,7 +2102,7 @@
           <repository
               url="https://download.eclipse.org/releases/2024-03"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
           <repository
               url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.35.0"/>
           <repository
@@ -2093,14 +2113,14 @@
           <repository
               url="https://download.eclipse.org/releases/2024-06"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
         <repositoryList
             name="2024-09">
           <repository
               url="https://download.eclipse.org/releases/2024-09"/>
           <repository
-              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/2.1.1/"/>
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
       </targlet>
       <targlet

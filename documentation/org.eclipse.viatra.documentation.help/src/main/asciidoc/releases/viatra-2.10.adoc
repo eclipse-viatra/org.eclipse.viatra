@@ -1,0 +1,18 @@
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+ifndef::rootdir[:rootdir: .]
+ifndef::imagesdir[:imagesdir: {rootdir}/../images]
+[[viatra-210]]
+
+= VIATRA 2.10
+
+Release date:: TBD
+More information:: https://projects.eclipse.org/projects/modeling.viatra/releases/2.10.0
+
+== Dependency updates
+
+To reduce maintenance efforts, the VIATRA project increased the minimum required versions of its dependencies. The most important ones are as follows:
+   * *Xtext 2.37*
+
+== New and Noteworthy
+
+In addition to behind-the-scenes work with the Github migration and dependency updates, VIATRA 2.9 also includes a few smaller features and bugfixes. In the following we mention a some of these.
