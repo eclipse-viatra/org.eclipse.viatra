@@ -5,7 +5,6 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.eclipse.viatra.parent.dse</artifactId>
     <name>VIATRA Design Space Exploration</name>
-    <url>http://eclipse.org/viatra</url>
     <packaging>pom</packaging>
     <modules>
 

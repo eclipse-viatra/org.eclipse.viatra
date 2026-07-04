@@ -268,7 +268,7 @@
 	</distributionManagement>
 	<scm>
 		<connection>${tycho.scmUrl}</connection>
-		<url>http://git.eclipse.org/c/viatra/org.eclipse.viatra.git/</url>
+		<url>https://github.com/eclipse-viatra/org.eclipse.viatra/issues/</url>
 	</scm>
 	<ciManagement>
 		<url>https://ci.eclipse.org/viatra/</url>

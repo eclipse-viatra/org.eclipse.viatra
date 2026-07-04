@@ -6,7 +6,6 @@
     <artifactId>org.eclipse.viatra.parent.incubation</artifactId>
     <name>VIATRA Eclipse Project (Incubation Features)</name>
     <version>0.30.0-SNAPSHOT</version>
-    <url>http://eclipse.org/viatra</url>
     <packaging>pom</packaging>
     <modules>
         <!-- Incubation modules to be published to a Maven repository -->
