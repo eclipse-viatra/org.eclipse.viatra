@@ -9,14 +9,14 @@
 package org.eclipse.viatra.integration.zest.viewer.internal;
 
 import org.eclipse.viatra.integration.zest.viewer.IGraphEdgeContentProvider;
-import org.eclipse.zest.core.viewers.internal.AbstractStructuredGraphViewer;
+import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.internal.AbstractStylingModelFactory;
 import org.eclipse.zest.core.widgets.Graph;
 
 @SuppressWarnings("restriction")
 public class GraphModelEdgeFactory extends AbstractStylingModelFactory {
 
-	public GraphModelEdgeFactory(AbstractStructuredGraphViewer viewer) {
+	public GraphModelEdgeFactory(GraphViewer viewer) {
 		super(viewer);
 		if (!(viewer.getContentProvider() instanceof IGraphEdgeContentProvider)) {
 			throw new IllegalArgumentException("Expected IGraphEdgeRelationshipContentProvider");
@@ -28,6 +28,7 @@ public class GraphModelEdgeFactory extends AbstractStylingModelFactory {
 		return model;
 	}
 
+	@Override
 	protected void doBuildGraph(Graph model) {
 		super.doBuildGraph(model);
 		Object[] nodes = getContentProvider().getElements(getViewer().getInput());
@@ -63,6 +64,7 @@ public class GraphModelEdgeFactory extends AbstractStylingModelFactory {
 		}
 	}
 
+	@Override
 	public void refresh(Graph graph, Object element) {
 		refresh(graph, element, false);
 	}
