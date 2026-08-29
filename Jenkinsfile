@@ -27,7 +27,7 @@
 	}
 	
 	tools {
-        maven 'apache-maven-3.9.6'
+        maven 'apache-maven-3-latest'
         jdk 'openjdk-jdk21-latest' // Java 11 is selected using Maven toolchains
     }
 
