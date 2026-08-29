@@ -435,7 +435,7 @@ class EMFPatternLanguageJvmModelInferrerUtil {
      * then removes all segment except the last one.
      */
     def realPatternName(String fqn) {
-        Splitter.on(".").split(fqn).last
+        Splitter.on(".").split(fqn).lastOrNull
     }
     
     def JvmType findInferredSpecification(Pattern pattern) {
