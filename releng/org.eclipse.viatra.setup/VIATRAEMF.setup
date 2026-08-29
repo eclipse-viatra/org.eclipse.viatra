@@ -646,6 +646,42 @@
           <repository
               url="http://download.eclipse.org/collections/11.1.0/repository"/>
         </repositoryList>
+        <repositoryList
+            name="2025-12">
+          <repository
+              url="https://download.eclipse.org/releases/2025-12"/>
+          <repository
+              url="https://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/collections/11.1.0/repository"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-03">
+          <repository
+              url="https://download.eclipse.org/releases/2026-03"/>
+          <repository
+              url="https://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/collections/11.1.0/repository"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-06">
+          <repository
+              url="https://download.eclipse.org/releases/2026-06"/>
+          <repository
+              url="https://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/collections/11.1.0/repository"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-09">
+          <repository
+              url="https://download.eclipse.org/releases/2026-09"/>
+          <repository
+              url="https://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="http://download.eclipse.org/collections/11.1.0/repository"/>
+        </repositoryList>
       </targlet>
       <targlet
           name="Xtext"
@@ -790,6 +826,34 @@
             name="2025-09">
           <repository
               url="https://download.eclipse.org/releases/2025-09"/>
+          <repository
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
+        </repositoryList>
+        <repositoryList
+            name="2025-12">
+          <repository
+              url="https://download.eclipse.org/releases/2025-12"/>
+          <repository
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-03">
+          <repository
+              url="https://download.eclipse.org/releases/2026-03"/>
+          <repository
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-06">
+          <repository
+              url="https://download.eclipse.org/releases/2026-06"/>
+          <repository
+              url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-09">
+          <repository
+              url="https://download.eclipse.org/releases/2026-09"/>
           <repository
               url="https://artifacts.itemis.cloud/repository/p2/xtext-updates/releases/2.1.1/"/>
         </repositoryList>
@@ -940,6 +1004,42 @@
           <repository
               url="https://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
         </repositoryList>
+        <repositoryList
+            name="2025-12">
+          <repository
+              url="https://download.eclipse.org/releases/2025-12"/>
+          <repository
+              url="https://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="https://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-03">
+          <repository
+              url="https://download.eclipse.org/releases/2026-03"/>
+          <repository
+              url="https://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="https://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-06">
+          <repository
+              url="https://download.eclipse.org/releases/2026-06"/>
+          <repository
+              url="https://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="https://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-09">
+          <repository
+              url="https://download.eclipse.org/releases/2026-09"/>
+          <repository
+              url="https://download.eclipse.org/cbi/updates/license"/>
+          <repository
+              url="https://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/"/>
+        </repositoryList>
       </targlet>
       <targlet
           name="CPS metamodels"
@@ -1066,6 +1166,34 @@
               url="https://download.eclipse.org/releases/2025-09"/>
           <repository
               url="https://download.eclipse.org/sirius/updates/releases/7.4.10/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2025-12">
+          <repository
+              url="https://download.eclipse.org/releases/2025-12"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.4.14/2023-03/"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-03">
+          <repository
+              url="https://download.eclipse.org/releases/2026-03"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.5.0/2025-09/"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-06">
+          <repository
+              url="https://download.eclipse.org/releases/2026-06"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.6.0/2025-09/"/>
+        </repositoryList>
+        <repositoryList
+            name="2026-09">
+          <repository
+              url="https://download.eclipse.org/releases/2026-09"/>
+          <repository
+              url="https://download.eclipse.org/sirius/updates/releases/7.6.0/2025-09/"/>
         </repositoryList>
       </targlet>
     </setupTask>

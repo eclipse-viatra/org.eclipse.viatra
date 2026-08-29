@@ -37,35 +37,23 @@
       <import feature="org.eclipse.jdt"/>
       <import feature="org.eclipse.pde"/>
       <import feature="org.eclipse.viatra.addon.viewers.runtime.zest.feature" version="2.6.0" match="compatible"/>
-      <import feature="org.eclipse.zest" version="1.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.zest" version="3.22.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="org.eclipse.viatra.query.tooling.debug"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.viatra.query.tooling.ui.retevis"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.viatra.query.tooling.localsearch.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.viatra.addon.viewers.tooling.ui.zest"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>

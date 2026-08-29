@@ -133,7 +133,7 @@ class PatternLanguageTypeRules {
            typeSystem.extractTypeDescriptor(constraint.sourceType)           
        }
        
-       var tailType = constraint.edgeTypes.last
+       var tailType = constraint.edgeTypes.lastOrNull
        val targetType = if (!typeSystem.isValidType(tailType)) {
            BottomTypeKey.INSTANCE
        } else {

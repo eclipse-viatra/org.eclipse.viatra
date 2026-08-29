@@ -8,10 +8,6 @@
  *******************************************************************************/
 package org.eclipse.viatra.integration.zest.viewer;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.GestureEvent;
@@ -22,14 +18,8 @@ import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.IGraphContentProvider;
 import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 import org.eclipse.zest.core.viewers.IGraphEntityRelationshipContentProvider;
-import org.eclipse.zest.core.viewers.internal.GraphModelEntityFactory;
-import org.eclipse.zest.core.viewers.internal.GraphModelEntityRelationshipFactory;
-import org.eclipse.zest.core.viewers.internal.GraphModelFactory;
 import org.eclipse.zest.core.viewers.internal.IStylingGraphModelFactory;
 import org.eclipse.zest.core.widgets.Graph;
-import org.eclipse.zest.core.widgets.GraphConnection;
-import org.eclipse.zest.core.widgets.GraphNode;
-import org.eclipse.zest.layouts.LayoutRelationship;
 
 /**
  * 
@@ -70,25 +60,6 @@ public class ViatraGraphViewer extends GraphViewer {
             }
         });
     }
-
-    @Override
-    public void removeNode(Object element) {
-        GraphNode node = (GraphNode) findItem(element);
-
-        if (node != null) {
-            // remove the node from the layout algorithm and all the connections
-            if (getLayoutAlgorithm() != null) {
-                getLayoutAlgorithm().removeEntity(node.getLayoutEntity());
-                final Stream<GraphConnection> connectionStream = 
-                        Stream.concat(node.getSourceConnections().stream(),
-                                node.getTargetConnections().stream()).map(GraphConnection.class::cast);
-                final List<LayoutRelationship> sourceRelationships = connectionStream.map(GraphConnection::getLayoutRelationship).collect(Collectors.toList());
-                getLayoutAlgorithm().removeRelationships(sourceRelationships);
-            }
-            // remove the node and it's connections from the model
-            node.dispose();
-        }
-    }
     
     @Override
     public void setContentProvider(IContentProvider contentProvider) {
@@ -115,12 +86,8 @@ public class ViatraGraphViewer extends GraphViewer {
         if (overriddenModelFactory == null) {
             if (getContentProvider() instanceof IGraphEdgeContentProvider) {
                 overriddenModelFactory = new GraphModelEdgeFactory(this);
-            } else if (getContentProvider() instanceof IGraphContentProvider) {
-                overriddenModelFactory = new GraphModelFactory(this);
-            } else if (getContentProvider() instanceof IGraphEntityContentProvider) {
-                overriddenModelFactory = new GraphModelEntityFactory(this);
-            } else if (getContentProvider() instanceof IGraphEntityRelationshipContentProvider) {
-                overriddenModelFactory = new GraphModelEntityRelationshipFactory(this);
+            } else {
+                return super.getFactory();
             }
         }
         return overriddenModelFactory;

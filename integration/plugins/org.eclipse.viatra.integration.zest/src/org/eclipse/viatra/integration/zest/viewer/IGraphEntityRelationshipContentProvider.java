@@ -8,13 +8,13 @@
  *******************************************************************************/
 package org.eclipse.viatra.integration.zest.viewer;
 
-import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 
 /**
  * @author Zoltan Ujhelyi
  *
  */
-public interface IGraphEntityRelationshipContentProvider extends IContentProvider, INestedGraphContentProvider {
+public interface IGraphEntityRelationshipContentProvider extends IStructuredContentProvider {
 
     /**
      * Returns all content elements which represent nodes on the first level of
